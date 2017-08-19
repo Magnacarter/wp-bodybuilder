@@ -1,0 +1,31 @@
+/* Helpers ----- */
+
+// transition
+%transition {
+ transition: all 0.3s ease-in-out;
+}
+
+.no-padding {
+	padding: 0 !important;
+}
+
+.text-right {
+	text-align: right !important;
+}
+
+.text-center {
+	text-align: center !important;
+}
+
+.text-left {
+	text-align: left !important;
+}
+
+.fat-border {
+	border-bottom: 5px solid #000;
+}
+
+.med-border {
+	border-bottom: 2px solid #000;
+}
+
