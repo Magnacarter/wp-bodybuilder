@@ -82,7 +82,8 @@ function admin_scripts() {
 
 	wp_enqueue_style(  'wpbb_admin_grid',   BODYBUILDER_URL . 'admin/css/unsemantic-grid-responsive.css' );
 	wp_enqueue_style(  'wpbb_admin_styles', BODYBUILDER_URL . 'admin/css/admin.css', ADMIN_CSS_VERSION );
-	wp_enqueue_script( 'wpbb_admin_script', BODYBUILDER_URL . 'admin/js/admin-script.js', array( 'jquery' ), ADMIN_JS_VERSION, true );
+	wp_enqueue_script( 'wpbb_admin_script', BODYBUILDER_URL . 'admin/js/admin-script.js', array( 'jquery' ), ADMIN_JS_VERSION, false );
+	wp_enqueue_media();
 
 }
 

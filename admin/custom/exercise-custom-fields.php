@@ -92,22 +92,22 @@ class Exercise_Custom_Fields {
 
 		$custom_meta_fields = array(
 			array(
-				'label' => 'Text Input',
-				'desc'  => 'A description for the field.',
-				'id'    => $prefix . 'text',
+				'label' => 'Category',
+				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc...',
+				'id'    => $prefix . 'category',
 				'type'  => 'text'
 			),
 			array(
-				'label' => 'Textarea',
-				'desc'  => 'A description for the field.',
-				'id'    => $prefix . 'textarea',
+				'label' => 'Instructions',
+				'desc'  => 'Step by step instructions on how to perform the exercise. Skip to new line for each new instruction. **Do not number**',
+				'id'    => $prefix . 'instructions',
 				'type'  => 'textarea'
 			),
 			array(
-				'label' => 'Checkbox Input',
-				'desc'  => 'A description for the field.',
-				'id'    => $prefix . 'checkbox',
-				'type'  => 'checkbox'
+				'label' => 'Caution',
+				'desc'  => 'Add a caution about this exercise.',
+				'id'    => $prefix . 'caution',
+				'type'  => 'textarea'
 			),
 			array(
 				'label'   => 'Select Box',
@@ -128,6 +128,12 @@ class Exercise_Custom_Fields {
 						'value' => 'three'
 					),
 				),
+			),
+			array(
+				'label' => 'Exercise Image',
+				'desc'  => 'Add an image of the exercise being performed.',
+				'id'    => $prefix.'image',
+				'type'  => 'image'
 			),
 		);
 
@@ -201,6 +207,49 @@ class Exercise_Custom_Fields {
 
 						printf( '</select>' );
 
+						break;
+
+					case 'image':
+
+						// Get WordPress' media upload URL
+						$upload_link = esc_url( get_upload_iframe_src( 'image', $post->ID ) );
+
+						// See if there's a media id already saved as post meta
+						$img_id = get_post_meta( $post->ID, $field['id'], true );
+
+						// Get the image src
+						$img_src = wp_get_attachment_image_src( $img_id, 'full' );
+
+						// For convenience, see if the array is valid
+						$have_img = is_array( $img_src );
+
+						?>
+
+						<!-- Your image container, which can be manipulated with js -->
+						<div class="custom-img-container">
+							<span class="description"><?php echo esc_html( $field['desc'] ) ?></span><br/><br/>
+							<?php if ( $have_img ) : ?>
+								<img src="<?php echo $img_src[0] ?>" alt="" style="max-width:150px; height: auto;" />
+							<?php endif; ?>
+						</div>
+
+						<!-- Your add & remove image links -->
+						<p class="hide-if-no-js">
+							<a class="upload-custom-img <?php if ( $have_img  ) { echo 'hidden'; } ?>"
+							   href="<?php echo $upload_link ?>">
+								<?php _e('Set custom image') ?>
+							</a>
+							<a class="delete-custom-img <?php if ( ! $have_img  ) { echo 'hidden'; } ?>"
+							   href="#">
+								<?php _e('Remove this image') ?>
+							</a>
+						</p>
+
+						<!-- A hidden input to set and post the chosen image id -->
+						<input class="custom-img-id" name="custom-img-id" type="hidden" value="<?php echo esc_attr( $img_id ); ?>" />
+
+						<?php
+
 					break;
 
 				} //end switch
@@ -261,6 +310,14 @@ class Exercise_Custom_Fields {
 			} elseif ( '' == $new && $old ) {
 
 				delete_post_meta( $post_id, $field['id'], $old );
+
+			}
+
+			if ( $field['id'] == 'exercise_image' ) {
+
+				$img_id = $_POST['custom-img-id'];
+
+				update_post_meta( $post_id, $field['id'] , $img_id );
 
 			}
 

@@ -12,11 +12,11 @@ var gulp         = require( 'gulp' ),
     browserSync  = require( 'browser-sync' );
 
 var path = {
-  JS_PUB        : '../js/pub/js',
-  JS_PUB_FILES  : [ '../pub/js/pub.js' ],
-  SCSS_PUB      : '../pub/scss/main.scss',
-  CSS_PUB       : '../pub/css',
-  CSS_PUB_FILES : [ '../pub/css/unsemantic-grid-responsive.css', '../pub/css/pub.css' ],
+  JS_PUB          : '../js/pub/js',
+  JS_PUB_FILES    : [ '../pub/js/pub.js' ],
+  SCSS_PUB        : '../pub/scss/main.scss',
+  CSS_PUB         : '../pub/css',
+  CSS_PUB_FILES   : [ '../pub/css/unsemantic-grid-responsive.css', '../pub/css/pub.css' ],
   SCSS_ADMIN      : '../admin/scss/main.scss',
   CSS_ADMIN       : '../admin/css',
   JS_ADMIN        : '../admin/js',

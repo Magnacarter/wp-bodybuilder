@@ -40,6 +40,7 @@ function register_exercise_custom_post_type() {
 		'author',
 		'revisions',
 		'editor',
+		'thumbnail',
 		'custom-fields',
 	) );
 
