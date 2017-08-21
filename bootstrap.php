@@ -21,6 +21,8 @@
 
 namespace Bodybuilder\plugin;
 
+use Bodybuilder\plugin\admin\custom\Custom_Tables;
+
 if ( ! defined( 'ABSPATH' ) ) {
 
 	exit( 'Cheatin&#8217?' );
@@ -118,6 +120,8 @@ function activate_plugin() {
 
 	flush_rewrite_rules();
 
+	new Custom_Tables();
+
 }
 
 /**
@@ -158,7 +162,11 @@ function init_autoloader() {
 	// Admin files
 	require_once( 'admin/custom/post-types.php' );
 
+	require_once( 'admin/custom/custom-tables.php' );
+
 	require_once( 'admin/custom/settings-page.php' );
+
+	require_once( 'admin/custom/exercise-custom-fields.php' );
 
 	//Public files
 

@@ -37,6 +37,9 @@ function register_exercise_custom_post_type() {
 		'excerpt',
 		'comments',
 		'trackbacks',
+		'author',
+		'revisions',
+		'editor',
 		'custom-fields',
 	) );
 
