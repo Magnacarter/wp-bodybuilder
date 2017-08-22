@@ -71,5 +71,53 @@ jQuery( document ).ready( function($) {
 
 	});
 
+	/**
+	 * Repeater field
+	 *
+	 * click function that adds a repeated field
+	 */
+	$( '.repeatable-add' ).click( function() {
+
+		field = $( this ).closest( 'td' ).find( '.custom_repeatable li:last' ).clone( true );
+
+		fieldLocation = $( this ).closest( 'td' ).find( '.custom_repeatable li:last' );
+
+		$( 'input', field ).val('').attr( 'name', function( index, name ) {
+
+			return name.replace( /(\d+)/, function( fullMatch, n ) {
+
+				return Number(n) + 1;
+
+			});
+
+		})
+
+		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) )
+
+		return false;
+
+	});
+
+	/**
+	 * Remove a repeated field
+	 */
+	$( '.repeatable-remove' ).click( function(){
+
+		$( this ).parent().remove();
+
+		return false;
+
+	});
+
+	/**
+	 * Sort repeated fields
+	 */
+	$( '.custom_repeatable' ).sortable({
+		opacity: 0.6,
+		revert: true,
+		cursor: 'move',
+		handle: '.sort'
+	});
+
 });
 //# sourceMappingURL=admin-app.js.map

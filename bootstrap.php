@@ -161,6 +161,8 @@ function uninstall_plugin() {
 function init_autoloader() {
 
 	// Admin files
+	require_once( 'admin/custom/custom-field.php' );
+
 	require_once( 'admin/custom/post-types.php' );
 
 	require_once( 'admin/custom/custom-tables.php' );
