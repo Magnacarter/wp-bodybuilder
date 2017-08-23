@@ -90,9 +90,9 @@ jQuery( document ).ready( function($) {
 
 			});
 
-		})
+		});
 
-		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) )
+		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) );
 
 		return false;
 
@@ -110,13 +110,52 @@ jQuery( document ).ready( function($) {
 	});
 
 	/**
-	 * Sort repeated fields
+	 * Sort repeated fields and save new order to db
+	 * with a php callback function
 	 */
 	$( '.custom_repeatable' ).sortable({
 		opacity: 0.6,
 		revert: true,
 		cursor: 'move',
-		handle: '.sort'
+		handle: '.sort',
+		update: function (event, ui) {
+
+			var list = $( this ).sortable( "toArray", {attribute: 'id'} );
+			var data = [];
+
+			for( var i = 0; list.length > i; i++ ) {
+
+				var item    = list[i];
+				var itemVal = $( "#" + item ).find( 'input' ).val();
+
+				data.push( itemVal );
+
+			}
+
+			$.ajax({
+				type: 'POST',
+				datatype: 'json',
+				url: ajaxurl,
+				data: {
+					action: 'process_ajax',
+					data: data,
+					postId: $( '#exercise_repeatable-repeatable' ).attr('data-post-id')
+				},
+				success: function( response ) {
+					if ( response.success === true ) {
+
+						console.log('working');
+						console.log( response.data );
+
+					}
+					if ( response.success === false ) {
+
+						console.log( response );
+
+					}
+				}
+			});
+		}
 	});
 
 });

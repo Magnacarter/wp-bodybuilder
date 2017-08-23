@@ -88,11 +88,9 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function render_exercise_meta_box() {
 
-		global $post;
+		$post_id = $this->get_global_id();
 
-		$post_id = $post->ID;
-
-		$custom_meta_fields = self::set_exercise_meta_fields();
+		$custom_meta_fields = $this->set_exercise_meta_fields();
 
 		// Use nonce for verification
 		print( '<input type="hidden" name="exercise_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ).'" />' );
@@ -103,7 +101,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 		foreach ( $custom_meta_fields as $field ) {
 
 			// get value of this field if it exists for this post
-			$meta = get_post_meta( $post->ID, $field['id'], true );
+			$meta = get_post_meta( $post_id, $field['id'], true );
 
 			// begin a table row with
 			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
@@ -112,37 +110,37 @@ class Exercise_Custom_Fields extends Custom_Field {
 
 					case 'text':
 
-						self::render_text_field( $field, $meta );
+						$this->render_text_field( $field, $meta );
 
 					break;
 
 					case 'textarea':
 
-						self::render_textarea_field( $field, $meta );
+						$this->render_textarea_field( $field, $meta );
 
 					break;
 
 					case 'checkbox':
 
-						self::render_checkbox_field( $field, $meta );
+						$this->render_checkbox_field( $field, $meta );
 
 					break;
 
 					case 'select':
 
-						self::render_select_field( $field, $meta );
+						$this->render_select_field( $field, $meta );
 
 					break;
 
 					case 'image':
 
-						self::render_image_field( $field, $meta, $post_id );
+						$this->render_image_field( $field, $meta, $post_id );
 
 					break;
 
 					case 'repeatable':
 
-						self::render_repeater_field( $field, $meta );
+						$this->render_repeater_field( $field, $meta );
 
 					break;
 
@@ -168,7 +166,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function save_exercise_meta( $post_id ) {
 
-		$custom_meta_fields = self::set_exercise_meta_fields();
+		$custom_meta_fields = $this->set_exercise_meta_fields();
 
 		// verify nonce
 		if ( ! wp_verify_nonce( $_POST['exercise_meta_box_nonce'], basename( __FILE__ ) ) )
@@ -228,7 +226,12 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function process_ajax() {
 
+		$sorted  = $_POST['data'];
+		$post_id = $_POST['postId'];
 
+		update_post_meta( $post_id, 'exercise_repeatable', $sorted );
+
+		wp_send_json_success( $sorted );
 
 	}
 
@@ -241,11 +244,9 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function localize_script() {
 
-		global $post;
-
 		if( isset( $post ) ) {
 
-			$post_id = $post->ID;
+			$post_id = $this->get_global_id();
 
 			wp_localize_script( 'wpbb_admin_script', 'wpbbConfig', array(
 

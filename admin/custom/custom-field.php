@@ -16,6 +16,20 @@ namespace Bodybuilder\plugin\admin\custom;
 class Custom_Field {
 
 	/**
+	 * Get global id
+	 *
+	 * @since 1.0.0
+	 * @return int $post_id
+	 */
+	public function get_global_id() {
+
+		global $post;
+
+		return $post->ID;
+
+	}
+
+	/**
 	 * Set custom meta fields
 	 *
 	 * define the custom fields for the CPT
@@ -23,7 +37,7 @@ class Custom_Field {
 	 * @since 1.0.0
 	 * @return array $custom_meta_fields
 	 */
-	public static function set_exercise_meta_fields() {
+	public function set_exercise_meta_fields() {
 
 		$prefix = 'exercise_';
 
@@ -72,7 +86,7 @@ class Custom_Field {
 	 * @param string/int $meta
 	 * @return void
 	 */
-	public static function render_text_field( $field, $meta ){
+	public function render_text_field( $field, $meta ){
 
 		printf( '<span class="description">%s</span></br><input type="text" name="%s" id="%1$s" value="%s" size="30" />',
 		esc_html( $field['desc'] ), esc_attr( $field['id'] ), esc_attr( $meta ) );
@@ -142,7 +156,7 @@ class Custom_Field {
 	 * @param int $post_id
 	 * @return void
 	 */
-	public static function render_image_field( $field, $meta, $post_id ){
+	public function render_image_field( $field, $meta, $post_id ){
 
 		// Get WordPress' media upload URL
 		$upload_link = esc_url( get_upload_iframe_src( 'image', $post_id ) );
@@ -194,13 +208,15 @@ class Custom_Field {
 	 * @param string/int $meta
 	 * @return void
 	 */
-	public static function render_repeater_field( $field, $meta ){
+	public function render_repeater_field( $field, $meta ){
+
+		$post_id = $this->get_global_id();
 
 		echo '<span class="description">' . $field['desc'] . '</span><br/>';
 
 		echo '<a class="repeatable-add button" href="#">+</a>
 
-		<ul id="' . $field['id'] . '-repeatable" class="custom_repeatable">';
+		<ul data-post-id="' . esc_attr( $post_id ) . '" id="' . $field['id'] . '-repeatable" class="custom_repeatable">';
 
 		$i = 0;
 
@@ -208,7 +224,7 @@ class Custom_Field {
 
 			foreach ( $meta as $row ) {
 
-				echo '<li><span class="sort hndle">|||</span>
+				echo '<li id="item-' . $i . '"><span class="sort hndle">|||</span>
 
 					<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="' . $row . '" size="30" />
 
