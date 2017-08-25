@@ -90,7 +90,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 
 		$post_id = $this->get_global_id();
 
-		$custom_meta_fields = $this->set_exercise_meta_fields();
+		$custom_meta_fields = $this->get_exercise_meta_fields();
 
 		// Use nonce for verification
 		print( '<input type="hidden" name="exercise_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ).'" />' );
@@ -166,7 +166,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function save_exercise_meta( $post_id ) {
 
-		$custom_meta_fields = $this->set_exercise_meta_fields();
+		$custom_meta_fields = $this->get_exercise_meta_fields();
 
 		// verify nonce
 		if ( ! wp_verify_nonce( $_POST['exercise_meta_box_nonce'], basename( __FILE__ ) ) )

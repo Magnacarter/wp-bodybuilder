@@ -171,6 +171,8 @@ function init_autoloader() {
 
 	require_once( 'admin/custom/exercise-custom-fields.php' );
 
+	require_once( 'admin/custom/post-custom-fields.php' );
+
 	//Public files
 
 	// Testing
