@@ -1,5 +1,8 @@
 jQuery( document ).ready( function($) {
 
+	// Counter for day-repeater click function
+	var i = 1;
+
 	// Set all variables to be used in scope
 	var frame,
 		metaBox = $('#exercise-custom-fields.postbox'), // Your meta box id here
@@ -68,6 +71,102 @@ jQuery( document ).ready( function($) {
 
 		// Delete the image id from the hidden input
 		imgIdInput.val( '' );
+
+	});
+
+	/**
+	 * Day repeater
+	 *
+	 * click function that adds a repeated day
+	 */
+	$( '.day-repeat-add' ).click( function() {
+
+		i++;
+
+		field = $( this ).closest( 'td' ).find( '.day_repeat li#day-list-item:last' ).clone( true );
+
+		field.find( '#exercise-list li' ).remove();
+
+		fieldLocation = $( this ).closest( 'td' ).find( '.day_repeat li#day-list-item:last' );
+
+		$( '.day-header', field ).find( 'h4' ).html( 'Day ' + i, function( index, name ) {
+
+			return name.replace( /(\d+)/, function( fullMatch, n ) {
+
+				return Number(n) + 1;
+
+			});
+
+		});
+
+		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) );
+
+		return false;
+
+	});
+
+	/**
+	 * Select an exercise for workout
+	 */
+	var exerciseSelect = $( 'select.wpbb-exercise-selection' );
+
+	exerciseSelect.change( function() {
+
+		var selectedValue = $( this ).val();
+		var list          = $( this ).parent();
+
+		$( this ).prop('selectedIndex',0);
+
+		//saveExercises.show();
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: ajaxurl,
+			data: {
+				action: 'workout_process_ajax',
+				exerciseId: selectedValue
+			},
+			success: function( response ) {
+
+				if ( response.success === true ) {
+
+					console.log( response.data.post_title );
+
+					var json = response.data;
+
+					if( json.post_title !== '' ) {
+						list.find( '#exercise-list' ).append( '<li class="list" data-class-id="'+ json.ID +'"><strong>Exercise: </strong>' + json.post_title + '<span><a href="" class="remove-exercise">  Remove</a></span></li>' );
+					}
+
+					$( ".remove-exercise" ).on( 'click', function(e) {
+						e.preventDefault();
+						console.log( 'clicked' );
+						var exerciseListItem = $( this ).parent().parent();
+						exerciseListItem.remove();
+					});
+				}
+
+				if ( response.success === false ) {
+					console.log( 'not working' );
+				}
+			},
+			error: function( xhr, status, error ) {
+				var err = eval( "(" + xhr.responseText + ")" );
+				console.log( err.Message );
+			}
+		});
+
+	});
+
+	/**
+	 * Remove a repeated day
+	 */
+	$( '.day-repeat-remove' ).click( function(){
+
+		$( this ).parent().parent().remove();
+
+		return false;
 
 	});
 

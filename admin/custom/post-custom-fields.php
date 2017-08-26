@@ -15,7 +15,7 @@ namespace Bodybuilder\plugin\admin\custom;
 /**
  * Class Post_Custom_Fields
  */
-class Post_Custom_Fields {
+class Post_Custom_Fields extends Custom_Field {
 
 	/**
 	 * Hold Post_Custom_Fields instance
@@ -41,6 +41,8 @@ class Post_Custom_Fields {
 			add_action( 'load-post-new.php', array( $this, 'init_metabox' ) );
 
 		}
+
+		add_action( 'wp_ajax_workout_process_ajax', array( $this, 'workout_process_ajax' ) );
 
 	}
 
@@ -85,9 +87,71 @@ class Post_Custom_Fields {
 	/**
 	 * Render metabox card fields
 	 */
-	public function render_metabox_workout_fields( $post ) {
+	public function render_metabox_workout_fields() {
 
-		print( '<header><h3>Feel the burn</h3></header>' );
+		$post_id = $this->get_global_id();
+
+		$custom_meta_fields = $this->get_workout_meta_fields();
+
+		// Use nonce for verification
+		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ).'" />' );
+
+		// Begin the field table and loop
+		print( '<table class="form-table">' );
+
+		foreach ( $custom_meta_fields as $field ) {
+
+			// get value of this field if it exists for this post
+			$meta = get_post_meta( $post_id, $field['id'], true );
+
+			// begin a table row with
+			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
+
+			switch( $field['type'] ) {
+
+				case 'text':
+
+					$this->render_text_field( $field, $meta );
+
+					break;
+
+				case 'textarea':
+
+					$this->render_textarea_field( $field, $meta );
+
+					break;
+
+				case 'checkbox':
+
+					$this->render_checkbox_field( $field, $meta );
+
+					break;
+
+				case 'select':
+
+					$this->render_select_field( $field, $meta );
+
+					break;
+
+				case 'image':
+
+					$this->render_image_field( $field, $meta, $post_id );
+
+					break;
+
+				case 'day-repeater':
+
+					$this->render_day_repeater_field( $field, $meta );
+
+					break;
+
+			} //end switch
+
+			print( '</td></tr>' );
+
+		} // end foreach
+
+		print( '</table>' ); // end table
 
 	}
 
@@ -97,12 +161,28 @@ class Post_Custom_Fields {
 	 * Render the meta box in the post post editor screen
 	 *
 	 * @since 1.0.0
-	 * @param object $post
 	 * @return void
 	 */
-	public function render_metabox_for_post( $post ) {
+	public function render_metabox_for_post() {
 
-		$this->render_metabox_workout_fields( $post );
+		$this->render_metabox_workout_fields();
+
+	}
+
+	/**
+	 * Process ajax
+	 *
+	 * @since 1.0.0
+	 * @add_action wp_ajax
+	 * @return void
+	 */
+	public function workout_process_ajax() {
+
+		$exercise_id = $_POST['exerciseId'];
+
+		$exercise_post = get_post( $exercise_id );
+
+		wp_send_json_success( $exercise_post );
 
 	}
 
@@ -115,7 +195,7 @@ class Post_Custom_Fields {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function save_recipe_from_post() {
+	public function save_workout_from_post() {
 
 		if (
 			'POST' === $_SERVER['REQUEST_METHOD']

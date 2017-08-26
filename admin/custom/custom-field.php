@@ -16,14 +16,24 @@ namespace Bodybuilder\plugin\admin\custom;
 class Custom_Field {
 
 	/**
-	 * @var $prefix
+	 * @var $exercise_prefix
 	 */
-	public $prefix = 'exercise_';
+	public $exercise_prefix = 'exercise_';
+
+	/**
+	 * @var $workout_prefix
+	 */
+	public $workout_prefix = 'workout_';
 
 	/**
 	 * @var array $exercise_meta_fields
 	 */
 	public $exercise_meta_fields = [];
+
+	/**
+	 * @var array $workout_meta_fields
+	 */
+	public $workout_meta_fields = [];
 
 	/**
 	 * Get global id
@@ -83,6 +93,47 @@ class Custom_Field {
 	}
 
 	/**
+	 * Set workout meta fields
+	 *
+	 * define the custom fields for the workout
+	 *
+	 * @since 1.0.0
+	 * @return array $custom_meta_fields
+	 */
+	public function set_wokout_meta_fields( $prefix ) {
+
+		$this->workout_meta_fields = array(
+			array(
+				'label' => 'Category',
+				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc...',
+				'id'    => $prefix . 'category',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Workout Directions',
+				'desc'  => 'Add instructions for performing the workout. Skip to new line for each new instruction. **Do not number**',
+				'id'    => $prefix . 'instructions',
+				'type'  => 'textarea'
+			),
+			array(
+				'label' => 'Workout Image',
+				'desc'  => 'Add an image of the exercise being performed.',
+				'id'    => $prefix . 'image',
+				'type'  => 'image'
+			),
+			array(
+				'label' => 'Add Day',
+				'desc'  => 'Add exercises for a day.',
+				'id'    => $prefix . 'day',
+				'type'  => 'day-repeater'
+			),
+		);
+
+		return $this->workout_meta_fields;
+
+	}
+
+	/**
 	 * Get exercise meta fields
 	 *
 	 * @since 1.0.0
@@ -90,7 +141,19 @@ class Custom_Field {
 	 */
 	public function get_exercise_meta_fields() {
 
-		return $this->set_exercise_meta_fields( $this->prefix );
+		return $this->set_exercise_meta_fields( $this->exercise_prefix );
+
+	}
+
+	/**
+	 * Get workout meta fields
+	 *
+	 * @since 1.0.0
+	 * @return array $exercise_meta_fields
+	 */
+	public function get_workout_meta_fields() {
+
+		return $this->set_wokout_meta_fields( $this->workout_prefix );
 
 	}
 
@@ -261,6 +324,86 @@ class Custom_Field {
 			<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="" size="30" />
 
 			<a class="repeatable-remove button" href="#">-</a></li>';
+
+		}
+
+		echo '</ul>';
+
+	}
+
+	/**
+	 * Render day repeater field
+	 *
+	 * @since 1.0.0
+	 * @param array $field
+	 * @param string /int $meta
+	 * @return void
+	 */
+	public function render_day_repeater_field( $field, $meta ) {
+
+		$args = array(
+			'posts_per_page'   => -1,
+			'post_type'        => 'exercise',
+			'post_status'      => 'publish',
+		);
+
+		$exercise_posts = get_posts( $args );
+
+		$post_id = $this->get_global_id();
+
+		echo '<span class="description">' . $field['desc'] . '</span><br/>';
+
+		echo '<a class="day-repeat-add button" href="#">Add Day</a>
+
+		<ul data-post-id="' . esc_attr( $post_id ) . '" id="' . $field['id'] . '-repeatable" class="day_repeat">';
+
+		$i = 0;
+
+		if ( $meta ) {
+
+			foreach ( $meta as $row ) {
+
+				echo '<li id="item-' . $i . '">
+
+				<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="' . $row . '" size="30" />
+
+				<a class="day-repeat-remove button" href="#">-</a></li>';
+
+				$i++;
+
+			}
+
+		} else {
+
+			print( '<li id="day-list-item">' );
+
+				print( '<div class="day-header"><span><h4>Day 1</h4></div>' );
+
+				print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
+
+					print( '<option>Add Exercise</option>' );
+
+					foreach ( $exercise_posts as $exercise_post ) :
+
+						printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
+
+					endforeach;
+
+				print( '</select>' );
+
+				printf( '<input class="wpbb-exercise-setting" name="post_id" value="%s" type="hidden"/>', $post_id );
+
+				print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
+
+				print( '<div class="selected-exercises-wrap">' );
+
+					print( '<ul id="exercise-list"></ul>' );
+
+				print( '</div>' );
+
+				print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
+
+			print( '</li>' );
 
 		}
 
