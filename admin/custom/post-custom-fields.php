@@ -155,6 +155,8 @@ class Post_Custom_Fields extends Custom_Field {
 
 		print( '</table>' ); // end table
 
+		print( '<a class="save-btn">Save Workout</a>' );
+
 	}
 
 	/**

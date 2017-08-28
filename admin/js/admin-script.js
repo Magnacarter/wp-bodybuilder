@@ -95,7 +95,15 @@ jQuery( document ).ready( function($) {
 					var json = response.data;
 
 					if (json.post_title !== '') {
-						list.find('#exercise-list').append('<li class="list" data-class-id="' + json.ID + '"><strong>Exercise: </strong>' + json.post_title + '<span><a href="" class="remove-exercise">  Remove</a></span></li>');
+						list.find('#exercise-list').append('<li class="list" data-class-id="' + json.ID + '">' +
+							'<h4><strong>' + json.post_title + ' : </strong></h4>' +
+							'<span>' +
+							'<input type="text" id="sets" name="sets" placeholder="Sets" value=""/>' +
+							'<input type="text" id="reps" name="reps" placeholder="Reps/Duration" value=""/>' +
+							'<input type="text" id="rest" name="rest" placeholder="Rest between sets" value=""/>' +
+							'<a href="" class="remove-exercise">x</a>' +
+							'</span>' +
+							'</li>');
 					}
 
 					$(".remove-exercise").on('click', function (e) {
@@ -132,8 +140,8 @@ jQuery( document ).ready( function($) {
 					var exercisePosts = response.data;
 					var dayRepeat     = $( '.day_repeat' );
 
-					dayRepeat.append( '<li id="day-list-item"><div class="day-header">' +
-						'<span><h4>Day 1</h4></span>' +
+					dayRepeat.append( '<li id="day-list-item" class="day-exercises"><div class="day-header">' +
+						'<span><h3>Day 1</h3></span>' +
 						'</div>' +
 						'<div><p>Add Exercises</p></div>' +
 						'<select class="wpbb-exercise-selection">' +
@@ -204,7 +212,7 @@ jQuery( document ).ready( function($) {
 
 		fieldLocation = $(this).closest('td').find('.day_repeat li#day-list-item:last');
 
-		$('.day-header', field).find('h4').html('Day ' + i, function (index, name) {
+		$('.day-header', field).find('h3').html('Day ' + i, function (index, name) {
 
 			return name.replace(/(\d+)/, function (fullMatch, n) {
 
@@ -231,6 +239,38 @@ jQuery( document ).ready( function($) {
 		addExercise( selectedValue, list );
 
 		//saveExercises.show();
+
+	});
+
+	// Collect workout days and exercises upon clicking save workout
+	$( '.save-btn' ).click( function() {
+
+		var workouts = [];
+
+		var els = document.getElementsByClassName("day-exercises");
+
+		Array.prototype.forEach.call(els, function(el) {
+
+			// Get the exercise day
+			var day = el.getElementsByTagName('h3')[0].textContent;
+
+			// Get the exercises for the day
+			var exercises = el.getElementsByClassName("list");
+
+			var exerciseIds = [];
+
+			Array.prototype.forEach.call(exercises, function(exercise) {
+
+				// For each exercise in the day, add the id of the exercise to an array
+				exerciseIds.push( exercise.getAttribute('data-class-id') );
+
+			});
+
+			workouts[day] = exerciseIds;
+
+		});
+
+		console.log( workouts );
 
 	});
 

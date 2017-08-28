@@ -375,9 +375,9 @@ class Custom_Field {
 
 		} else {
 
-			print( '<li id="day-list-item">' );
+			print( '<li id="day-list-item" class="day-exercises">' );
 
-				print( '<div class="day-header"><span><h4>Day 1</h4></div>' );
+				print( '<div class="day-header"><span><h3>Day 1</h3></div>' );
 
 				print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
 
