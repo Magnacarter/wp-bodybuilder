@@ -1,15 +1,17 @@
 jQuery( document ).ready( function($) {
 
 	// Counter for day-repeater click function
-	var i = 1;
+	var i            = 1,
+		select       = $( 'select.wpbb-exercise-selection' ),
+		dayRepeatAdd = $( '.day-repeat-add' );
 
 	// Set all variables to be used in scope
 	var frame,
-		metaBox = $('#exercise-custom-fields.postbox'), // Your meta box id here
-		addImgLink = metaBox.find('.upload-custom-img'),
-		delImgLink = metaBox.find( '.delete-custom-img'),
+		metaBox      = $('#exercise-custom-fields.postbox'), // Your meta box id here
+		addImgLink   = metaBox.find('.upload-custom-img'),
+		delImgLink   = metaBox.find( '.delete-custom-img'),
 		imgContainer = metaBox.find( '.custom-img-container'),
-		imgIdInput = metaBox.find( '.custom-img-id' );
+		imgIdInput   = metaBox.find( '.custom-img-id' );
 
 	// ADD IMAGE LINK
 	addImgLink.on( 'click', function( event ){
@@ -75,49 +77,9 @@ jQuery( document ).ready( function($) {
 	});
 
 	/**
-	 * Day repeater
-	 *
-	 * click function that adds a repeated day
+	 * Add exercise
 	 */
-	$( '.day-repeat-add' ).click( function() {
-
-		i++;
-
-		field = $( this ).closest( 'td' ).find( '.day_repeat li#day-list-item:last' ).clone( true );
-
-		field.find( '#exercise-list li' ).remove();
-
-		fieldLocation = $( this ).closest( 'td' ).find( '.day_repeat li#day-list-item:last' );
-
-		$( '.day-header', field ).find( 'h4' ).html( 'Day ' + i, function( index, name ) {
-
-			return name.replace( /(\d+)/, function( fullMatch, n ) {
-
-				return Number(n) + 1;
-
-			});
-
-		});
-
-		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) );
-
-		return false;
-
-	});
-
-	/**
-	 * Select an exercise for workout
-	 */
-	var exerciseSelect = $( 'select.wpbb-exercise-selection' );
-
-	exerciseSelect.change( function() {
-
-		var selectedValue = $( this ).val();
-		var list          = $( this ).parent();
-
-		$( this ).prop('selectedIndex',0);
-
-		//saveExercises.show();
+	var addExercise = function( selectedValue, list ) {
 
 		$.ajax({
 			type: 'POST',
@@ -127,22 +89,18 @@ jQuery( document ).ready( function($) {
 				action: 'workout_process_ajax',
 				exerciseId: selectedValue
 			},
-			success: function( response ) {
+			success: function(response) {
 
-				if ( response.success === true ) {
-
-					console.log( response.data.post_title );
-
+				if (response.success === true) {
 					var json = response.data;
 
-					if( json.post_title !== '' ) {
-						list.find( '#exercise-list' ).append( '<li class="list" data-class-id="'+ json.ID +'"><strong>Exercise: </strong>' + json.post_title + '<span><a href="" class="remove-exercise">  Remove</a></span></li>' );
+					if (json.post_title !== '') {
+						list.find('#exercise-list').append('<li class="list" data-class-id="' + json.ID + '"><strong>Exercise: </strong>' + json.post_title + '<span><a href="" class="remove-exercise">  Remove</a></span></li>');
 					}
 
-					$( ".remove-exercise" ).on( 'click', function(e) {
+					$(".remove-exercise").on('click', function (e) {
 						e.preventDefault();
-						console.log( 'clicked' );
-						var exerciseListItem = $( this ).parent().parent();
+						var exerciseListItem = $(this).parent().parent();
 						exerciseListItem.remove();
 					});
 				}
@@ -150,40 +108,105 @@ jQuery( document ).ready( function($) {
 				if ( response.success === false ) {
 					console.log( 'not working' );
 				}
-			},
-			error: function( xhr, status, error ) {
-				var err = eval( "(" + xhr.responseText + ")" );
-				console.log( err.Message );
 			}
 		});
-
-	});
-
-	/**
-	 * Remove a repeated day
-	 */
-	$( '.day-repeat-remove' ).click( function(){
-
-		$( this ).parent().parent().remove();
-
-		return false;
-
-	});
+	};
 
 	/**
-	 * Repeater field
-	 *
-	 * click function that adds a repeated field
+	 * Add day
 	 */
-	$( '.repeatable-add' ).click( function() {
+	const addDay = function( bool ) {
 
-		field = $( this ).closest( 'td' ).find( '.custom_repeatable li:last' ).clone( true );
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: ajaxurl,
+			data: {
+				action: 'add_day_ajax',
+				addDay: bool
+			},
+			success: function( response ) {
 
-		fieldLocation = $( this ).closest( 'td' ).find( '.custom_repeatable li:last' );
+				if (response.success === true) {
 
-		$( 'input', field ).val('').attr( 'name', function( index, name ) {
+					var exercisePosts = response.data;
+					var dayRepeat     = $( '.day_repeat' );
 
-			return name.replace( /(\d+)/, function( fullMatch, n ) {
+					dayRepeat.append( '<li id="day-list-item"><div class="day-header">' +
+						'<span><h4>Day 1</h4></span>' +
+						'</div>' +
+						'<div><p>Add Exercises</p></div>' +
+						'<select class="wpbb-exercise-selection">' +
+						'<option>Add Exercise</option>' );
+
+					for( var j = 0; exercisePosts.length > j; j++ ) {
+
+						$( '.wpbb-exercise-selection' ).append( '<option value="' + exercisePosts[j].ID + '">' + exercisePosts[j].post_title + '</option>' );
+
+					}
+
+					dayRepeat.find( 'li' ).append( '</select>' +
+						'<div class="selected-exercises">You\'ve added the following exercises:</div>' +
+						'<div class="selected-exercises-wrap"><ul id="exercise-list"></ul></div>' +
+						'<div id="remove-btn">' +
+						'<a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
+
+					dayRepeat.append( '</li>' );
+
+				}
+			},
+			complete: function() {
+				removeDay();
+
+				$('.wpbb-exercise-selection').change( function () {
+
+					var selectedValue = $(this).val();
+					var list          = $(this).parent();
+
+					// Reset the dropdown menu so you can select the same item twice without selecting another first
+					$( this ).prop( 'selectedIndex', 0 );
+
+					addExercise( selectedValue, list );
+
+				});
+			}
+		});
+	};
+
+	/**
+	 * Remove day
+	 */
+	const removeDay = function() {
+
+		$( '.day-repeat-remove' ).click( function( e ) {
+			e.preventDefault();
+			$( this ).parent().parent().remove();
+			i--;
+			return false;
+		});
+	};
+	removeDay();
+
+	// Add day on click
+	dayRepeatAdd.click( function( e ) {
+
+		e.preventDefault();
+		i++;
+
+		if( ! $( '.day_repeat' ).has( '.wpbb-exercise-selection' ).length ) {
+			bool = true;
+			addDay(bool);
+		}
+
+		field = $(this).closest('td').find('.day_repeat li#day-list-item:last').clone(true);
+
+		field.find('#exercise-list li').remove();
+
+		fieldLocation = $(this).closest('td').find('.day_repeat li#day-list-item:last');
+
+		$('.day-header', field).find('h4').html('Day ' + i, function (index, name) {
+
+			return name.replace(/(\d+)/, function (fullMatch, n) {
 
 				return Number(n) + 1;
 
@@ -191,70 +214,24 @@ jQuery( document ).ready( function($) {
 
 		});
 
-		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) );
+		field.insertAfter(fieldLocation, $(this).closest('td'));
 
 		return false;
 
 	});
 
-	/**
-	 * Remove a repeated field
-	 */
-	$( '.repeatable-remove' ).click( function(){
+	// Select an exercise for workout
+	select.change( function () {
 
-		$( this ).parent().remove();
+		var selectedValue = $(this).val();
+		var list          = $(this).parent();
 
-		return false;
+		$(this).prop( 'selectedIndex', 0 );
 
-	});
+		addExercise( selectedValue, list );
 
-	/**
-	 * Sort repeated fields and save new order to db
-	 * with a php callback function
-	 */
-	$( '.custom_repeatable' ).sortable({
-		opacity: 0.6,
-		revert: true,
-		cursor: 'move',
-		handle: '.sort',
-		update: function (event, ui) {
+		//saveExercises.show();
 
-			var list = $( this ).sortable( "toArray", {attribute: 'id'} );
-			var data = [];
-
-			for( var i = 0; list.length > i; i++ ) {
-
-				var item    = list[i];
-				var itemVal = $( "#" + item ).find( 'input' ).val();
-
-				data.push( itemVal );
-
-			}
-
-			$.ajax({
-				type: 'POST',
-				datatype: 'json',
-				url: ajaxurl,
-				data: {
-					action: 'process_ajax',
-					data: data,
-					postId: $( '#exercise_repeatable-repeatable' ).attr('data-post-id')
-				},
-				success: function( response ) {
-					if ( response.success === true ) {
-
-						console.log('working');
-						console.log( response.data );
-
-					}
-					if ( response.success === false ) {
-
-						console.log( response );
-
-					}
-				}
-			});
-		}
 	});
 
 });

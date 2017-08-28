@@ -44,6 +44,8 @@ class Post_Custom_Fields extends Custom_Field {
 
 		add_action( 'wp_ajax_workout_process_ajax', array( $this, 'workout_process_ajax' ) );
 
+		add_action( 'wp_ajax_add_day_ajax', array( $this, 'add_day_ajax' ) );
+
 	}
 
 	/**
@@ -170,6 +172,27 @@ class Post_Custom_Fields extends Custom_Field {
 	}
 
 	/**
+	 * Add day ajax
+	 */
+	public function add_day_ajax() {
+
+		if( $_POST['addDay'] == true ) {
+
+			$args = array(
+				'posts_per_page'   => -1,
+				'post_type'        => 'exercise',
+				'post_status'      => 'publish',
+			);
+
+			$exercisePosts = get_posts( $args );
+
+			wp_send_json_success( $exercisePosts );
+
+		}
+
+	}
+
+	/**
 	 * Process ajax
 	 *
 	 * @since 1.0.0
@@ -178,11 +201,15 @@ class Post_Custom_Fields extends Custom_Field {
 	 */
 	public function workout_process_ajax() {
 
-		$exercise_id = $_POST['exerciseId'];
+		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 
-		$exercise_post = get_post( $exercise_id );
+			$exercise_id = $_POST['exerciseId'];
 
-		wp_send_json_success( $exercise_post );
+			$exercise_post = get_post( $exercise_id );
+
+			wp_send_json_success( $exercise_post );
+
+		}
 
 	}
 
