@@ -391,8 +391,6 @@ class Custom_Field {
 
 				print( '</select>' );
 
-				printf( '<input class="wpbb-exercise-setting" name="post_id" value="%s" type="hidden"/>', $post_id );
-
 				print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
 
 				print( '<div class="selected-exercises-wrap">' );

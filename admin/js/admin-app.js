@@ -95,7 +95,7 @@ jQuery( document ).ready( function($) {
 					var json = response.data;
 
 					if (json.post_title !== '') {
-						list.find('#exercise-list').append('<li class="list" data-class-id="' + json.ID + '">' +
+						list.find('#exercise-list').append('<li class="list" data-exercise-id="' + json.ID + '">' +
 							'<h4><strong>' + json.post_title + ' : </strong></h4>' +
 							'<span>' +
 							'<input type="text" id="sets" name="sets" placeholder="Sets" value=""/>' +
@@ -245,32 +245,65 @@ jQuery( document ).ready( function($) {
 	// Collect workout days and exercises upon clicking save workout
 	$( '.save-btn' ).click( function() {
 
-		var workouts = [];
+		var workout = [],
+			els     = document.getElementsByClassName( 'day-exercises' );
 
-		var els = document.getElementsByClassName("day-exercises");
+		for ( var i = 0; i < els.length; i++ ) {
 
-		Array.prototype.forEach.call(els, function(el) {
+			var ids          = els[i].getElementsByClassName( 'list' ),
+				exercises    = {},
+				exerciseMeta = [];
 
-			// Get the exercise day
-			var day = el.getElementsByTagName('h3')[0].textContent;
+			for ( var j = 0; j < ids.length; j++ ) {
 
-			// Get the exercises for the day
-			var exercises = el.getElementsByClassName("list");
+				var inputs = ids[j].getElementsByTagName( 'input' ),
+					sets = {},
+					reps = {},
+					rest = {},
+					meta = {},
+					id   = {};
 
-			var exerciseIds = [];
+				for ( var k = 0; k < inputs.length; k++ ) {
 
-			Array.prototype.forEach.call(exercises, function(exercise) {
+					id['id'] = ids[j].dataset.exerciseId;
 
-				// For each exercise in the day, add the id of the exercise to an array
-				exerciseIds.push( exercise.getAttribute('data-class-id') );
+					if ( inputs[k].id === 'sets' ) {
 
-			});
+						meta['sets'] = inputs[k].value;
 
-			workouts[day] = exerciseIds;
+					}
 
-		});
+					if ( inputs[k].id === 'reps' ) {
 
-		console.log( workouts );
+						meta['reps'] = inputs[k].value;
+
+					}
+
+					if ( inputs[k].id === 'rest' ) {
+
+						meta['rest'] = inputs[k].value;
+
+					}
+
+					exercises['exercise' + j] = exerciseMeta.concat( id, meta );
+
+				}
+
+			}
+
+			exercise = {
+
+				day: els[i].getElementsByTagName('h3')[0].textContent,
+
+				exercises: exercises
+
+			};
+
+			workout.push( exercise );
+
+		}
+
+		console.log( workout );
 
 	});
 
