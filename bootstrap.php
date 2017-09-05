@@ -121,8 +121,6 @@ function activate_plugin() {
 
 	flush_rewrite_rules();
 
-	new Custom_Tables();
-
 }
 
 /**

@@ -12,6 +12,8 @@
 
 namespace Bodybuilder\plugin\admin\custom;
 
+use Bodybuilder\plugin\admin\custom\Custom_Tables;
+
 /**
  * Class Post_Custom_Fields
  */
@@ -45,6 +47,8 @@ class Post_Custom_Fields extends Custom_Field {
 		add_action( 'wp_ajax_workout_process_ajax', array( $this, 'workout_process_ajax' ) );
 
 		add_action( 'wp_ajax_add_day_ajax', array( $this, 'add_day_ajax' ) );
+
+		add_action( 'wp_ajax_save_workout_from_post', array( $this, 'save_workout_from_post' ) );
 
 	}
 
@@ -96,7 +100,7 @@ class Post_Custom_Fields extends Custom_Field {
 		$custom_meta_fields = $this->get_workout_meta_fields();
 
 		// Use nonce for verification
-		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ).'" />' );
+		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
 
 		// Begin the field table and loop
 		print( '<table class="form-table">' );
@@ -228,35 +232,48 @@ class Post_Custom_Fields extends Custom_Field {
 
 		if (
 			'POST' === $_SERVER['REQUEST_METHOD']
+
+			&&
+
+			isset( $_POST['nonce'] )
+
+			&&
+
+			isset( $_POST['workout'] )
 		) {
 
-			$workout_id = intval( $_POST['workout_id'] );
+			$workout_object = $_POST['workout'];
 
+			$workout_json = json_encode( $workout_object );
+
+			// Add nonce for security and authentication.
+			$nonce_field   = $_POST['nonce'];
+			$nonce_action = 'workout-nonce';
+
+			// Check if a nonce is valid.
+			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
+				return;
+
+			// Check if the user has permissions to save data.
+			if ( ! current_user_can( 'edit_post', $workout_object ) )
+				return;
+
+			// Check if it's not an autosave.
+			if ( wp_is_post_autosave( $workout_object ) )
+				return;
+
+			// Check if it's not a revision.
+			if ( wp_is_post_revision( $workout_object ) )
+				return;
+
+			$args = array(
+				'workout' => $workout_json,
+			);
+
+			Custom_Tables::save_workout( $args );
+
+			wp_send_json_success( $workout_object );
 		}
-
-		// Add nonce for security and authentication.
-		$nonce_name   = $_POST['mrc_nonce'];
-		$nonce_action = 'mrc_nonce_action';
-
-		// Check if a nonce is set.
-		if ( ! isset( $nonce_name ) )
-			return;
-
-		// Check if a nonce is valid.
-		if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) )
-			return;
-
-		// Check if the user has permissions to save data.
-		if ( ! current_user_can( 'edit_post', $workout_id ) )
-			return;
-
-		// Check if it's not an autosave.
-		if ( wp_is_post_autosave( $workout_id ) )
-			return;
-
-		// Check if it's not a revision.
-		if ( wp_is_post_revision( $workout_id ) )
-			return;
 
 	}
 

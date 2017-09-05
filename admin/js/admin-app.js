@@ -242,9 +242,12 @@ jQuery( document ).ready( function($) {
 
 	});
 
-	// Collect workout days and exercises upon clicking save workout
-	$( '.save-btn' ).click( function() {
-
+	/**
+	 * saveWorkout
+	 *
+	 * @returns {Array}
+	 */
+	var saveWorkout = function() {
 		var workout = [],
 			els     = document.getElementsByClassName( 'day-exercises' );
 
@@ -264,46 +267,53 @@ jQuery( document ).ready( function($) {
 					id   = {};
 
 				for ( var k = 0; k < inputs.length; k++ ) {
-
 					id['id'] = ids[j].dataset.exerciseId;
 
 					if ( inputs[k].id === 'sets' ) {
-
 						meta['sets'] = inputs[k].value;
-
 					}
 
 					if ( inputs[k].id === 'reps' ) {
-
 						meta['reps'] = inputs[k].value;
-
 					}
 
 					if ( inputs[k].id === 'rest' ) {
-
 						meta['rest'] = inputs[k].value;
-
 					}
 
 					exercises['exercise' + j] = exerciseMeta.concat( id, meta );
-
 				}
-
 			}
 
 			exercise = {
-
 				day: els[i].getElementsByTagName('h3')[0].textContent,
-
 				exercises: exercises
-
 			};
 
 			workout.push( exercise );
-
 		}
+		return workout;
+	};
 
-		console.log( workout );
+	// Collect workout days and exercises upon clicking save workout
+	$( '.save-btn' ).click( function() {
+
+		var workout = saveWorkout(),
+			nonce   = $( '[name = "workout_meta_box_nonce"]' ).val();
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: ajaxurl,
+			data: {
+				action: 'save_workout_from_post',
+				workout: workout,
+				nonce: nonce
+			},
+			success: function( response ) {
+				console.log(response.data);
+			}
+		});
 
 	});
 

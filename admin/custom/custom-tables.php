@@ -15,12 +15,27 @@ namespace Bodybuilder\plugin\admin\custom;
  */
 class Custom_Tables {
 
+	/**
+	 * @var $instance
+	 */
+	public static $instance;
+
+	/**
+	 * Custom_Tables constructor.
+	 */
 	public function __construct() {
 
 		$this->install_workout_table();
 
 	}
 
+	/**
+	 * Install workout table
+	 *
+	 * upon plugin activation, create custom table to store user workouts
+	 *
+	 * @return void
+	 */
 	public function install_workout_table() {
 		global $wpdb;
 
@@ -31,6 +46,7 @@ class Custom_Tables {
 		$sql = "CREATE TABLE $table_name (
 		workout_id mediumint(9) NOT NULL AUTO_INCREMENT,
 		workout_name text NOT NULL,
+		workout text NOT NULL,
 		activity_duration mediumint NOT NULL,
 		activity_frequency mediumint NOT NULL,
 		exercise_type text NOT NULL,
@@ -48,4 +64,52 @@ class Custom_Tables {
 		dbDelta( $sql );
 	}
 
+	/**
+	 * Save workout
+	 *
+	 * run array through to save values to the wpbb table
+	 *
+	 * @since 1.0.0
+	 * @param array $args
+	 * @param int $workout_id
+	 * @return void
+	 */
+	public static function save_workout( $args, $workout_id = 0 ) {
+
+		global $wpdb;
+		$table_name = "wp_bodybuilder_workout";
+
+		if( $workout_id === 0 ) {
+
+			$wpdb->insert( $table_name, $args );
+
+			return;
+
+		}
+
+		$wpdb->update( $table_name, $args, array( 'workout_id' => $workout_id ) );
+
+	}
+
+	/**
+	 * Return active instance of Custom_Tables, create one if it doesn't exist
+	 *
+	 * @return Custom_Tables
+	 */
+	public static function get_instance() {
+
+		if ( empty( self::$instance ) ) {
+
+			$class = __CLASS__;
+
+			self::$instance = new $class;
+
+		}
+
+		return self::$instance;
+
+	}
+
 }
+
+new Custom_Tables();
