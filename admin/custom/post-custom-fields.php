@@ -91,21 +91,39 @@ class Post_Custom_Fields extends Custom_Field {
 	}
 
 	/**
-	 * Render metabox card fields
+	 * Get workout
+	 *
+	 * @since 1.0.0
+	 * @return array|null|object $workout
 	 */
-	public function render_metabox_workout_fields() {
+	public static function get_workout() {
 
-		$post_id = $this->get_global_id();
+		global $post, $wpdb;
+
+		$post_id = $post->ID;
+
+		$workout = $wpdb->get_results(
+			"
+			SELECT workout
+			FROM $wpdb->bodybuilder_workout
+			WHERE workout_id = $post_id
+			"
+		);
+
+		return $workout;
+
+	}
+
+	/**
+	 * Set new workout fields
+	 *
+	 * @since
+	 * @param int $post_id
+	 * @return void
+	 */
+	public function set_new_workout_fields( $post_id ) {
 
 		$custom_meta_fields = $this->get_workout_meta_fields();
-
-		print( '<input type="hidden" name="post_id" value="' . $post_id . '" />' );
-
-		// Use nonce for verification
-		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
-
-		// Begin the field table and loop
-		print( '<table class="form-table">' );
 
 		foreach ( $custom_meta_fields as $field ) {
 
@@ -115,42 +133,30 @@ class Post_Custom_Fields extends Custom_Field {
 			// begin a table row with
 			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
 
-			switch( $field['type'] ) {
+			switch ( $field['type'] ) {
 
 				case 'text':
-
 					$this->render_text_field( $field, $meta );
-
 					break;
 
 				case 'textarea':
-
 					$this->render_textarea_field( $field, $meta );
-
 					break;
 
 				case 'checkbox':
-
 					$this->render_checkbox_field( $field, $meta );
-
 					break;
 
 				case 'select':
-
 					$this->render_select_field( $field, $meta );
-
 					break;
 
 				case 'image':
-
 					$this->render_image_field( $field, $meta, $post_id );
-
 					break;
 
 				case 'day-repeater':
-
 					$this->render_day_repeater_field( $field, $meta );
-
 					break;
 
 			} //end switch
@@ -158,6 +164,26 @@ class Post_Custom_Fields extends Custom_Field {
 			print( '</td></tr>' );
 
 		} // end foreach
+
+	}
+
+	/**
+	 * Render metabox card fields
+	 */
+	public function render_metabox_workout_fields() {
+
+		$post_id = $this->get_global_id();
+		$workout = Post_Custom_Fields::get_workout();
+
+		print( '<input type="hidden" name="post_id" value="' . $post_id . '" />' );
+
+		// Use nonce for verification
+		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
+
+		// Begin the field table and loop
+		print( '<table class="form-table">' );
+
+			$this->set_new_workout_fields( $post_id );
 
 		print( '</table>' ); // end table
 
@@ -248,15 +274,11 @@ class Post_Custom_Fields extends Custom_Field {
 			isset( $_POST['workoutId'] )
 		) {
 
-			$workout_id = intval( $_POST['workoutId'] );
-
+			$workout_id     = intval( $_POST['workoutId'] );
 			$workout_object = $_POST['workout'];
-
-			$workout_json = json_encode( $workout_object );
-
-			// Add nonce for security and authentication.
-			$nonce_field   = $_POST['nonce'];
-			$nonce_action = 'workout-nonce';
+			$workout_json   = json_encode( $workout_object );
+			$nonce_field    = $_POST['nonce'];
+			$nonce_action   = 'workout-nonce';
 
 			// Check if a nonce is valid.
 			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
@@ -275,13 +297,14 @@ class Post_Custom_Fields extends Custom_Field {
 				return;
 
 			$args = array(
-				'workout' => $workout_json,
+				'workout'    => $workout_json,
 				'workout_id' => $workout_id
 			);
 
 			Custom_Tables::save_workout( $args, $workout_id );
 
 			wp_send_json_success( $workout_object );
+
 		}
 
 	}

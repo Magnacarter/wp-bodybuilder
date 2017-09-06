@@ -10,6 +10,8 @@
 
 namespace Bodybuilder\plugin\admin\custom;
 
+use Bodybuilder\plugin\admin\custom\Post_Custom_Fields;
+
 /**
  * Class Custom_Field
  */
@@ -295,11 +297,11 @@ class Custom_Field {
 
 		$post_id = $this->get_global_id();
 
-		echo '<span class="description">' . $field['desc'] . '</span><br/>';
+		printf( '<span class="description">%s</span><br/>', $field['desc'] );
 
-		echo '<a class="repeatable-add button" href="#">+</a>
+		print( '<a class="repeatable-add button" href="#">+</a>' );
 
-		<ul data-post-id="' . esc_attr( $post_id ) . '" id="' . $field['id'] . '-repeatable" class="custom_repeatable">';
+		printf( '<ul data-post-id="%s" id="%s-repeatable" class="custom_repeatable">', esc_attr( $post_id ), $field['id'] );
 
 		$i = 0;
 
@@ -307,11 +309,9 @@ class Custom_Field {
 
 			foreach ( $meta as $row ) {
 
-				echo '<li id="item-' . $i . '"><span class="sort hndle">|||</span>
+				printf( '<input type="text" name="%s" id="%s" value="%s" size="30" />', $field['id'][$i], $field['id'], $row  );
 
-				<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="' . $row . '" size="30" />
-
-				<a class="repeatable-remove button" href="#">-</a></li>';
+				print( '<a class="repeatable-remove button" href="#">-</a></li>' );
 
 				$i ++;
 
@@ -319,15 +319,99 @@ class Custom_Field {
 
 		} else {
 
-			echo '<li><span class="sort hndle">|||</span>
+			printf( '<input type="text" name="%s" id="%s" value="" size="30" />', $field['id'][$i], $field['id'] );
 
-			<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="" size="30" />
-
-			<a class="repeatable-remove button" href="#">-</a></li>';
+			print( '<a class="repeatable-remove button" href="#">-</a></li>' );
 
 		}
 
-		echo '</ul>';
+		print( '</ul>' );
+
+	}
+
+	/**
+	 * Load new day
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function load_new_day() {
+
+		print( '<li id="day-list-item" class="day-exercises">' );
+
+		print( '<div class="day-header"><span><h3>Day 1</h3></div>' );
+
+		print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
+
+		print( '<option>Add Exercise</option>' );
+
+		foreach ( $exercise_posts as $exercise_post ) :
+
+			printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
+
+		endforeach;
+
+		print( '</select>' );
+
+		print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
+
+		print( '<div class="selected-exercises-wrap">' );
+
+		print( '<ul id="exercise-list"></ul>' );
+
+		print( '</div>' );
+
+		print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
+
+		print( '</li>' );
+
+	}
+
+	/**
+	 * Load saved workout
+	 *
+	 * @since 1.0.0
+	 * @param $exercise_posts
+	 * @param $workout
+	 * @return void
+	 */
+	public function load_saved_workout( $exercise_posts, $workout ) {
+
+		$d = 0;
+
+		foreach ( $workout as $day ) {
+
+			print( '<li id="day-list-item" class="day-exercises">' );
+
+			printf( '<div class="day-header"><span><h3>%s</h3></div>', $workout[$d]->day );
+
+			print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
+
+			print( '<option>Add Exercise</option>' );
+
+			foreach ( $exercise_posts as $exercise_post ) :
+
+				printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
+
+			endforeach;
+
+			print( '</select>' );
+
+			print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
+
+			print( '<div class="selected-exercises-wrap">' );
+
+			print( '<ul id="exercise-list"></ul>' );
+
+			print( '</div>' );
+
+			print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
+
+			print( '</li>' );
+
+			$d++;
+
+		}
 
 	}
 
@@ -348,14 +432,14 @@ class Custom_Field {
 		);
 
 		$exercise_posts = get_posts( $args );
+		$post_id        = $this->get_global_id();
+		$workout        = Post_Custom_Fields::get_workout();
 
-		$post_id = $this->get_global_id();
+		printf( '<span class="description">%s</span><br/>', $field['desc'] );
 
-		echo '<span class="description">' . $field['desc'] . '</span><br/>';
+		print( '<a class="day-repeat-add button" href="#">Add Day</a>' );
 
-		echo '<a class="day-repeat-add button" href="#">Add Day</a>
-
-		<ul data-post-id="' . esc_attr( $post_id ) . '" id="' . $field['id'] . '-repeatable" class="day_repeat">';
+		printf( '<ul data-post-id="%s" id="%s-repeatable" class="day_repeat">', esc_attr( $post_id ), $field['id'] );
 
 		$i = 0;
 
@@ -363,49 +447,31 @@ class Custom_Field {
 
 			foreach ( $meta as $row ) {
 
-				echo '<li id="item-' . $i . '">
+				printf( '<li id="item-%s>', $field['id'] );
 
-				<input type="text" name="' . $field['id'] . '[' . $i . ']" id="' . $field['id'] . '" value="' . $row . '" size="30" />
+				printf( '<input type="text" name="%s" id="%s" value="%s" size="30" />', $field['id'][ $i ], $field['id'], $row );
 
-				<a class="day-repeat-remove button" href="#">-</a></li>';
+				print( '<a class="day-repeat-remove button" href="#">-</a></li>' );
 
-				$i++;
+				$i ++;
 
 			}
 
+		} elseif( ! empty( $workout ) ) {
+
+			$workout = json_decode( $workout[0]->workout );
+
+			$this->load_saved_workout( $exercise_posts, $workout );
+
+			d($workout);
+
 		} else {
 
-			print( '<li id="day-list-item" class="day-exercises">' );
-
-				print( '<div class="day-header"><span><h3>Day 1</h3></div>' );
-
-				print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
-
-					print( '<option>Add Exercise</option>' );
-
-					foreach ( $exercise_posts as $exercise_post ) :
-
-						printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
-
-					endforeach;
-
-				print( '</select>' );
-
-				print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
-
-				print( '<div class="selected-exercises-wrap">' );
-
-					print( '<ul id="exercise-list"></ul>' );
-
-				print( '</div>' );
-
-				print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
-
-			print( '</li>' );
+			$this->load_new_day();
 
 		}
 
-		echo '</ul>';
+		print( '</ul>' );
 
 	}
 
