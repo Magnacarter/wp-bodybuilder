@@ -163,18 +163,6 @@ class Post_Custom_Fields extends Custom_Field {
 
 		print( '<a class="save-btn">Save Workout</a>' );
 
-		global $wpdb;
-		$workout_id = 23;
-		$id = $wpdb->get_results(
-			"
-			SELECT workout_id
-			FROM   $wpdb->bodybuilder_workout
-			WHERE  workout_id = $workout_id
-			"
-		);
-
-		d($id);
-
 	}
 
 	/**
