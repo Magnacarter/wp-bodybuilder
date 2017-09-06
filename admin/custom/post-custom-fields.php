@@ -99,6 +99,8 @@ class Post_Custom_Fields extends Custom_Field {
 
 		$custom_meta_fields = $this->get_workout_meta_fields();
 
+		print( '<input type="hidden" name="post_id" value="' . $post_id . '" />' );
+
 		// Use nonce for verification
 		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
 
@@ -160,6 +162,18 @@ class Post_Custom_Fields extends Custom_Field {
 		print( '</table>' ); // end table
 
 		print( '<a class="save-btn">Save Workout</a>' );
+
+		global $wpdb;
+		$workout_id = 23;
+		$id = $wpdb->get_results(
+			"
+			SELECT workout_id
+			FROM   $wpdb->bodybuilder_workout
+			WHERE  workout_id = $workout_id
+			"
+		);
+
+		d($id);
 
 	}
 
@@ -240,7 +254,13 @@ class Post_Custom_Fields extends Custom_Field {
 			&&
 
 			isset( $_POST['workout'] )
+
+			&&
+
+			isset( $_POST['workoutId'] )
 		) {
+
+			$workout_id = intval( $_POST['workoutId'] );
 
 			$workout_object = $_POST['workout'];
 
@@ -268,9 +288,10 @@ class Post_Custom_Fields extends Custom_Field {
 
 			$args = array(
 				'workout' => $workout_json,
+				'workout_id' => $workout_id
 			);
 
-			Custom_Tables::save_workout( $args );
+			Custom_Tables::save_workout( $args, $workout_id );
 
 			wp_send_json_success( $workout_object );
 		}

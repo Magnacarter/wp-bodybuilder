@@ -298,8 +298,9 @@ jQuery( document ).ready( function($) {
 	// Collect workout days and exercises upon clicking save workout
 	$( '.save-btn' ).click( function() {
 
-		var workout = saveWorkout(),
-			nonce   = $( '[name = "workout_meta_box_nonce"]' ).val();
+		var workout   = saveWorkout(),
+			nonce     = $( '[name = "workout_meta_box_nonce"]' ).val(),
+			workoutId = $( '[name = "post_id"]' ).val();
 
 		$.ajax({
 			type: 'POST',
@@ -308,6 +309,7 @@ jQuery( document ).ready( function($) {
 			data: {
 				action: 'save_workout_from_post',
 				workout: workout,
+				workoutId: workoutId,
 				nonce: nonce
 			},
 			success: function( response ) {

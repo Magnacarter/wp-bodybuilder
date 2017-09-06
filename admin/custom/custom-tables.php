@@ -41,6 +41,8 @@ class Custom_Tables {
 
 		$table_name = $wpdb->prefix . 'bodybuilder_workout';
 
+		$wpdb->bodybuilder_workout = $wpdb->prefix . 'bodybuilder_workout';
+
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
@@ -79,15 +81,23 @@ class Custom_Tables {
 		global $wpdb;
 		$table_name = "wp_bodybuilder_workout";
 
-		if( $workout_id === 0 ) {
+		$id = $wpdb->get_results(
+			"
+			SELECT workout_id
+			FROM   $wpdb->bodybuilder_workout
+			WHERE  workout_id = $workout_id
+			"
+		);
+
+		if( empty( $id ) || $id === null ) {
 
 			$wpdb->insert( $table_name, $args );
 
-			return;
+		} else {
+
+			$wpdb->update( $table_name, $args, array( 'workout_id' => $workout_id ) );
 
 		}
-
-		$wpdb->update( $table_name, $args, array( 'workout_id' => $workout_id ) );
 
 	}
 
