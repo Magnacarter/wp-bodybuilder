@@ -80,7 +80,7 @@ class Post_Custom_Fields extends Custom_Field {
 		global $post;
 
 		add_meta_box(
-			'workout',
+			'exercise-custom-fields',
 			__( 'Add a New Workout', 'text_domain' ),
 			array( $this, 'render_metabox_for_post' ),
 			'post',
@@ -168,7 +168,10 @@ class Post_Custom_Fields extends Custom_Field {
 	}
 
 	/**
-	 * Render metabox card fields
+	 * Render metabox workout fields
+	 *
+	 * @since 1.0.0
+	 * @return void
 	 */
 	public function render_metabox_workout_fields() {
 
@@ -274,11 +277,15 @@ class Post_Custom_Fields extends Custom_Field {
 			isset( $_POST['workoutId'] )
 		) {
 
-			$workout_id     = intval( $_POST['workoutId'] );
-			$workout_object = $_POST['workout'];
-			$workout_json   = json_encode( $workout_object );
-			$nonce_field    = $_POST['nonce'];
-			$nonce_action   = 'workout-nonce';
+			$workout_id           = intval( $_POST['workoutId'] );
+			$workout_object       = $_POST['workout'];
+			$workout_json         = json_encode( $workout_object );
+			$nonce_field          = $_POST['nonce'];
+			$nonce_action         = 'workout-nonce';
+			$workout_image        = $_POST['workoutImage'];
+			$workout_name         = $_POST['workoutName'];
+			$workout_instructions = $_POST['workoutInstructions'];
+			$workout_category     = $_POST['workoutCategory'];
 
 			// Check if a nonce is valid.
 			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
@@ -297,13 +304,17 @@ class Post_Custom_Fields extends Custom_Field {
 				return;
 
 			$args = array(
-				'workout'    => $workout_json,
-				'workout_id' => $workout_id
+				'workout'              => $workout_json,
+				'workout_id'           => $workout_id,
+				'workout_name'         => $workout_name,
+				'workout_image'        => $workout_image,
+				'workout_instructions' => $workout_instructions,
+				'workout_category'     => $workout_category,
 			);
 
 			Custom_Tables::save_workout( $args, $workout_id );
 
-			wp_send_json_success( $workout_object );
+			wp_send_json_success( $workout_image );
 
 		}
 

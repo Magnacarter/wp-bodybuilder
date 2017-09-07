@@ -102,9 +102,15 @@ class Custom_Field {
 	 * @since 1.0.0
 	 * @return array $custom_meta_fields
 	 */
-	public function set_wokout_meta_fields( $prefix ) {
+	public function set_workout_meta_fields( $prefix ) {
 
 		$this->workout_meta_fields = array(
+			array(
+				'label' => 'Workout Name',
+				'desc'  => 'Name the workout',
+				'id'    => $prefix . 'name',
+				'type'  => 'text'
+			),
 			array(
 				'label' => 'Category',
 				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc...',
@@ -155,7 +161,7 @@ class Custom_Field {
 	 */
 	public function get_workout_meta_fields() {
 
-		return $this->set_wokout_meta_fields( $this->workout_prefix );
+		return $this->set_workout_meta_fields( $this->workout_prefix );
 
 	}
 

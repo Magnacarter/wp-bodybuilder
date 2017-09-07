@@ -7,10 +7,10 @@ jQuery( document ).ready( function($) {
 
 	// Set all variables to be used in scope
 	var frame,
-		metaBox      = $('#exercise-custom-fields.postbox'), // Your meta box id here
-		addImgLink   = metaBox.find('.upload-custom-img'),
-		delImgLink   = metaBox.find( '.delete-custom-img'),
-		imgContainer = metaBox.find( '.custom-img-container'),
+		metaBox      = $( '#exercise-custom-fields.postbox' ), // Your meta box id here
+		addImgLink   = metaBox.find( '.upload-custom-img' ),
+		delImgLink   = metaBox.find( '.delete-custom-img' ),
+		imgContainer = metaBox.find( '.custom-img-container' ),
 		imgIdInput   = metaBox.find( '.custom-img-id' );
 
 	// ADD IMAGE LINK
@@ -310,9 +310,13 @@ jQuery( document ).ready( function($) {
 	// Collect workout days and exercises upon clicking save workout
 	$( '.save-btn' ).click( function() {
 
-		var workout   = saveWorkout(),
-			nonce     = $( '[name = "workout_meta_box_nonce"]' ).val(),
-			workoutId = $( '[name = "post_id"]' ).val();
+		var workout             = saveWorkout(),
+			nonce               = $( '[name = "workout_meta_box_nonce"]' ).val(),
+			workoutId           = $( '[name = "post_id"]' ).val(),
+			workoutName         = $( '[name = "workout_name"]' ).val(),
+			workoutInstructions = $( '[name = "workout_instructions"]' ).val(),
+			workoutCategory     = $( '[name = "workout_category"]' ).val(),
+			workoutImage        = $( '#exercise-custom-fields .form-table img' ).attr( 'src' );
 
 		$.ajax({
 			type: 'POST',
@@ -322,6 +326,10 @@ jQuery( document ).ready( function($) {
 				action: 'save_workout_from_post',
 				workout: workout,
 				workoutId: workoutId,
+				workoutName: workoutName,
+				workoutCategory: workoutCategory,
+				workoutInstructions: workoutInstructions,
+				workoutImage: workoutImage,
 				nonce: nonce
 			},
 			success: function( response ) {
