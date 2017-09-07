@@ -368,6 +368,45 @@ class Custom_Field {
 	}
 
 	/**
+	 * Load exercises
+	 *
+	 * @since 1.0.0
+	 * @param array $exercises
+	 * @return void
+	 */
+	public function load_exercise( $exercises ) {
+
+		if( ! isset( $exercises ) )
+			return;
+
+		foreach( $exercises as $exercise ) {
+
+			$sets = $exercise[1]->sets;
+			$reps = $exercise[1]->reps;
+			$rest = $exercise[1]->rest;
+			$e_id = intval( $exercise[0]->id );
+			$title = get_the_title( $e_id );
+
+			printf( '<li class="list" data-exercise-id="%s">', $e_id );
+
+			printf( '<h4><strong>%s :</strong></h4>', $title );
+
+			print( '<span>' );
+
+			printf( '<input type="text" id="sets" name="sets" placeholder="Sets" value="%s"/>', esc_attr( $sets ) );
+			printf( '<input type="text" id="reps" name="reps" placeholder="Reps/Duration" value="%s"/>', esc_attr( $reps ) );
+			printf( '<input type="text" id="rest" name="rest" placeholder="Rest between sets" value="%s"/>', esc_attr( $rest ) );
+			print( '<a href="" class="remove-exercise">x</a>' );
+
+			print( '</span>' );
+
+			print( '</li>' );
+
+		}
+
+	}
+
+	/**
 	 * Load saved workout
 	 *
 	 * @since 1.0.0
@@ -401,7 +440,13 @@ class Custom_Field {
 
 			print( '<div class="selected-exercises-wrap">' );
 
-			print( '<ul id="exercise-list"></ul>' );
+			print( '<ul id="exercise-list">' );
+
+			$exercises = $workout[$d]->exercises;
+
+			$this->load_exercise( $exercises );
+
+			print( '</ul>' );
 
 			print( '</div>' );
 
@@ -462,8 +507,6 @@ class Custom_Field {
 			$workout = json_decode( $workout[0]->workout );
 
 			$this->load_saved_workout( $exercise_posts, $workout );
-
-			d($workout);
 
 		} else {
 

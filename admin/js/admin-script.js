@@ -195,6 +195,18 @@ jQuery( document ).ready( function($) {
 	};
 	removeDay();
 
+	/**
+	 * Remove exercise
+	 */
+	const removeExercise = function() {
+		$(".remove-exercise").on('click', function (e) {
+			e.preventDefault();
+			var exerciseListItem = $(this).parent().parent();
+			exerciseListItem.remove();
+		});
+	}
+	removeExercise();
+
 	// Add day on click
 	dayRepeatAdd.click( function( e ) {
 
