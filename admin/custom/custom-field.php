@@ -335,7 +335,7 @@ class Custom_Field {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function load_new_day() {
+	public function load_new_day( $exercise_posts ) {
 
 		print( '<li id="day-list-item" class="day-exercises">' );
 
@@ -510,7 +510,7 @@ class Custom_Field {
 
 		} else {
 
-			$this->load_new_day();
+			$this->load_new_day( $exercise_posts );
 
 		}
 
