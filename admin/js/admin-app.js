@@ -316,7 +316,7 @@ jQuery( document ).ready( function($) {
 			workoutName         = $( '[name = "workout_name"]' ).val(),
 			workoutInstructions = $( '[name = "workout_instructions"]' ).val(),
 			workoutCategory     = $( '[name = "workout_category"]' ).val(),
-			workoutImage        = $( '#exercise-custom-fields .form-table img' ).attr( 'src' );
+			workoutImage        = $( '[name = "custom-img-id"]' ).val();
 
 		$.ajax({
 			type: 'POST',

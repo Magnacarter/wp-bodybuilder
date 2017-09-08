@@ -70,6 +70,37 @@ class Custom_Tables {
 	}
 
 	/**
+	 * Get workout title
+	 *
+	 * @since
+	 * @param $workout_id
+	 * @return string $title
+	 */
+	public static function get_workout_meta( $workout_id, $field_id ) {
+
+		if( ! isset( $workout_id ) )
+			return;
+
+		if( $field_id === 'workout_day' )
+			return;
+
+		global $wpdb;
+
+		$meta = $wpdb->get_results(
+			"
+			SELECT $field_id
+			FROM $wpdb->bodybuilder_workout
+			WHERE workout_id = $workout_id
+			"
+		);
+
+		$workout_meta = $meta[0]->$field_id;
+
+		return $workout_meta;
+
+	}
+
+	/**
 	 * Save workout
 	 *
 	 * run array through to save values to the wpbb table

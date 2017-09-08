@@ -128,7 +128,7 @@ class Post_Custom_Fields extends Custom_Field {
 		foreach ( $custom_meta_fields as $field ) {
 
 			// get value of this field if it exists for this post
-			$meta = get_post_meta( $post_id, $field['id'], true );
+			$meta = Custom_Tables::get_workout_meta( $post_id, $field['id'] );
 
 			// begin a table row with
 			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
@@ -279,7 +279,7 @@ class Post_Custom_Fields extends Custom_Field {
 
 			$workout_id           = intval( $_POST['workoutId'] );
 			$workout_object       = $_POST['workout'];
-			$workout_json         = json_encode( $workout_object );
+			$workout_json         = json_encode( $workout_object, JSON_UNESCAPED_SLASHES );
 			$nonce_field          = $_POST['nonce'];
 			$nonce_action         = 'workout-nonce';
 			$workout_image        = $_POST['workoutImage'];

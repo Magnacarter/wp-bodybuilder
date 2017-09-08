@@ -11,6 +11,7 @@
 namespace Bodybuilder\plugin\admin\custom;
 
 use Bodybuilder\plugin\admin\custom\Post_Custom_Fields;
+use Bodybuilder\plugin\admin\custom\Custom_Tables;
 
 /**
  * Class Custom_Field
@@ -109,7 +110,7 @@ class Custom_Field {
 				'label' => 'Workout Name',
 				'desc'  => 'Name the workout',
 				'id'    => $prefix . 'name',
-				'type'  => 'text'
+				'type'  => 'text',
 			),
 			array(
 				'label' => 'Category',
@@ -176,7 +177,7 @@ class Custom_Field {
 	public function render_text_field( $field, $meta ) {
 
 		printf( '<span class="description">%s</span></br><input type="text" name="%s" id="%2$s" value="%s" size="30" />',
-			esc_html( $field['desc'] ), esc_attr( $field['id'] ), esc_attr( $meta ) );
+			esc_html( $field['desc'] ), esc_attr( $field['id'] ), stripslashes_deep( esc_attr( $meta ) ) );
 
 	}
 
@@ -191,7 +192,7 @@ class Custom_Field {
 	public static function render_textarea_field( $field, $meta ) {
 
 		printf( '<span class="description">%s</span><br /><textarea name="%s" id="%2$s" cols="60" rows="4">%s</textarea>',
-			esc_html( $field['desc'] ), esc_attr( $field['id'] ), esc_html( $meta ) );
+			esc_html( $field['desc'] ), esc_attr( $field['id'] ), stripslashes( esc_html( $meta ) ) );
 
 	}
 
@@ -247,9 +248,18 @@ class Custom_Field {
 
 		// Get WordPress' media upload URL
 		$upload_link = esc_url( get_upload_iframe_src( 'image', $post_id ) );
+		$post_type   = get_post_type( $post_id );
 
 		// See if there's a media id already saved as post meta
-		$img_id = get_post_meta( $post_id, $field['id'], true );
+		if( $post_type == 'exercise' ) {
+
+			$img_id = get_post_meta( $post_id, $field['id'], true );
+
+		} else {
+
+			$img_id = Custom_Tables::get_workout_meta( $post_id, $field['id'] );
+
+		}
 
 		// Get the image src
 		$img_src = wp_get_attachment_image_src( $img_id, 'full' );

@@ -88,8 +88,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function render_exercise_meta_box() {
 
-		$post_id = $this->get_global_id();
-
+		$post_id            = $this->get_global_id();
 		$custom_meta_fields = $this->get_exercise_meta_fields();
 
 		// Use nonce for verification
@@ -109,39 +108,26 @@ class Exercise_Custom_Fields extends Custom_Field {
 				switch( $field['type'] ) {
 
 					case 'text':
-
 						$this->render_text_field( $field, $meta );
-
 					break;
 
 					case 'textarea':
-
 						$this->render_textarea_field( $field, $meta );
-
 					break;
-
 					case 'checkbox':
-
 						$this->render_checkbox_field( $field, $meta );
-
 					break;
 
 					case 'select':
-
 						$this->render_select_field( $field, $meta );
-
 					break;
 
 					case 'image':
-
 						$this->render_image_field( $field, $meta, $post_id );
-
 					break;
 
 					case 'repeatable':
-
 						$this->render_repeater_field( $field, $meta );
-
 					break;
 
 				} //end switch
@@ -192,7 +178,6 @@ class Exercise_Custom_Fields extends Custom_Field {
 		foreach ( $custom_meta_fields as $field ) {
 
 			$old = get_post_meta( $post_id, $field['id'], true );
-
 			$new = $_POST[$field['id']];
 
 			if ( $new && $new != $old ) {
