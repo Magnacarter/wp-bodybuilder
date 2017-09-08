@@ -160,18 +160,15 @@ function init_autoloader() {
 
 	// Admin files
 	require_once( 'admin/custom/custom-field.php' );
-
 	require_once( 'admin/custom/post-types.php' );
-
 	require_once( 'admin/custom/custom-tables.php' );
-
 	require_once( 'admin/custom/settings-page.php' );
-
 	require_once( 'admin/custom/exercise-custom-fields.php' );
-
 	require_once( 'admin/custom/post-custom-fields.php' );
 
 	//Public files
+	require_once( 'pub/workout.php' );
+	require_once( 'pub/display-workout.php' );
 
 	// Testing
 	require_once( 'admin/root.php' );

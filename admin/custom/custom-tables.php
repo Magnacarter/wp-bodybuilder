@@ -70,9 +70,9 @@ class Custom_Tables {
 	}
 
 	/**
-	 * Get workout title
+	 * Get workout meta
 	 *
-	 * @since
+	 * @since 1.0.0
 	 * @param $workout_id
 	 * @return string $title
 	 */
@@ -156,4 +156,4 @@ class Custom_Tables {
 
 }
 
-new Custom_Tables();
+Custom_Tables::get_instance();

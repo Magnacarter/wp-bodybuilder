@@ -390,7 +390,7 @@ class Custom_Field {
 	 * @param array $exercises
 	 * @return void
 	 */
-	public function load_exercise( $exercises ) {
+	public function load_exercises( $exercises ) {
 
 		if( ! isset( $exercises ) )
 			return;
@@ -460,7 +460,7 @@ class Custom_Field {
 
 			$exercises = $workout[$d]->exercises;
 
-			$this->load_exercise( $exercises );
+			$this->load_exercises( $exercises );
 
 			print( '</ul>' );
 
