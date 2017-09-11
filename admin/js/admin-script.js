@@ -316,7 +316,14 @@ jQuery( document ).ready( function($) {
 			workoutName         = $( '[name = "workout_name"]' ).val(),
 			workoutInstructions = $( '[name = "workout_instructions"]' ).val(),
 			workoutCategory     = $( '[name = "workout_category"]' ).val(),
-			workoutImage        = $( '[name = "custom-img-id"]' ).val();
+			workoutImage        = $( '[name = "custom-img-id"]' ).val(),
+			workoutDuration     = $( '[name = "workout_duration"]' ).val(),
+			workoutIntensity    = $( '[name = "workout_intensity"]' ).val(),
+			workoutWorkload     = $( '[name = "workout_workload"]' ).val(),
+			workoutRest         = $( '[name = "workout_rest_periods"]' ).val(),
+			workoutAuthor       = $( '[name = "workout_author"]' ).val(),
+			workoutRepetitions  = $( '[name = "workout_repetitions"]' ).val(),
+			workoutDescription  = $( '[name = "workout_description"]' ).val();
 
 		$.ajax({
 			type: 'POST',
@@ -330,7 +337,14 @@ jQuery( document ).ready( function($) {
 				workoutCategory: workoutCategory,
 				workoutInstructions: workoutInstructions,
 				workoutImage: workoutImage,
-				nonce: nonce
+				workoutDuration: workoutDuration,
+				nonce: nonce,
+				workoutRepetitions: workoutRepetitions,
+				workoutAuthor: workoutAuthor,
+				workoutRest: workoutRest,
+				workoutWorkload: workoutWorkload,
+				workoutIntensity: workoutIntensity,
+				workoutDescription: workoutDescription
 			},
 			success: function( response ) {
 				console.log(response.data);

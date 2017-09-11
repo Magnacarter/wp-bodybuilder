@@ -110,12 +110,54 @@ class Custom_Field {
 				'label' => 'Workout Name',
 				'desc'  => 'Name the workout',
 				'id'    => $prefix . 'name',
-				'type'  => 'text',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Author',
+				'desc'  => 'Who designed this workout?',
+				'id'    => $prefix . 'author',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Description',
+				'desc'  => 'Give a brief overview of the workout',
+				'id'    => $prefix . 'description',
+				'type'  => 'textarea'
+			),
+			array(
+				'label' => 'Intensity',
+				'desc'  => 'Average target heartrate',
+				'id'    => $prefix . 'intensity',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Rest Periods',
+				'desc'  => 'How many rest days are there per week?',
+				'id'    => $prefix . 'rest_periods',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Repetitions',
+				'desc'  => 'How many weeks should one do this workout?',
+				'id'    => $prefix . 'repetitions',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Workload',
+				'desc'  => 'What is the energy expenditure? e.g., calories burned',
+				'id'    => $prefix . 'workload',
+				'type'  => 'text'
 			),
 			array(
 				'label' => 'Category',
 				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc...',
 				'id'    => $prefix . 'category',
+				'type'  => 'text'
+			),
+			array(
+				'label' => 'Average Workout Time',
+				'desc'  => 'Average time it takes to complete each workout',
+				'id'    => $prefix . 'duration',
 				'type'  => 'text'
 			),
 			array(

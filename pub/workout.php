@@ -12,6 +12,8 @@
 
 namespace Bodybuilder\plugin\pub;
 
+use Bodybuilder\plugin\admin\custom\Custom_Tables;
+
 /**
  * Class Workout
  */
@@ -62,6 +64,27 @@ class Workout {
 	}
 
 	/**
+	 * Get all workout meta
+	 *
+	 * @since 1.0.0
+	 * @param $post_id
+	 * @return array $meta
+	 */
+	public function get_all_workout_meta( $post_id ) {
+
+		global $wpdb;
+
+		$meta = $wpdb->get_results(
+			"
+			SELECT * 
+			FROM $wpdb->bodybuilder_workout
+			"
+		);
+
+		return $meta;
+	}
+
+	/**
 	 * Get workout
 	 *
 	 * @since 1.0.0
@@ -109,6 +132,9 @@ class Workout {
 
 				$exercises = $work_day['exercises'];
 
+				if( ! isset( $exercises ) )
+					return;
+
 				foreach ( $exercises as $exercise ) {
 
 					print( '<div class="grid-50">' );
@@ -140,65 +166,40 @@ class Workout {
 	/**
 	 * Build schema array
 	 *
-	 *
 	 * @since 1.0.0
-	 * @return array $recipe_schema
+	 * @param int $post_id
+	 * @return array $workout_schema
 	 */
-//	public function build_schema_array( $post_id ) {
-//
-//		global $post;
-//
-//		$recipe_vals    = $this->get_card_fields();
-//		$total          = $recipe_vals['mrc_rating_total'];
-//		$count          = $recipe_vals['mrc_review_count'];
-//		$rating_average = Import::get_rating_average( $total, $count );
-//
-//		$recipe_schema = array(
-//			'@context'          => 'http://schema.org',
-//			'@type'             => 'Recipe',
-//			'@id'               => get_permalink( $post->ID ),
-//			'name'              => $recipe_vals['mrc_recipe_name'],
-//			'description'       => $recipe_vals['mrc_summary'],
-//			'aggregateRating'   => array(
-//				'@type'       => 'AggregateRating',
-//				'ratingValue' => $rating_average,
-//				'reviewCount' => $count,
-//				'bestRating'  => $recipe_vals['mrc_best_rating'],
-//				'worstRating' => $recipe_vals['mrc_worst_rating'],
-//			),
-//			'url'               => get_permalink( $post->ID ),
-//			'author'            => $recipe_vals['mrc_author'],
-//			'image'             => $recipe_vals['mrc_photo'],
-//			'mainEntityOfPage'  => get_permalink( $post->ID ),
-//			'prepTime'          => $recipe_vals['mrc_prep_time'],
-//			'cookTime'          => $recipe_vals['mrc_cook_time'],
-//			'totalTime'         => $recipe_vals['mrc_total_time'],
-//			'recipeYield'       => $recipe_vals['mrc_yield'],
-//			'recipeCategory'    => $recipe_vals['mrc_type'],
-//			'recipeCuisine'     => $recipe_vals['mrc_cuisine'],
-//			'nutrition'         => array(
-//				'@type'               => 'NutritionInformation',
-//				'servingSize'         => $recipe_vals['mrc_serving_size'],
-//				'calories'            => $recipe_vals['mrc_calories'],
-//				'fatContent'          => $recipe_vals['mrc_fat'],
-//				'carbohydrateContent' => $recipe_vals['mrc_carbohydrates'],
-//				'cholesterolContent'  => $recipe_vals['mrc_cholesterol'],
-//				'fiberContent'        => $recipe_vals['mrc_fiber'],
-//				'proteinContent'      => $recipe_vals['mrc_protein'],
-//				'saturatedFatContent' => $recipe_vals['mrc_saturated_fat'],
-//				'sodiumContent'       => $recipe_vals['mrc_sodium'],
-//				'sugarContent'        => $recipe_vals['mrc_sugar'],
-//			),
-//			'recipeIngredient'   => array( json_decode( $recipe_vals['mrc_ingredients'] ) ),
-//			'recipeInstructions' => array( json_decode( $recipe_vals['mrc_instructions'] ) ),
-//		);
-//
-//		$workout_schema  = $this->array_filter_recursive( $workout_schema );
-//		$encoded_workout = json_encode( $workout_schema, JSON_UNESCAPED_SLASHES );
-//		$workout_schema  = sprintf( '<script type=“application/ld+json”>%s</script>', $encoded_workout );
-//
-//		return $workout_schema;
-//
-//	}
+	public function build_schema_array( $post_id ) {
+
+		$meta  = $this->get_all_workout_meta( $post_id );
+		$image = $meta[0]->workout_image;
+		$workout_image = wp_get_attachment_image_src( $image );
+
+		$workout_schema = array(
+			'@context'          => 'http://schema.org',
+			'@type'             => 'ExercisePlan',
+			'@id'               => get_permalink( $post_id ),
+			'name'              => $meta[0]->workout_name,
+			'description'       => $meta[0]->workout_description,
+			'url'               => get_permalink( $post_id ),
+			'author'            => $meta[0]->workout_author,
+			'image'             => $workout_image,
+			'mainEntityOfPage'  => get_permalink( $post_id ),
+			'activityDuration'  => $meta[0]->workout_duration,
+			'activityFrequency' => $meta[0]->workout_frequency,
+			'intensity'         => $meta[0]->workout_intensity,
+			'repetitions'       => $meta[0]->workout_repetitions,
+			'exerciseType'      => $meta[0]->workout_category,
+			'restPeriods'       => $meta[0]->workout_rest_periods,
+			'workload'          => $meta[0]->workout_workload,
+		);
+
+		$encoded_workout = json_encode( $workout_schema, JSON_UNESCAPED_SLASHES );
+		$workout_schema  = sprintf( '<script type=“application/ld+json”>%s</script>', $encoded_workout );
+
+		return $workout_schema;
+
+	}
 
 }

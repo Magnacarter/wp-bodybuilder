@@ -159,7 +159,7 @@ class Post_Custom_Fields extends Custom_Field {
 					$this->render_day_repeater_field( $field, $meta );
 					break;
 
-			} //end switch
+			} // end switch
 
 			print( '</td></tr>' );
 
@@ -277,6 +277,7 @@ class Post_Custom_Fields extends Custom_Field {
 			isset( $_POST['workoutId'] )
 		) {
 
+			$i                    = 0;
 			$workout_id           = intval( $_POST['workoutId'] );
 			$workout_object       = $_POST['workout'];
 			$workout_json         = json_encode( $workout_object, JSON_UNESCAPED_SLASHES );
@@ -286,6 +287,13 @@ class Post_Custom_Fields extends Custom_Field {
 			$workout_name         = $_POST['workoutName'];
 			$workout_instructions = $_POST['workoutInstructions'];
 			$workout_category     = $_POST['workoutCategory'];
+			$workout_duration     = $_POST['workoutDuration'];
+			$workout_repetitions  = $_POST['workoutRepetitions'];
+			$workout_author       = $_POST['workoutAuthor'];
+			$workout_rest         = $_POST['workoutRest'];
+			$workout_workload     = $_POST['workoutWorkload'];
+			$workout_intensity    = $_POST['workoutIntensity'];
+			$workout_description  = $_POST['workoutDescription'];
 
 			// Check if a nonce is valid.
 			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
@@ -303,6 +311,11 @@ class Post_Custom_Fields extends Custom_Field {
 			if ( wp_is_post_revision( $workout_object ) )
 				return;
 
+			$workout_days = json_decode( $workout_json, true );
+			foreach ( $workout_days as $work_day ) {
+				$i++;
+			}
+
 			$args = array(
 				'workout'              => $workout_json,
 				'workout_id'           => $workout_id,
@@ -310,6 +323,14 @@ class Post_Custom_Fields extends Custom_Field {
 				'workout_image'        => $workout_image,
 				'workout_instructions' => $workout_instructions,
 				'workout_category'     => $workout_category,
+				'workout_frequency'    => $i . ' days',
+				'workout_duration'     => $workout_duration,
+				'workout_intensity'    => $workout_intensity,
+				'workout_repetitions'  => $workout_repetitions,
+				'workout_rest_periods' => $workout_rest,
+				'workout_workload'     => $workout_workload,
+				'workout_author'       => $workout_author,
+				'workout_description'  => $workout_description
 			);
 
 			Custom_Tables::save_workout( $args, $workout_id );

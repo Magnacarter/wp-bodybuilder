@@ -123,6 +123,8 @@ class Display_Workout extends Workout {
 
 			</div><!-- .wpbb-content-inner -->
 
+			<?php echo $this->build_schema_array( $post_id ) ?>
+
 		</div><!-- .wpbb-workout -->
 
 		<?php
