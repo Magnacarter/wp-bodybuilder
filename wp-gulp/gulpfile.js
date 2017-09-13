@@ -13,7 +13,7 @@ var gulp         = require( 'gulp' ),
 
 var path = {
   JS_PUB          : '../js/pub/js',
-  JS_PUB_FILES    : [ '../pub/js/pub.js' ],
+  JS_PUB_FILES    : [ '../pub/js/pub-script.js' ],
   SCSS_PUB        : '../pub/scss/main.scss',
   CSS_PUB         : '../pub/css',
   CSS_PUB_FILES   : [ '../pub/css/unsemantic-grid-responsive.css', '../pub/css/pub.css' ],
@@ -94,7 +94,7 @@ gulp.task( 'concatCSS', [ 'compileSass' ], function() {
 
 gulp.task( 'cssWatch', [ 'concatCSS' ], browserSync.reload );
 
-gulp.task( 'jsWatch', [ 'concatAdminScripts' ], browserSync.reload );
+gulp.task( 'jsWatch', [ 'concatScripts' ], browserSync.reload );
 
 gulp.task( 'cssAdminWatch', [ 'concatAdminCSS' ], browserSync.reload );
 
@@ -107,7 +107,7 @@ gulp.task( 'watchFiles', function() {
     }
   });
   gulp.watch([ '../pub/scss/**/*.scss' ], [ 'cssWatch' ]);
-  gulp.watch( '../pub/js/pub.js', [ 'jsWatch' ]);
+  gulp.watch( '../pub/js/pub-script.js', [ 'jsWatch' ]);
   gulp.watch([ '../admin/scss/**/*.scss' ], [ 'cssAdminWatch' ]);
   gulp.watch( '../admin/js/admin-script.js', [ 'jsAdminWatch' ]);
 });

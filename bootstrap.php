@@ -66,11 +66,13 @@ function init_constants() {
  */
 function public_scripts() {
 
-	wp_enqueue_style(   'wpbb_grid',          BODYBUILDER_URL . 'pub/css/unsemantic-grid-responsive.css' );
-	wp_enqueue_style(   'wpbb_rateyo_styles', BODYBUILDER_URL . 'pub/css/jquery.rateyo.min.css' );
-	wp_enqueue_style(   'wpbb_styles',        BODYBUILDER_URL . 'pub/css/pub.css' );
-	wp_enqueue_script(  'wpbb_rateyo_script', BODYBUILDER_URL . 'pub/js/jquery.rateyo.min.js', array( 'jquery' ), PUB_JS_VER, false );
-	wp_enqueue_script(  'wpbb_script',        BODYBUILDER_URL . 'pub/js/pub-script.js', array( 'jquery' ), PUB_JS_VER, false );
+	wp_enqueue_style(   'wpbb_grid',             BODYBUILDER_URL . 'pub/css/unsemantic-grid-responsive.css' );
+	wp_enqueue_style(   'wpbb_rateyo_styles',    BODYBUILDER_URL . 'pub/css/jquery.rateyo.min.css' );
+	wp_enqueue_style(   'wpbb_styles',           BODYBUILDER_URL . 'pub/css/pub.css' );
+	wp_enqueue_script(  'wpbb_pdf_script',       BODYBUILDER_URL . 'pub/js/jspdf.min.js', array( 'jquery' ), PUB_JS_VER, true );
+	wp_enqueue_script(  'wpbb_html_script',      BODYBUILDER_URL . 'pub/js/html2canvas.min.js', array( 'jquery' ), PUB_JS_VER, true );
+	wp_enqueue_script(  'wpbb_rateyo_script',    BODYBUILDER_URL . 'pub/js/jquery.rateyo.min.js', array( 'jquery' ), PUB_JS_VER, false );
+	wp_enqueue_script(  'wpbb_script',           BODYBUILDER_URL . 'pub/js/pub-script.js', array( 'jquery' ), PUB_JS_VER, false );
 
 }
 

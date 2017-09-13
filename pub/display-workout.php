@@ -143,6 +143,17 @@ class Display_Workout extends Workout {
 	}
 
 	/**
+	 * Save as pdf
+	 */
+	public function save_as_pdf() {
+
+		?>
+
+		<?php
+
+	}
+
+	/**
 	 * Add workout to post
 	 *
 	 * Filter the post content. Add the workout to the bottom of the post.
@@ -169,9 +180,11 @@ class Display_Workout extends Workout {
 
 		?>
 
-		<div class="wpbb-workout grid-container">
+		<div id="wpbb-workout-card" class="wpbb-workout grid-container">
 
-			<div class="wpbb-content-inner">
+			<a href="javascript:genPDF()">Download PDF</a>
+
+			<div id="wpbb-workout-inner" class="wpbb-content-inner">
 
 				<header class="grid-50">
 
@@ -183,7 +196,7 @@ class Display_Workout extends Workout {
 
 				<div class="workout-image-wrapper grid-50">
 
-					<img src="<?php echo esc_attr( $img_att[0] ) ?>" />
+					<img id="workout-img" src="<?php echo esc_attr( $img_att[0] ) ?>" />
 
 					<?php echo $this->add_rating_js( $post_id ) ?>
 
@@ -198,8 +211,6 @@ class Display_Workout extends Workout {
 					</div><!-- .workout-instructions -->
 
 					<div class="exercises">
-
-						<div class="grid-100"><h2>Exercises :</h2></div>
 
 						<?php $this->load_exercises( $workouts ) ?>
 
