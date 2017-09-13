@@ -9,6 +9,8 @@
  */
 
 namespace Bodybuilder\plugin\pub;
+use Bodybuilder\plugin\admin\custom\Custom_Tables;
+use Bodybuilder\plugin\pub\Rating;
 
 /**
  * Class Workout
@@ -59,6 +61,88 @@ class Display_Workout extends Workout {
 	}
 
 	/**
+	 * Add rating js
+	 *
+	 * @since 1.0.0
+	 * @param int $post_id
+	 * @return void
+	 */
+	public function add_rating_js( $post_id ) {
+
+		$name   = $this->get_workout_meta( $post_id, 'workout_name' );
+		$div_id = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
+		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
+
+		printf( '<div id="%s"></div>', $div_id );
+		printf( '<div class="rating-meta">%s out of 5 stars</div>', $average_rating );
+
+		?>
+		<script type="text/javascript">
+
+			jQuery( document ).ready( function($) {
+
+				$( '#<?php echo $div_id ?>' ).rateYo({
+					rating    : <?php echo $average_rating ?>,
+					starWidth : "25px",
+					normalFill: "#ddd",
+					ratedFill : "#000",
+					fullStar  : true
+				});
+
+				$( '#<?php echo $div_id ?>' ).rateYo().on( 'rateyo.set', function (e, data) {
+
+					$( '#rating_value').attr( 'value', data.rating );
+
+					var userRating = data.rating;
+
+					console.log( userRating );
+
+					$.ajax({
+						type: 'POST',
+						url: wpbb_rating_vars.ajaxurl,
+						dataType: 'json',
+						data: {
+							action: 'update_user_rating',
+							user_rating: userRating,
+							post_id: <?php echo $post_id ?>,
+							div_id: '#<?php echo $div_id ?>'
+						},
+						success: function( response ) {
+
+							console.log( response.data );
+
+							if( response.success === true ) {
+
+								console.log( response.data );
+
+								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 stars</p>' );
+
+								alert( 'Thank you for rating this recipe!' );
+
+							 }
+
+							if( response.success === false ) {
+
+								console.log( response );
+
+								alert( response.data );
+
+							}
+
+						}
+
+					}); // rate, no comment event
+
+				}); // on rate event
+
+			}); // on rate event
+
+		</script>
+		<?php
+
+	}
+
+	/**
 	 * Add workout to post
 	 *
 	 * Filter the post content. Add the workout to the bottom of the post.
@@ -79,9 +163,9 @@ class Display_Workout extends Workout {
 
 		ob_start();
 
-		//$workout_schema = $this->build_schema_array( $post_id );
+		$workout_schema = $this->build_schema_array( $post_id );
 
-		//print( $workout_schema );
+		print( $workout_schema );
 
 		?>
 
@@ -100,6 +184,8 @@ class Display_Workout extends Workout {
 				<div class="workout-image-wrapper grid-50">
 
 					<img src="<?php echo esc_attr( $img_att[0] ) ?>" />
+
+					<?php echo $this->add_rating_js( $post_id ) ?>
 
 				</div><!-- .workout-image-wrapper -->
 
@@ -122,8 +208,6 @@ class Display_Workout extends Workout {
 				</section><!-- .workout-content -->
 
 			</div><!-- .wpbb-content-inner -->
-
-			<?php echo $this->build_schema_array( $post_id ) ?>
 
 		</div><!-- .wpbb-workout -->
 

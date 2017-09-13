@@ -60,6 +60,9 @@ class Custom_Tables {
 		workout_workload text NOT NULL,
 		workout_author tinytext NOT NULL,
 		workout_description text NOT NULL,
+		rating_count mediumint(9) NOT NULL,
+		rating_total mediumint(9) NOT NULL,
+		rating_average mediumint(9) NOT NULL,
 		url varchar(55) DEFAULT '' NOT NULL,
 		PRIMARY KEY  (workout_id)
 	) $charset_collate;";
@@ -96,6 +99,24 @@ class Custom_Tables {
 		$workout_meta = $meta[0]->$field_id;
 
 		return $workout_meta;
+
+	}
+
+	/**
+	 * Update workout meta
+	 *
+	 * @since 1.0.0
+	 * @param $workout_id
+	 * @param $data
+	 * @return void
+	 */
+	public static function update_workout_meta( $workout_id, $data ) {
+
+		global $wpdb;
+		$table_name = "wp_bodybuilder_workout";
+		$where      = array( 'workout_id' => $workout_id );
+
+		$wpdb->update( $table_name, $data, $where );
 
 	}
 

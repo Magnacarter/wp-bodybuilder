@@ -66,9 +66,11 @@ function init_constants() {
  */
 function public_scripts() {
 
-	wp_enqueue_style(   'wpbb_grid',   BODYBUILDER_URL . 'pub/css/unsemantic-grid-responsive.css' );
-	wp_enqueue_style(   'wpbb_styles', BODYBUILDER_URL . 'pub/css/pub.css' );
-	wp_enqueue_script(  'wpbb_script', BODYBUILDER_URL . 'pub/js/pub-script.js', array( 'jquery' ), PUB_JS_VER, false );
+	wp_enqueue_style(   'wpbb_grid',          BODYBUILDER_URL . 'pub/css/unsemantic-grid-responsive.css' );
+	wp_enqueue_style(   'wpbb_rateyo_styles', BODYBUILDER_URL . 'pub/css/jquery.rateyo.min.css' );
+	wp_enqueue_style(   'wpbb_styles',        BODYBUILDER_URL . 'pub/css/pub.css' );
+	wp_enqueue_script(  'wpbb_rateyo_script', BODYBUILDER_URL . 'pub/js/jquery.rateyo.min.js', array( 'jquery' ), PUB_JS_VER, false );
+	wp_enqueue_script(  'wpbb_script',        BODYBUILDER_URL . 'pub/js/pub-script.js', array( 'jquery' ), PUB_JS_VER, false );
 
 }
 
@@ -167,7 +169,9 @@ function init_autoloader() {
 	require_once( 'admin/custom/post-custom-fields.php' );
 
 	//Public files
+	require_once( 'pub/frontend-ajax.php' );
 	require_once( 'pub/workout.php' );
+	require_once( 'pub/ratings.php' );
 	require_once( 'pub/display-workout.php' );
 
 	// Testing
