@@ -121,6 +121,30 @@ jQuery( document ).ready( function($) {
 	};
 
 	/**
+	 * RenameDay
+	 *
+	 * Change the day names to the correct days when the user removes a day
+	 * in the admin screen
+	 *
+	 * @since 1.0.0
+	 * return void
+	 */
+	const renameDay = function() {
+
+		var d    = 1,
+			days = document.getElementsByClassName( 'day-exercises' );
+
+		for( var i = 0; i < days.length; i++ ) {
+
+			var day = days[i].getElementsByTagName('h3');
+
+			var dayTitle = day[0].innerHTML = "Day " + d;
+
+			d++;
+		}
+	};
+
+	/**
 	 * Add day
 	 */
 	const addDay = function( bool ) {
@@ -185,11 +209,11 @@ jQuery( document ).ready( function($) {
 	 * Remove day
 	 */
 	const removeDay = function() {
-
 		$( '.day-repeat-remove' ).click( function( e ) {
 			e.preventDefault();
 			$( this ).parent().parent().remove();
 			i--;
+			renameDay( $(this) );
 			return false;
 		});
 	};
