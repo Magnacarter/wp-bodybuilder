@@ -218,13 +218,15 @@ jQuery( document ).ready( function($) {
 			addDay(bool);
 		}
 
+		var dayNumber = document.getElementsByClassName( 'day-exercises' ).length + 1;
+
 		field = $(this).closest('td').find('.day_repeat li#day-list-item:last').clone(true);
 
 		field.find('#exercise-list li').remove();
 
 		fieldLocation = $(this).closest('td').find('.day_repeat li#day-list-item:last');
 
-		$('.day-header', field).find('h3').html('Day ' + i, function (index, name) {
+		$('.day-header', field).find('h3').html('Day ' + dayNumber, function (index, name) {
 
 			return name.replace(/(\d+)/, function (fullMatch, n) {
 
