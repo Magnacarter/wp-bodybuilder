@@ -108,6 +108,57 @@ class Workout {
 	}
 
 	/**
+	 * Check whitespace or empty
+	 *
+	 * Callback for array_filter to filter an array's values
+	 * for whitespace or empty strings and remove it
+	 *
+	 * @since 1.0.0
+	 * @param string $val
+	 * @return bool
+	 */
+	public function check_whitespace_or_empty( $val ) {
+
+		return $val != '' || preg_match( '/\S/', $val );
+
+	}
+
+	/**
+	 * Render instructions popup
+	 */
+	public function render_instructions_popup( $post_id ) {
+
+		$instructions_arr = get_post_meta( $post_id, 'exercise_instructions' );
+
+		// Put instructions into an array at each new line
+		$instructions = preg_split( '/(\r\n|\n|\r)/', $instructions_arr[0] );
+
+		// Filter the array for whitespace or empty stings from the textarea in the post admin
+		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
+
+		?>
+
+		<div class="instruction-popup">
+
+			<div class="close-button"><a class="close-btn">x</a></div>
+
+			<ul>
+
+				<?php foreach( $instructions as $instruction ) : ?>
+
+					<li><?php echo $instruction ?></li>
+
+				<?php endforeach ?>
+
+			</ul>
+
+		</div>
+
+		<?php
+
+	}
+
+	/**
 	 * Load exercises
 	 *
 	 * @since 1.0.0
@@ -138,7 +189,7 @@ class Workout {
 
 				foreach ( $exercises as $exercise ) {
 
-					print( '<div class="exercise no-pad-left grid-100">' );
+					print( '<div id="single-exercise" class="exercise no-pad-left grid-100">' );
 
 					$exercise_id = $exercise[0]['id'];
 					$image_id    = get_post_meta( $exercise_id, 'exercise_image' );
@@ -151,15 +202,19 @@ class Workout {
 					$reps        = $exercise[1]['reps'];
 					$rest        = $exercise[1]['rest'];
 
+					$this->render_instructions_popup( $exercise_id );
+
 					printf( '<h4><span>%s</span></h4>', esc_html( $title ) );
 
 					printf( '<div class="no-pad-left grid-30"><img src="%s"/></div>', esc_attr( $image_path ) );
 
-					print( '<div class="sets grid-70">' );
+					print( '<div class="sets grid-45">' );
 					printf( '<p><span>Sets : </span> %s</p>', $sets );
 					printf( '<p><span>Reps : </span> %s</p>', $reps );
 					printf( '<p><span>Rest per set : </span> %s</p>', $rest );
 					print( '</div>' );
+
+					print( '<div class="instruction-button grid-25"><a class="instruction-btn">Instructions</a></div>' );
 
 					print( '</div>' );
 

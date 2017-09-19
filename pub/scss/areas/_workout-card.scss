@@ -36,6 +36,7 @@
 
 	.exercise {
 		padding: 20px 0;
+		position: relative;
 	}
 
 	h4 {
@@ -85,6 +86,76 @@
 #workout-img {
 	margin-bottom: 9px;
 	box-shadow: $shadow 6px 6px 4px;
+}
+
+.instruction-popup {
+	display: none;
+	position: absolute;
+	left:0;
+	right:0;
+	margin: auto;
+	width: 90%;
+	height: 90%;
+	background-color: $star;
+	opacity: .8;
+	border-radius: 8px;
+
+	ul {
+		margin: 30px 40px;
+		li {
+			color: $white;
+			font-size: 12px;
+		}
+	}
+
+}
+
+/* Buttons ----- */
+
+.close-button {
+	.close-btn {
+		padding: 3px 15px;
+		margin-top: 5px;
+		margin-right: 10px;
+		padding: 3px 8px;
+		font-size: 10px;
+		background-color: $black;
+		border-radius: 50px;
+		text-decoration: none !important;
+		box-shadow: none !important;
+		color: $white;
+		float: right;
+		cursor: pointer;
+
+		&:hover {
+			color: $white;
+		}
+	}
+}
+
+.instruction-button {
+	.instruction-btn {
+		padding: 3px 15px;
+		text-decoration: none;
+		font-size: 10px;
+		border-radius: 2px;
+		box-shadow: none;
+		color: white;
+		border: 1px solid $grey;
+		background: $star;
+		font-weight: 200;
+		border: none;
+		cursor: pointer;
+
+		&:hover {
+			opacity: .8;
+			color: white;
+			background: $star;
+			border-radius: 2px;
+			box-shadow: none;
+			border: none;
+		}
+	}
 }
 
 .save-button {

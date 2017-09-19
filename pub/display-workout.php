@@ -144,22 +144,6 @@ class Display_Workout extends Workout {
 	}
 
 	/**
-	 * Check whitespace or empty
-	 *
-	 * Callback for array_filter to filter an array's values
-	 * for whitespace or empty strings and remove it
-	 *
-	 * @since 1.0.0
-	 * @param string $val
-	 * @return bool
-	 */
-	public function check_whitespace_or_empty( $val ) {
-
-		return $val != '' || preg_match( '/\S/', $val );
-
-	}
-
-	/**
 	 * Add workout to post
 	 *
 	 * Filter the post content. Add the workout to the bottom of the post.

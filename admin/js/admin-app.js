@@ -333,6 +333,16 @@ jQuery( document ).ready( function($) {
 		return workout;
 	};
 
+	/**
+	 * Vars for select box
+	 */
+	const selectBox     = $( '.wpbb-exercise-selection' ),
+		  selectedCards = [],
+		  cardsById     = {};
+
+	/**
+	 * Populate the select box with options for selecting exercises
+	 */
 	(function ($) {
 		$.fn.refreshDataSelect2 = function (data) {
 			this.select2('data', data);
@@ -347,9 +357,7 @@ jQuery( document ).ready( function($) {
 		};
 	})(jQuery);
 
-	const selectedCards = [];
-	const cardsById = {};
-	const cardData = $('.wpbb-exercise-selection').children().map(function(index, $el) {
+	const cardData = selectBox.children().map(function(index, $el) {
 		const card = {
 			id: $el.value,
 			text: $el.text,
@@ -359,15 +367,9 @@ jQuery( document ).ready( function($) {
 	});
 
 	/**
-	 * @var select
-	 * cache our selector
-	 */
-	var select = $( '.wpbb-exercise-selection' );
-
-	/**
 	 * Initialize select2 plugin
 	 */
-	select.select2({
+	selectBox.select2({
 		data: cardData,
 		placeholder: 'Add Exercise'
 	});
