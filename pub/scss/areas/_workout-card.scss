@@ -1,10 +1,55 @@
 /* Workout card ------ */
 .wpbb-workout {
-	padding: 20px 0;
+	padding: 38px 28px;
 	border: 1px solid $border;
+}
+
+.workout-image-wrapper {
+
 }
 
 .rating-meta {
 	margin-top: 5px;
 }
 
+#wpbb-workout-inner {
+	h2 {
+		margin-bottom: 4px;
+	}
+
+	header {
+		.jq-ry-container {
+			margin-top: 10px;
+			padding-left: 0;
+		}
+	}
+}
+
+#workout-img {
+	margin-bottom: 9px;
+	box-shadow: $shadow 6px 6px 4px;
+}
+
+.save-button {
+	margin-top: 5px;
+
+	.save-btn {
+		padding: 3px 15px;
+		text-decoration: none;
+		font-size: 10px;
+		border-radius: 2px;
+		box-shadow: none;
+		color: white;
+		border: 1px solid $grey;
+		//text-transform: uppercase;
+		background: $grey;
+		font-weight: 200;
+
+		&:hover {
+			color: white;
+			background: $star;
+			box-shadow: none;
+			border: none;
+		}
+	}
+}

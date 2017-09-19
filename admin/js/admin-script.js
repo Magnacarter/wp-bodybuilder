@@ -213,7 +213,7 @@ jQuery( document ).ready( function($) {
 			e.preventDefault();
 			$( this ).parent().parent().remove();
 			i--;
-			renameDay( $(this) );
+			renameDay();
 			return false;
 		});
 	};
@@ -228,7 +228,7 @@ jQuery( document ).ready( function($) {
 			var exerciseListItem = $(this).parent().parent();
 			exerciseListItem.remove();
 		});
-	}
+	};
 	removeExercise();
 
 	// Add day on click

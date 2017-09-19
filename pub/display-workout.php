@@ -48,6 +48,7 @@ class Display_Workout extends Workout {
 			'workout_category',
 			'workout_image',
 			'workout_instructions',
+			'workout_author'
 		);
 
 		foreach ( $args as $arg ) {
@@ -74,7 +75,7 @@ class Display_Workout extends Workout {
 		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
 
 		printf( '<div id="%s"></div>', $div_id );
-		printf( '<div class="rating-meta">%s out of 5 stars</div>', $average_rating );
+		printf( '<div class="rating-meta"><p>%s out of 5 stars</p></div>', $average_rating );
 
 		?>
 		<script type="text/javascript">
@@ -83,9 +84,9 @@ class Display_Workout extends Workout {
 
 				$( '#<?php echo $div_id ?>' ).rateYo({
 					rating    : <?php echo $average_rating ?>,
-					starWidth : "25px",
-					normalFill: "#ddd",
-					ratedFill : "#000",
+					starWidth : "15px",
+					normalFill: "#d8d4d4",
+					ratedFill : "#969393",
 					fullStar  : true
 				});
 
@@ -143,13 +144,18 @@ class Display_Workout extends Workout {
 	}
 
 	/**
-	 * Save as pdf
+	 * Check whitespace or empty
+	 *
+	 * Callback for array_filter to filter an array's values
+	 * for whitespace or empty strings and remove it
+	 *
+	 * @since 1.0.0
+	 * @param string $val
+	 * @return bool
 	 */
-	public function save_as_pdf() {
+	public function check_whitespace_or_empty( $val ) {
 
-		?>
-
-		<?php
+		return $val != '' || preg_match( '/\S/', $val );
 
 	}
 
@@ -169,6 +175,11 @@ class Display_Workout extends Workout {
 		$img_att  = wp_get_attachment_image_src( $img_id, 'full' );
 		$workouts = $this->get_workout( $post_id );
 
+		$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
+
+		//Filter the array for whitespace or empty stings from the textarea in the post admin
+		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
+
 		if ( empty( $workouts ) )
 			return;
 
@@ -182,23 +193,33 @@ class Display_Workout extends Workout {
 
 		<div id="wpbb-workout-card" class="wpbb-workout grid-container">
 
-			<a href="javascript:genPDF()">Download PDF</a>
-
 			<div id="wpbb-workout-inner" class="wpbb-content-inner">
 
-				<header class="grid-50">
+				<header class="grid-40">
 
 					<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
 
+					<p>Author: <?php echo esc_html( $fields['workout_author'] ) ?></p>
+
 					<p>Category: <?php echo esc_html( $fields['workout_category'] ) ?></p>
+
+					<div class="no-padding">
+
+						<?php echo $this->add_rating_js( $post_id ) ?>
+
+					</div>
+
+					<div class="no-padding save-button">
+
+						<a class="save-btn" href="javascript:genPDF()">Save Workout</a>
+
+					</div>
 
 				</header>
 
-				<div class="workout-image-wrapper grid-50">
+				<div class="workout-image-wrapper grid-60">
 
 					<img id="workout-img" src="<?php echo esc_attr( $img_att[0] ) ?>" />
-
-					<?php echo $this->add_rating_js( $post_id ) ?>
 
 				</div><!-- .workout-image-wrapper -->
 
@@ -206,7 +227,17 @@ class Display_Workout extends Workout {
 
 					<div class="workout-instructions grid-100">
 
-						<?php echo esc_html( stripslashes( $fields['workout_instructions'] ) ) ?>
+						<h4>Workout Instructions</h4>
+
+						<ol class="grid-100">
+
+						<?php foreach ( $instructions as $instruction ) : ?>
+
+							<li><?php echo $instruction ?></li>
+
+						<?php endforeach ?>
+
+						</ol>
 
 					</div><!-- .workout-instructions -->
 

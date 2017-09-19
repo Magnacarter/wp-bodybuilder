@@ -283,9 +283,9 @@ class Post_Custom_Fields extends Custom_Field {
 			$workout_json         = json_encode( $workout_object, JSON_UNESCAPED_SLASHES );
 			$nonce_field          = $_POST['nonce'];
 			$nonce_action         = 'workout-nonce';
+			$workout_instructions = $_POST['workoutInstructions'];
 			$workout_image        = $_POST['workoutImage'];
 			$workout_name         = $_POST['workoutName'];
-			$workout_instructions = $_POST['workoutInstructions'];
 			$workout_category     = $_POST['workoutCategory'];
 			$workout_duration     = $_POST['workoutDuration'];
 			$workout_repetitions  = $_POST['workoutRepetitions'];
@@ -335,7 +335,7 @@ class Post_Custom_Fields extends Custom_Field {
 
 			Custom_Tables::save_workout( $args, $workout_id );
 
-			wp_send_json_success( $workout_image );
+			wp_send_json_success( $workout_instructions );
 
 		}
 

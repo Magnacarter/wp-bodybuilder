@@ -55,6 +55,37 @@ class Custom_Field {
 	}
 
 	/**
+	 * Check whitespace or empty
+	 *
+	 * Callback for array_filter to filter an array's values
+	 * for whitespace or empty strings and remove it
+	 *
+	 * @since 1.0.0
+	 * @param string $val
+	 * @return bool
+	 */
+	public function check_whitespace_or_empty( $val ) {
+
+		return $val != '' || preg_match( '/\S/', $val );
+
+	}
+
+	/**
+	 * Sanitize array values
+	 *
+	 * Sanatize each value in an array before updating the db
+	 *
+	 * @since 1.0.0
+	 * @param string $val
+	 * @return string $val
+	 */
+	public function sanitize_array_values( $val ) {
+
+		return sanitize_text_field( $val );
+
+	}
+
+	/**
 	 * Set custom meta fields
 	 *
 	 * define the custom fields for the CPT
