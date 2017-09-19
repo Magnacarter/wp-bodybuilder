@@ -333,6 +333,45 @@ jQuery( document ).ready( function($) {
 		return workout;
 	};
 
+	(function ($) {
+		$.fn.refreshDataSelect2 = function (data) {
+			this.select2('data', data);
+
+			// Update options
+			var $select = $(this[0]);
+
+			var options = data.map(function(item) {
+				return '<option value="' + item.id + '">' + item.text + '</option>';
+			});
+			$select.html(options.join('')).change();
+		};
+	})(jQuery);
+
+	const selectedCards = [];
+	const cardsById = {};
+	const cardData = $('.wpbb-exercise-selection').children().map(function(index, $el) {
+		const card = {
+			id: $el.value,
+			text: $el.text,
+		};
+		cardsById[$el.value] = card;
+		return card;
+	});
+
+	/**
+	 * @var select
+	 * cache our selector
+	 */
+	var select = $( '.wpbb-exercise-selection' );
+
+	/**
+	 * Initialize select2 plugin
+	 */
+	select.select2({
+		data: cardData,
+		placeholder: 'Add Exercise'
+	});
+
 	// Collect workout days and exercises upon clicking save workout
 	$( '.save-btn' ).click( function() {
 

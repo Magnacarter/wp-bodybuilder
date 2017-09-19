@@ -78,6 +78,7 @@ class Workout {
 			"
 			SELECT * 
 			FROM $wpdb->bodybuilder_workout
+			WHERE workout_id = $post_id
 			"
 		);
 
