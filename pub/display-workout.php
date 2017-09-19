@@ -169,15 +169,19 @@ class Display_Workout extends Workout {
 	 */
 	public function add_workout_to_post( $content ) {
 
-		$post_id  = $this->get_global_id();
-		$fields   = $this->add_workout_meta( $post_id );
-		$img_id   = intval( $fields['workout_image'] );
-		$img_att  = wp_get_attachment_image_src( $img_id, 'full' );
-		$workouts = $this->get_workout( $post_id );
+		$post_id     = $this->get_global_id();
+		$fields      = $this->add_workout_meta( $post_id );
+		$img_id      = intval( $fields['workout_image'] );
+		$img_att     = wp_get_attachment_image_src( $img_id, 'full' );
+		$workouts    = $this->get_workout( $post_id );
+		$avg_time    = Custom_Tables::get_workout_meta( $post_id, 'workout_duration' );
+		$avg_energy  = Custom_Tables::get_workout_meta( $post_id, 'workout_workload' );
+		$description = Custom_Tables::get_workout_meta( $post_id, 'workout_description' );
 
+		// Put instructions into an array at each new line
 		$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
 
-		//Filter the array for whitespace or empty stings from the textarea in the post admin
+		// Filter the array for whitespace or empty stings from the textarea in the post admin
 		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
 
 		if ( empty( $workouts ) )
@@ -195,7 +199,7 @@ class Display_Workout extends Workout {
 
 			<div id="wpbb-workout-inner" class="wpbb-content-inner">
 
-				<header class="grid-40">
+				<header class="no-pad-left grid-40">
 
 					<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
 
@@ -225,7 +229,35 @@ class Display_Workout extends Workout {
 
 				<section class="workout-content">
 
-					<div class="workout-instructions grid-100">
+					<div class="clearfix"></div>
+
+					<section id="averages" class="grid-100">
+
+						<div class="avg-time no-padding grid-100">
+
+							<?php printf( '<h5><strong>Average workout time :</strong> %s</h5>', esc_html( $avg_time ) ) ?>
+
+						</div>
+
+						<div class="avg-energy no-padding grid-100">
+
+							<?php printf( '<h5><strong>Energy used per workout :</strong> %s</h5>', esc_html( $avg_energy ) ) ?>
+
+						</div>
+
+					</section> <!-- #averages -->
+
+					<div class="clearfix"></div>
+
+					<div class="description no-pad-left grid-100">
+
+						<h4>Description</h4>
+
+						<?php printf( '<p>%s</p>', esc_html( $description ) ) ?>
+
+					</div><!-- .description -->
+
+					<div class="workout-instructions no-pad-left grid-100">
 
 						<h4>Workout Instructions</h4>
 

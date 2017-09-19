@@ -124,7 +124,7 @@ class Workout {
 
 			foreach ( $work_days as $work_day ) {
 
-				print( '<div class="grid-100">' );
+				print( '<div class="day-title no-pad-left grid-100">' );
 
 				printf( '<h3>%s</h3>', $work_day['day'] );
 
@@ -137,21 +137,28 @@ class Workout {
 
 				foreach ( $exercises as $exercise ) {
 
-					print( '<div class="grid-50">' );
+					print( '<div class="exercise no-pad-left grid-100">' );
 
 					$exercise_id = $exercise[0]['id'];
+					$image_id    = get_post_meta( $exercise_id, 'exercise_image' );
+					$image_id    = (int)$image_id[0];
+					$image       = get_post_meta( $image_id, '_wp_attached_file' );
+					$title       = get_the_title( $exercise_id );
+					$image_path  = wp_upload_dir();
+					$image_path  = $image_path['baseurl'] . '/' . $image[0];
+					$sets        = $exercise[1]['sets'];
+					$reps        = $exercise[1]['reps'];
+					$rest        = $exercise[1]['rest'];
 
-					$title = get_the_title( $exercise_id );
+					printf( '<h4><span>%s</span></h4>', esc_html( $title ) );
 
-					printf( '<h4>%s</h4>', $title );
+					printf( '<div class="no-pad-left grid-30"><img src="%s"/></div>', esc_attr( $image_path ) );
 
-					$sets = $exercise[1]['sets'];
-					$reps = $exercise[1]['reps'];
-					$rest = $exercise[1]['rest'];
-
-					printf( '<h5>Sets : %s</h5>', $sets );
-					printf( '<h5>Reps : %s</h5>', $reps );
-					printf( '<h5>Rest per set : %s</h5>', $rest );
+					print( '<div class="sets grid-70">' );
+					printf( '<p><span>Sets : </span> %s</p>', $sets );
+					printf( '<p><span>Reps : </span> %s</p>', $reps );
+					printf( '<p><span>Rest per set : </span> %s</p>', $rest );
+					print( '</div>' );
 
 					print( '</div>' );
 

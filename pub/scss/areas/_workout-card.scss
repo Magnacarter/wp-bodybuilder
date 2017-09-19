@@ -4,8 +4,65 @@
 	border: 1px solid $border;
 }
 
-.workout-image-wrapper {
+#averages {
+	margin: 40px 0;
+	text-align: center;
 
+	h5 {
+		font-weight: 200;
+		font-size: 10px;
+		color: $grey;
+	}
+
+	.avg-time {
+		margin-bottom: 14px;
+	}
+}
+
+.description {
+	margin-bottom: 20px;
+
+	p {
+		line-height: 20px !important;
+		color: $star !important;
+	}
+}
+
+.exercises {
+
+	.day-title {
+		border-bottom: 1px solid $grey;
+	}
+
+	.exercise {
+		padding: 20px 0;
+	}
+
+	h4 {
+		margin-bottom: 20px !important;
+		font-size: 18px !important;
+		color: $darkGrey !important;
+		font-weight: 800;
+	}
+}
+
+.sets {
+	margin-top: 7px;
+	padding-left: 40px;
+
+	@media( max-width: 767px ) {
+		margin-top: 20px;
+		padding-left: 0;
+	}
+
+	p {
+		font-size: 14px;
+		margin: 6px 0 !important;
+
+		span {
+			font-weight: 600;
+		}
+	}
 }
 
 .rating-meta {
@@ -41,13 +98,15 @@
 		box-shadow: none;
 		color: white;
 		border: 1px solid $grey;
-		//text-transform: uppercase;
-		background: $grey;
+		background: $star;
 		font-weight: 200;
+		border: none;
 
 		&:hover {
+			opacity: .8;
 			color: white;
 			background: $star;
+			border-radius: 2px;
 			box-shadow: none;
 			border: none;
 		}
