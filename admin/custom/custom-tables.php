@@ -97,7 +97,7 @@ class Custom_Tables {
 			"
 		);
 
-		if( $meta === null )
+		if( $meta == null )
 			return;
 
 		$workout_meta = $meta[0]->$field_id;
