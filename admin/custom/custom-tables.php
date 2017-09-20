@@ -97,7 +97,9 @@ class Custom_Tables {
 			"
 		);
 
-		$workout_meta = $meta[0]->$field_id;
+		$metas = json_decode( json_encode( $meta[0] ), true );
+
+		$workout_meta = $metas[$field_id];
 
 		return $workout_meta;
 
