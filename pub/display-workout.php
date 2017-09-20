@@ -163,8 +163,6 @@ class Display_Workout extends Workout {
 		$description = Custom_Tables::get_workout_meta( $post_id, 'workout_description' );
 		$exercises   = json_decode( $workouts[0]->workout, true );
 
-		var_dump( $exercises[0]['exercises'] );
-
 		// Put instructions into an array at each new line
 		$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
 
