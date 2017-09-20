@@ -505,11 +505,7 @@ class Custom_Field {
 	 */
 	public function load_saved_workout( $exercise_posts, $workout ) {
 
-		$d         = 0;
-		$exercises = json_decode( $workout[0]->workout, true );
-
-		if( ! isset( $exercises ) )
-			return;
+		$d = 0;
 
 		foreach ( $workout as $day ) {
 

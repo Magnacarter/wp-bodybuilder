@@ -167,9 +167,7 @@ class Workout {
 	 */
 	public function load_exercises( $exercises ) {
 
-		$workouts   = json_decode( $exercises[0]->workout, true );
-
-		if( ! isset( $workouts ) )
+		if( ! isset( $exercises ) )
 			return;
 
 		foreach( $exercises as $day ) {
