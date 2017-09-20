@@ -167,7 +167,7 @@ class Workout {
 	 */
 	public function load_exercises( $exercises ) {
 
-		if( ! isset( $exercises ) )
+		if( ! isset( $exercises ) || $exercises === null || $exercises === 0 )
 			return;
 
 		foreach( $exercises as $day ) {

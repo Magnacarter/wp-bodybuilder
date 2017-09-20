@@ -76,6 +76,7 @@ class Custom_Tables {
 	 *
 	 * @since 1.0.0
 	 * @param $workout_id
+	 * @param $field_id
 	 * @return string $title
 	 */
 	public static function get_workout_meta( $workout_id, $field_id ) {

@@ -507,6 +507,9 @@ class Custom_Field {
 
 		$d = 0;
 
+		if( $workout[$d]->day == '' )
+			return;
+
 		foreach ( $workout as $day ) {
 
 			print( '<li id="day-list-item" class="day-exercises">' );
