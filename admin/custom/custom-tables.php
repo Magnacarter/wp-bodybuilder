@@ -76,7 +76,6 @@ class Custom_Tables {
 	 *
 	 * @since 1.0.0
 	 * @param $workout_id
-	 * @param $field_id
 	 * @return string $title
 	 */
 	public static function get_workout_meta( $workout_id, $field_id ) {
@@ -97,9 +96,14 @@ class Custom_Tables {
 			"
 		);
 
-		$metas = json_decode( json_encode( $meta[0] ), true );
+		$metas = json_decode( json_encode( $meta ), true );
 
-		$workout_meta = $metas[$field_id];
+		if( ! isset( $metas[0] ) )
+			return;
+
+		$workout_meta = $metas[0][$field_id];
+
+		return $workout_meta;
 
 		return $workout_meta;
 

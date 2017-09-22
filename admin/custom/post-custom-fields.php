@@ -300,7 +300,7 @@ class Post_Custom_Fields extends Custom_Field {
 				return;
 
 			// Check if the user has permissions to save data.
-			if ( ! current_user_can( 'edit_post', $workout_object ) )
+			if ( ! current_user_can( 'edit_posts', $workout_object ) )
 				return;
 
 			// Check if it's not an autosave.

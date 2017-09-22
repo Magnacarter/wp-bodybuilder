@@ -145,6 +145,14 @@ jQuery( document ).ready( function($) {
 	};
 
 	/**
+	 * Initialize select2 plugin
+	 */
+	var modifySelect = function() {
+		$('select.wpbb-exercise-selection').select2();
+	};
+	modifySelect();
+
+	/**
 	 * Add day
 	 */
 	const addDay = function( bool ) {
@@ -178,14 +186,19 @@ jQuery( document ).ready( function($) {
 					}
 
 					dayRepeat.find( 'li' ).append( '</select>' +
+
 						'<div class="selected-exercises">You\'ve added the following exercises:</div>' +
 						'<div class="selected-exercises-wrap"><ul id="exercise-list"></ul></div>' +
 						'<div id="remove-btn">' +
 						'<a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
 
+						// Add a new instance of select2 plugin for the new selectbox in the DOM
+						modifySelect();
+
 					dayRepeat.append( '</li>' );
 
 				}
+
 			},
 			complete: function() {
 				removeDay();
@@ -238,17 +251,22 @@ jQuery( document ).ready( function($) {
 		i++;
 
 		if( ! $( '.day_repeat' ).has( '.wpbb-exercise-selection' ).length ) {
-			bool = true;
-			addDay(bool);
+			var bool = true;
+			addDay( bool );
 		}
 
 		var dayNumber = document.getElementsByClassName( 'day-exercises' ).length + 1;
 
-		field = $(this).closest('td').find('.day_repeat li#day-list-item:last').clone(true);
+		var fieldSelect = $(this).closest('td').find( '.day_repeat li#day-list-item:last' );
+
+		// Destroy the current instance of the select2 plugin to avoid strange behaivor
+		fieldSelect.find('.wpbb-exercise-selection').select2("destroy");
+
+		var field = $(this).closest('td').find( '.day_repeat li#day-list-item:last' ).clone( true );
 
 		field.find('#exercise-list li').remove();
 
-		fieldLocation = $(this).closest('td').find('.day_repeat li#day-list-item:last');
+		var fieldLocation = $(this).closest('td').find('.day_repeat li#day-list-item:last');
 
 		$('.day-header', field).find('h3').html('Day ' + dayNumber, function (index, name) {
 
@@ -262,7 +280,10 @@ jQuery( document ).ready( function($) {
 
 		field.insertAfter(fieldLocation, $(this).closest('td'));
 
-		return false;
+		// Create new instance of the select2 plugin after the clone is complete
+		modifySelect();
+
+		//return false;
 
 	});
 
@@ -332,47 +353,6 @@ jQuery( document ).ready( function($) {
 		}
 		return workout;
 	};
-
-	/**
-	 * Vars for select box
-	 */
-	const selectBox     = $( '.wpbb-exercise-selection' ),
-		  selectedCards = [],
-		  cardsById     = {};
-
-	/**
-	 * Populate the select box with options for selecting exercises
-	 */
-	(function ($) {
-		$.fn.refreshDataSelect2 = function (data) {
-			this.select2('data', data);
-
-			// Update options
-			var $select = $(this[0]);
-
-			var options = data.map(function(item) {
-				return '<option value="' + item.id + '">' + item.text + '</option>';
-			});
-			$select.html(options.join('')).change();
-		};
-	})(jQuery);
-
-	const cardData = selectBox.children().map(function(index, $el) {
-		const card = {
-			id: $el.value,
-			text: $el.text,
-		};
-		cardsById[$el.value] = card;
-		return card;
-	});
-
-	/**
-	 * Initialize select2 plugin
-	 */
-	selectBox.select2({
-		data: cardData,
-		placeholder: 'Add Exercise'
-	});
 
 	// Collect workout days and exercises upon clicking save workout
 	$( '.save-btn' ).click( function() {

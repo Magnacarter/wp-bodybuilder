@@ -161,13 +161,15 @@ class Display_Workout extends Workout {
 		$avg_time    = Custom_Tables::get_workout_meta( $post_id, 'workout_duration' );
 		$avg_energy  = Custom_Tables::get_workout_meta( $post_id, 'workout_workload' );
 		$description = Custom_Tables::get_workout_meta( $post_id, 'workout_description' );
-		$exercises   = json_decode( $workouts[0]->workout, true );
 
 		// Put instructions into an array at each new line
 		$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
 
 		// Filter the array for whitespace or empty stings from the textarea in the post admin
 		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
+
+		if ( empty( $workouts ) )
+			return;
 
 		ob_start();
 
@@ -255,23 +257,11 @@ class Display_Workout extends Workout {
 
 					</div><!-- .workout-instructions -->
 
-					<?php if ( isset( $exercises[0]['exercises'] ) ) : ?>
+					<div class="exercises">
 
-						<div class="exercises">
+						<?php $this->load_exercises( $workouts ) ?>
 
-							<?php $this->load_exercises( $workouts ) ?>
-
-						</div><!-- .exercises -->
-
-					<?php else : ?>
-
-						<div class="exercises">
-
-							<p>Please add some exercises</p>
-
-						</div><!-- .exercises -->
-
-					<?php endif ?>
+					</div><!-- .exercises -->
 
 				</section><!-- .workout-content -->
 
