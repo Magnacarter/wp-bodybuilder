@@ -52,7 +52,7 @@ function init_constants() {
 
 	define( 'ADMIN_CSS_VERSION', '1.0.0' );
 
-	define( 'ADMIN_JS_VERSION', '1.0.0' );
+	define( 'ADMIN_JS_VERSION', '1.0.1' );
 
 	define( 'PUB_JS_VER', '1.0.0' );
 
