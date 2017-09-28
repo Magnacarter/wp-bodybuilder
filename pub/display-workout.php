@@ -109,29 +109,17 @@ class Display_Workout extends Workout {
 							div_id: '#<?php echo $div_id ?>'
 						},
 						success: function( response ) {
-
 							console.log( response.data );
-
 							if( response.success === true ) {
-
 								console.log( response.data );
-
 								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 stars</p>' );
-
 								alert( 'Thank you for rating this recipe!' );
-
 							 }
-
 							if( response.success === false ) {
-
 								console.log( response );
-
 								alert( response.data );
-
 							}
-
 						}
-
 					}); // rate, no comment event
 
 				}); // on rate event
@@ -169,7 +157,7 @@ class Display_Workout extends Workout {
 		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
 
 		if ( empty( $workouts ) )
-			return;
+			return $content;
 
 		ob_start();
 

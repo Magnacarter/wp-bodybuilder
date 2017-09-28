@@ -426,33 +426,25 @@ class Custom_Field {
 	 */
 	public function load_new_day( $exercise_posts ) {
 
-		print( '<li id="day-list-item" class="day-exercises">' );
+		?>
+		<li id="day-list-item" class="day-exercises">
+			<div class="day-header"><span><h3>Day 1</h3></div>
+			<div><p>Add Exercises</p></div>
+			<select class="wpbb-exercise-selection">
+				<option>Add Exercise</option>
+				<?php foreach ( $exercise_posts as $exercise_post ) :
 
-		print( '<div class="day-header"><span><h3>Day 1</h3></div>' );
+					printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
 
-		print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
-
-		print( '<option>Add Exercise</option>' );
-
-		foreach ( $exercise_posts as $exercise_post ) :
-
-			printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
-
-		endforeach;
-
-		print( '</select>' );
-
-		print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
-
-		print( '<div class="selected-exercises-wrap">' );
-
-		print( '<ul id="exercise-list"></ul>' );
-
-		print( '</div>' );
-
-		print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
-
-		print( '</li>' );
+				endforeach; ?>
+			</select>
+			<div class="selected-exercises">You've added the following exercises:</div>
+			<div class="selected-exercises-wrap">
+				<ul id="exercise-list"></ul>
+			</div>
+			<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
+		</li>
+		<?php
 
 	}
 
@@ -509,39 +501,31 @@ class Custom_Field {
 
 		foreach ( $workout as $day ) {
 
-			print( '<li id="day-list-item" class="day-exercises">' );
+			?>
+			<li id="day-list-item" class="day-exercises">
+				<div class="day-header"><span><h3><?php echo esc_html( $workout[$d]->day ); ?></h3></div>
+				<div><p>Add Exercises</p></div>
+				<select class="wpbb-exercise-selection">
+					<option>Add Exercise</option>
+					<?php foreach ( $exercise_posts as $exercise_post ) :
 
-			printf( '<div class="day-header"><span><h3>%s</h3></div>', $workout[$d]->day );
+						printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
 
-			print( '<div><p>Add Exercises</p></div><select class="wpbb-exercise-selection">' );
+					endforeach; ?>
+				</select>
+				<div class="selected-exercises">You've added the following exercises:</div>
+				<div class="selected-exercises-wrap">
+					<ul id="exercise-list">
+						<?php
+						$exercises = $workout[$d]->exercises;
 
-			print( '<option>Add Exercise</option>' );
-
-			foreach ( $exercise_posts as $exercise_post ) :
-
-				printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
-
-			endforeach;
-
-			print( '</select>' );
-
-			print( '<div class="selected-exercises">You\'ve added the following exercises:</div>' );
-
-			print( '<div class="selected-exercises-wrap">' );
-
-			print( '<ul id="exercise-list">' );
-
-			$exercises = $workout[$d]->exercises;
-
-			$this->load_exercises( $exercises );
-
-			print( '</ul>' );
-
-			print( '</div>' );
-
-			print( '<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>' );
-
-			print( '</li>' );
+						$this->load_exercises( $exercises );
+						?>
+					</ul>
+				</div>
+				<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
+			</li>
+			<?php
 
 			$d++;
 

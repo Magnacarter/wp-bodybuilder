@@ -12,38 +12,34 @@ var gulp         = require( 'gulp' ),
     browserSync  = require( 'browser-sync' );
 
 var path = {
-  JS_PUB          : '../js/pub/js',
-  JS_PUB_FILES    : [ '../pub/js/pub-script.js' ],
   SCSS_PUB        : '../pub/scss/main.scss',
-  CSS_PUB         : '../pub/css',
-  CSS_PUB_FILES   : [ '../pub/css/unsemantic-grid-responsive.css', '../pub/css/pub.css' ],
   SCSS_ADMIN      : '../admin/scss/main.scss',
-  CSS_ADMIN       : '../admin/css',
-  JS_ADMIN        : '../admin/js',
-  JS_ADMIN_FILES  : [ '../admin/js/admin-script.js', '../jquery.rateyo.min.js', '../select2.min.js' ],
-  CSS_ADMIN_FILES : [ '../admin/css/jquery.rateyo.min.css', '../admin/css/select2.min.css', '../admin/css/unsemantic-grid-responsive.css', '../admin/css/admin.css' ],
-}
+  CSS_DIR         : '../assets/css',
+  JS_DIR          : '../assets/js',
+  JS_FILES        : [ '../assets/js/admin-script.js', '../jquery.rateyo.min.js', '../select2.min.js' ],
+  CSS_FILES       : [ '../assets/css/jquery.rateyo.min.css', '../assets/css/select2.min.css', '../assets/css/unsemantic-grid-responsive.css', '../assets/css/admin.css' ]
+};
 
 /**
  * Admin scripts
  */
 gulp.task( 'concatAdminScripts', function() {
-  return gulp.src( path.JS_ADMIN_FILES )
+  return gulp.src( path.JS_FILES )
     .pipe( maps.init() )
     .pipe( concat( 'admin-app.js' ) )
     .pipe( maps.write( './' ) )
-    .pipe( gulp.dest( path.JS_ADMIN ) );
+    .pipe( gulp.dest( path.JS_DIR ) );
 });
 
 /**
  * Public scripts
  */
 gulp.task( 'concatScripts', function() {
-  return gulp.src( path.JS_PUB_FILES )
+  return gulp.src( path.JS_FILES )
     .pipe( maps.init() )
     .pipe( concat( 'app.js' ) )
     .pipe( maps.write( './' ) )
-    .pipe( gulp.dest( path.JS_PUB ) );
+    .pipe( gulp.dest( path.JS_DIR ) );
 });
 
 /**
@@ -56,17 +52,17 @@ gulp.task( 'compileAdminSass', function() {
     .pipe( autoprefixer( { browsers: ["> 0%"] } ) )
     .pipe( rename( 'admin.css' ) )
     .pipe( maps.write() )
-    .pipe( gulp.dest( path.CSS_ADMIN ) )
+    .pipe( gulp.dest( path.CSS_DIR ) )
 });
 
 /**
  * Admin css
  */
 gulp.task( 'concatAdminCSS', [ 'compileAdminSass' ], function() {
-  return gulp.src( path.CSS_ADMIN_FILES )
+  return gulp.src( path.CSS_FILES )
     .pipe( cleanCSS( { compatibility: 'ie8' } ) )
     .pipe( concat( 'admin-styles.css' ) )
-    .pipe( gulp.dest( path.CSS_ADMIN ) );
+    .pipe( gulp.dest( path.CSS_DIR ) );
 });
 
 /**
@@ -79,17 +75,17 @@ gulp.task( 'compileSass', function() {
     .pipe( autoprefixer( { browsers: ["> 0%"] } ) )
     .pipe( rename( 'pub.css' ) )
     .pipe( maps.write() )
-    .pipe( gulp.dest( path.CSS_PUB ) )
+    .pipe( gulp.dest( path.CSS_DIR ) )
 });
 
 /**
  * Public css
  */
 gulp.task( 'concatCSS', [ 'compileSass' ], function() {
-  return gulp.src( path.CSS_PUB_FILES )
+  return gulp.src( path.CSS_FILES )
     .pipe( cleanCSS( { compatibility: 'ie8' } ) )
     .pipe( concat( 'pub-styles.css' ) )
-    .pipe( gulp.dest( path.CSS_PUB ) );
+    .pipe( gulp.dest( path.CSS_DIR ) );
 });
 
 gulp.task( 'cssWatch', [ 'concatCSS' ], browserSync.reload );
@@ -107,9 +103,9 @@ gulp.task( 'watchFiles', function() {
     }
   });
   gulp.watch([ '../pub/scss/**/*.scss' ], [ 'cssWatch' ]);
-  gulp.watch( '../pub/js/pub-script.js', [ 'jsWatch' ]);
+  gulp.watch( '../assets/js/pub-script.js', [ 'jsWatch' ]);
   gulp.watch([ '../admin/scss/**/*.scss' ], [ 'cssAdminWatch' ]);
-  gulp.watch( '../admin/js/admin-script.js', [ 'jsAdminWatch' ]);
+  gulp.watch( '../assets/js/admin-script.js', [ 'jsAdminWatch' ]);
 });
 
 gulp.task( 'serve', [ 'watchFiles' ] );
