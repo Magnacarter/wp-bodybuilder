@@ -1,14 +1,10 @@
 #!/bin/bash
 
-HOST=HOST
-USER=USERNAME
-PASS=PASS
-
 cd ../
 
 sudo apt-get install ncftp
 
-ncftp -u $USER -p $PASS $HOST << EOF
+ncftp -u USERNAME -p PASS HOST << EOF
 
 cd public_html/plugin-testing/wp-content/plugins
 
