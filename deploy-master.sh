@@ -4,7 +4,7 @@ cd ../
 
 sudo apt-get install ncftp
 
-ncftp -u USERNAME -p PASSWORD HOST << EOF
+ncftp -u $USERNAME -p $PASSWORD $HOST << EOF
 
 cd public_html/plugin-testing/wp-content/plugins
 
