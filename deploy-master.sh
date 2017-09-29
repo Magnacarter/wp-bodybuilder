@@ -4,10 +4,7 @@ HOST=107.180.50.244
 USER=adamkcarter
 PASS=Wingchun78
 
-spawn ssh $USER@$HOST
-expect "password:"
-sleep 1
-send $PASS
+ssh $USER@$HOST
 
 cd /public_html/plugin-testing/wp-content/plugins
 
