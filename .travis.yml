@@ -1,59 +1,56 @@
 sudo: enabled
-
 language: php
-
 notifications:
   email:
     on_success: always
     on_failure: change
-
 branches:
   only:
-    - master
-
+  - master
 cache:
   directories:
-    - vendor
-    - $HOME/.composer/cache
-
+  - vendor
+  - $HOME/.composer/cache
 matrix:
   include:
-    - php: 7.1
-      env: WP_VERSION=latest
-    - php: 7.0
-      env: WP_VERSION=latest
-    - php: 5.6
-      env: WP_VERSION=latest
-    - php: 5.6
-      env: WP_VERSION=trunk
-
+  - php: 7.1
+    env: WP_VERSION=latest
+  - php: 7.0
+    env: WP_VERSION=latest
+  - php: 5.6
+    env: WP_VERSION=latest
+  - php: 5.6
+    env: WP_VERSION=trunk
 before_script:
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then
-        composer global require "phpunit/phpunit=4.8.*"
-      else
-        composer global require "phpunit/phpunit=5.7.*"
-      fi
+- export PATH="$HOME/.composer/vendor/bin:$PATH"
+- |
+  if [[ ! -z "$WP_VERSION" ]] ; then
+    bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+    if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then
+      composer global require "phpunit/phpunit=4.8.*"
+    else
+      composer global require "phpunit/phpunit=5.7.*"
     fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      composer global require wp-coding-standards/wpcs
-      phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
-    fi
-
+  fi
+- |
+  if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+    composer global require wp-coding-standards/wpcs
+    phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+  fi
 script:
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit
-      WP_MULTISITE=1 phpunit
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      phpcs
-    fi
-
+- |
+  if [[ ! -z "$WP_VERSION" ]] ; then
+    phpunit
+    WP_MULTISITE=1 phpunit
+  fi
+- |
+  if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+    phpcs
+  fi
+env:
+  global:
+  - secure: q5B91U71JwInMbRIrMISu4NxRNw7JwLwIiwtXXnyxnOU/c+E73SCg/eumYIHwtfP8MLqnD+KxJnLdM8F03xMGr13pM20bblsGW9KwpiN3ud36q9cUPXEDP/Lr4/DrkYqHGJ47Y1Gse96zS7+cqx779byoHj81QqWOj/V/ZYNCxVc3ZQ1KhLOwxIoRHAiBsuPyaNB4Oz6j2/13HVxjd9RTqCznfzYlP/t6/3wioNnw5kb+gPzidNmSiC6SuIwxmkQQHII1MDMqf1tcoTezSKvUDXtwrqNVa0+b79KUdw3sRauu8/t3FhCWjo6uczviUM12LpGFqxT663IrhvrlWhEZMe4wH3ha6z0asKcl9z0iovCUe0KQDw4R4BYUOLNYBKuYSWKuMgpeqMjyLnNRkiCdGMGQd2FwIUltGyuwNmHxhU6B8iZ2mH8XkMb6EUKHKZkTm61ifL659jSMfAmWL9o+DqC5raBsAjo7SSJCZIIyeELTehxRB3mJyjYRKWq1MDa6wy/iHZS0+3SUlRuzIFkXs8zhr09Jj/FYBBM8A/pZMcfR7klED6vlzYsLnQFMmoW27TDV2n+fCWS4FCW+Bvm7hB7MbnG7fX77Q0Lg1fbytj9cCo9czfqJHmr/uH0uCtV3SCiVEq7B2SyJtNr2fedhjTlq4A8OaPucWiGMyL2j4E=
+  - secure: EnSGPw+qDWyiyGcYxEmk6dJirRyIlltQUvbXke8PjkUkrZc3XN186pbO64XLf7G26IVQujw8a+hI9fMVfcw0QERDtlRxru8LhWWNachpfaC5KhzyyExI7OKC2WzCgON+y38CS9h3r3nyXIGAxBnvhl52nY9ZMyXF3XaXAMkPbOk7X/sH0c8OQy7qcjXeeiTsZx7eeolgbZGlR9BURIblYe89NP0yr9T7nQklBy4IBHPE/xwaDXOhzcQnZ/JyCKMNfCwG3sWjphjd41uAensFoHelLM8FcsamBlGrw6blrxw4T2L3AW1H1meq8Eb45eQm2Z2vh0fo4VfaMAuB/BQzJVBk9XNMhc9hgFrbk9fq2uOXOBRtpc7VNI/VrUBX3pUGlm+XZYeMIxB1XCslU35e9CvjeW/3qVmsa2iDv6pY5Q3gOp1iT4JjTXIUnWXfaDupci2o9pBMW+R4ygS8t6Jn9qGjezIYPx7xK0WrFtdqZV+NGXxXT0ZN3V1mzfys3CtWmCGJoXIrzWFRyfltgiDgLXa4uiJL2+ALW16kw6v1O4Dhkd1fFD5TAbFjKGzj9DCXmBMP2g/Fvo5BbwhmwTqUql+5hznE3MSNbxRIoYl8zQpQDRDSp3iti81LwtsvKVsVTTHUxODFndq4QmLmbrE2eSt6bsivqOmoMDJA4KtO/CM=
+  - secure: gSJkiwt0CdNJO12p6zpkSPfccAlwl4iOHthlHNjPjsglDtfrapdkEZteQm9dOxdcGFhVLyBvnDxS0NcDjRipZHVqdFl0fKqdZVooV+OGENDlIV7WHCWFTLuV+2jh9DVcoJzyF4wu+13C9tcGRuOC5BUo/j9nLu3FJ2A5JcYoDRMEvHKhQGD6BE5dX3hbm0hL4LSk2rIkcYOC0BxXlOzJFOC420YdsjPt2j+e36+GCSyVBp+ns544xN8WrLriooq281YMS9peKheOB4In+Vx3TzQjHDAuTswDWYc0ZgMvDWYrpmI0M4zn/gNrNhSTAQQPN5yH4IY1IjAjUfCkTo/oFdDa8p/L966aSUe+2KFM6gIUj6FRMRWWeLKO7cax3UIw2S9U1e4jywrmnr95K9xGxOSQvG9WLyLnuSc8QuQF+Ut3zvZbhUR9Vr7sOssQRFgcaj47Flh13M7EMj4ni6PrWHMnpbArZXsFQTkeo2HsKG0QJDAVdkZGCMxEhymDmuvlb2mN17CUcsDL2KP2bMImBNWUTIYk7sypYMj+uIoYaHlNJZlfB//8/5v8uggzXe3h8WXe7hzIYz0VN4jaGpQUP/cH96GQLK0K7WKfRE+0oMlEBr9WgEbLvWIcEOe4jQjMpyJL/A5PHhOBTq1blOnHiO6pMTJTovBQyhHViklTbAs=
 after_success:
 - ./deploy-master.sh
