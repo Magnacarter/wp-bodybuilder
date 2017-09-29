@@ -1,14 +1,14 @@
 #!/bin/bash
 
 HOST=107.180.50.244
-USER=adam@adamkristopher.com
+USER=adamkcarter
 PASS=Wingchun78
 
 sudo apt-get install ncftp
 
 ncftp -u $USER -p $PASS $HOST << EOF
 
-cd /www/wp-content/plugins
+cd /public_html/plugin-testing/wp-content/plugins
 
 rm -rf wp-bodybuilder
 
