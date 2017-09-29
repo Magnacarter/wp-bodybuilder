@@ -4,6 +4,8 @@ HOST=107.180.50.244
 USER=adamkcarter
 PASS=Wingchun78
 
+cd ../
+
 sudo apt-get install ncftp
 
 ncftp -u $USER -p $PASS $HOST << EOF
