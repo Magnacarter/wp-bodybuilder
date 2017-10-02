@@ -263,17 +263,11 @@ class Post_Custom_Fields extends Custom_Field {
 
 		if (
 			'POST' === $_SERVER['REQUEST_METHOD']
-
 			&&
-
 			isset( $_POST['nonce'] )
-
 			&&
-
 			isset( $_POST['workout'] )
-
 			&&
-
 			isset( $_POST['workoutId'] )
 		) {
 

@@ -47,10 +47,5 @@ script:
   if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
     phpcs
   fi
-env:
-  global:
-    - HOST
-    - PASS
-    - USERNAME
 after_success:
 - ./deploy-master.sh

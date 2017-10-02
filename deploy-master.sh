@@ -1,12 +1,8 @@
 #!/bin/bash
 
-#HOST=107.180.50.244
-#USER=adamkcarter
-#PASS=Wingchun78
-
-HOST=HOST
-USER=USERNAME
-PASS=PASS
+HOST=107.180.50.244
+USER=adamkcarter
+PASS=Wingchun78
 
 cd ../
 
