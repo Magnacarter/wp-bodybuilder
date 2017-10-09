@@ -113,7 +113,7 @@ class Display_Workout extends Workout {
 							if( response.success === true ) {
 								console.log( response.data );
 								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 stars</p>' );
-								alert( 'Thank you for rating this recipe!' );
+								alert( 'Thank you for rating this workout!' );
 							 }
 							if( response.success === false ) {
 								console.log( response );

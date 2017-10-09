@@ -181,9 +181,7 @@ class Post_Custom_Fields extends Custom_Field {
 		?>
 
 		<input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>" />
-
 		<input type="hidden" name="workout_meta_box_nonce" value="<?php echo wp_create_nonce( 'workout-nonce' ); ?>" />
-
 		<table class="form-table">
 
 			<?php $this->set_new_workout_fields( $post_id ); ?>

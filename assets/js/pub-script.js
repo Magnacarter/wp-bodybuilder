@@ -6,15 +6,13 @@ jQuery( document ).ready( function($) {
 
 	$( '.instruction-btn' ).on( 'click', function( e ) {
 
-		$(this).parent().parent().find( ".instruction-popup" ).show(200);
-
-		console.log('click');
+		$(this).parent().parent().find( ".instruction-popup" ).show( 200 );
 
 	});
 
 	closeBtn.on( 'click', function( e ) {
 
-		$(this).parent().parent().hide(200);
+		$( this ).parent().parent().hide( 200 );
 
 	});
 

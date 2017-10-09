@@ -148,7 +148,7 @@ jQuery( document ).ready( function($) {
 	 * Initialize select2 plugin
 	 */
 	var modifySelect = function() {
-		$('select.wpbb-exercise-selection').select2();
+		$( 'select.wpbb-exercise-selection' ).select2();
 	};
 	modifySelect();
 
@@ -278,7 +278,7 @@ jQuery( document ).ready( function($) {
 
 		});
 
-		field.insertAfter(fieldLocation, $(this).closest('td'));
+		field.insertAfter( fieldLocation, $( this ).closest( 'td' ) );
 
 		// Create new instance of the select2 plugin after the clone is complete
 		modifySelect();
@@ -290,10 +290,10 @@ jQuery( document ).ready( function($) {
 	// Select an exercise for workout
 	select.change( function () {
 
-		var selectedValue = $(this).val();
-		var list          = $(this).parent();
+		var selectedValue = $( this ).val();
+		var list          = $( this ).parent();
 
-		$(this).prop( 'selectedIndex', 0 );
+		$( this ).prop( 'selectedIndex', 0 );
 
 		addExercise( selectedValue, list );
 
