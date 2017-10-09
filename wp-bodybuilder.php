@@ -147,7 +147,7 @@ function uninstall_plugin() {
 /**
  * Kick off the plugin by initializing the plugin files.
  *
- * @since 1.0.0
+ * @since 1.0.00
  *
  * @return void
  */
