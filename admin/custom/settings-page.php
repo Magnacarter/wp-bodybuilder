@@ -122,7 +122,8 @@ function options_page() {
 		'WP Bodybuilder Options',
 		'manage_options',
 		'wpbb-plugin',
-		__NAMESPACE__ . '\options_page_html'
+		__NAMESPACE__ . '\options_page_html',
+		BODYBUILDER_URL . 'assets/img/exercise-icon.png'
 	);
 
 }

@@ -56,6 +56,7 @@ function init_constants() {
  */
 function public_scripts() {
 
+	wp_enqueue_style(   'font-awesome',      BODYBUILDER_URL . 'assets/font-awesome/css/font-awesome.min.css', '4.7.0' );
 	wp_enqueue_style(   'wpbb_grid',          BODYBUILDER_URL . 'assets/css/unsemantic-grid-responsive.css', BODYBUILDER_VER );
 	wp_enqueue_style(   'wpbb_rateyo_styles', BODYBUILDER_URL . 'assets/css/jquery.rateyo.min.css', '2.3.2' );
 	wp_enqueue_style(   'wpbb_styles',        BODYBUILDER_URL . 'assets/css/pub.css' );
@@ -74,6 +75,7 @@ function public_scripts() {
  */
 function admin_scripts() {
 
+	wp_enqueue_style(  'font-awesome',      BODYBUILDER_URL . 'assets/font-awesome/css/font-awesome.css', '4.7.0' );
 	wp_enqueue_style(  'wpbb_admin_styles', BODYBUILDER_URL . 'assets/css/admin.css', BODYBUILDER_VER );
 	wp_enqueue_style(  'select2_css',       BODYBUILDER_URL . 'assets/css/select2.min.css', BODYBUILDER_VER );
 	wp_enqueue_script( 'select2_js',        BODYBUILDER_URL . 'assets/js/select2.min.js', array( 'jquery' ), BODYBUILDER_VER, false );
@@ -147,7 +149,7 @@ function uninstall_plugin() {
 /**
  * Kick off the plugin by initializing the plugin files.
  *
- * @since 1.0.00
+ * @since 1.0.0
  *
  * @return void
  */

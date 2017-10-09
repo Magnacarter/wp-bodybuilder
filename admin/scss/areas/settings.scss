@@ -1,1 +1,10 @@
 /* Settings Page ----- */
+
+.wp-menu-image.dashicons-before {
+	img {
+		height:22px;
+	}
+	&:hover {
+		color: #0073aa;
+	}
+}
