@@ -8,3 +8,24 @@
 		color: #0073aa;
 	}
 }
+
+.progress-background {
+	display: none;
+	position: absolute;
+	padding: 20px;
+	top: 88%;
+	left: 20%;
+	width: 60%;
+	height: 18px;
+	background-color: rgba(60, 74, 80, 0.63);
+	border-radius: 5px;
+}
+.progress-bar-wrap {
+	background-color: $lite-blue;
+	border-radius: 5px;
+
+	#progress-bar {
+		background-color: $bb-blue;
+		color: #fff;
+	}
+}

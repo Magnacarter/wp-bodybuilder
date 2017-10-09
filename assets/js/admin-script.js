@@ -400,4 +400,38 @@ jQuery( document ).ready( function($) {
 
 	});
 
+	/**
+	 * Load progress bar on save workout
+	 */
+	var save = $( '.save-btn' );
+
+	function move() {
+		var elem         = document.getElementById("progress-bar"),
+			width       = 20,
+			id          = setInterval(frame, 10),
+			progressBar = $( '.progress-background' );
+
+		progressBar.show();
+
+		function hideBar() {
+			progressBar.fadeOut(900);
+		}
+
+		function frame() {
+			if (width >= 100) {
+				clearInterval(id);
+				elem.innerHTML = 'Workout Saved!'
+				setTimeout( hideBar, 1000 );
+			} else {
+				width++;
+				elem.style.width = width + '%';
+				elem.innerHTML = width * 1  + '%';
+			}
+		}
+	}
+
+	save.on( 'click', function() {
+		move();
+	});
+
 });

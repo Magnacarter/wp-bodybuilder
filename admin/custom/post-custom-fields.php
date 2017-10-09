@@ -178,19 +178,27 @@ class Post_Custom_Fields extends Custom_Field {
 		$post_id = $this->get_global_id();
 		$workout = Post_Custom_Fields::get_workout();
 
-		print( '<input type="hidden" name="post_id" value="' . $post_id . '" />' );
+		?>
 
-		// Use nonce for verification
-		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
+		<input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>" />
 
-		// Begin the field table and loop
-		print( '<table class="form-table">' );
+		<input type="hidden" name="workout_meta_box_nonce" value="<?php echo wp_create_nonce( 'workout-nonce' ); ?>" />
 
-			$this->set_new_workout_fields( $post_id );
+		<table class="form-table">
 
-		print( '</table>' ); // end table
+			<?php $this->set_new_workout_fields( $post_id ); ?>
 
-		print( '<a class="save-btn">Save Workout</a>' );
+		</table>
+
+		<a class="save-btn">Save Workout</a>
+
+		<div class="progress-background">
+			<div class="progress-bar-wrap">
+				<div id="progress-bar" class="center" style="width:20%">20%</div>
+			</div>
+		</div>
+
+		<?php
 
 	}
 
