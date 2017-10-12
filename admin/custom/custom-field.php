@@ -304,7 +304,7 @@ class Custom_Field {
 
 		}
 
-		printf( '</select>' );
+		print( '</select>' );
 
 	}
 
@@ -429,7 +429,12 @@ class Custom_Field {
 		?>
 		<li id="day-list-item" class="day-exercises">
 			<div class="day-header"><span><h3>Day 1</h3></div>
-			<div><p>Add Exercises</p></div>
+			<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
+			<div class="selected-exercises">You've added the following exercises:</div>
+			<div class="selected-exercises-wrap">
+				<ul id="exercise-list"></ul>
+			</div>
+			<div class="exercise-title"><p>Add Exercises</p></div>
 			<select class="wpbb-exercise-selection">
 				<option>Add Exercise</option>
 				<?php foreach ( $exercise_posts as $exercise_post ) :
@@ -438,52 +443,8 @@ class Custom_Field {
 
 				endforeach; ?>
 			</select>
-			<div class="selected-exercises">You've added the following exercises:</div>
-			<div class="selected-exercises-wrap">
-				<ul id="exercise-list"></ul>
-			</div>
-			<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
 		</li>
 		<?php
-
-	}
-
-	/**
-	 * Load exercises
-	 *
-	 * @since 1.0.0
-	 * @param array $exercises
-	 * @return void
-	 */
-	public function load_exercises( $exercises ) {
-
-		if( ! isset( $exercises ) )
-			return;
-
-		foreach( $exercises as $exercise ) {
-
-			$sets = $exercise[1]->sets;
-			$reps = $exercise[1]->reps;
-			$rest = $exercise[1]->rest;
-			$e_id = intval( $exercise[0]->id );
-			$title = get_the_title( $e_id );
-
-			printf( '<li class="list" data-exercise-id="%s">', $e_id );
-
-			printf( '<h4><strong>%s :</strong></h4>', $title );
-
-			print( '<span>' );
-
-			printf( '<input type="text" id="sets" name="sets" placeholder="Sets" value="%s"/>', esc_attr( $sets ) );
-			printf( '<input type="text" id="reps" name="reps" placeholder="Reps/Duration" value="%s"/>', esc_attr( $reps ) );
-			printf( '<input type="text" id="rest" name="rest" placeholder="Rest between sets" value="%s"/>', esc_attr( $rest ) );
-			print( '<a href="" class="remove-exercise">x</a>' );
-
-			print( '</span>' );
-
-			print( '</li>' );
-
-		}
 
 	}
 
@@ -504,15 +465,7 @@ class Custom_Field {
 			?>
 			<li id="day-list-item" class="day-exercises">
 				<div class="day-header"><span><h3><?php echo esc_html( $workout[$d]->day ); ?></h3></div>
-				<div><p>Add Exercises</p></div>
-				<select class="wpbb-exercise-selection">
-					<option>Add Exercise</option>
-					<?php foreach ( $exercise_posts as $exercise_post ) :
-
-						printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
-
-					endforeach; ?>
-				</select>
+				<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
 				<div class="selected-exercises">You've added the following exercises:</div>
 				<div class="selected-exercises-wrap">
 					<ul id="exercise-list">
@@ -523,11 +476,65 @@ class Custom_Field {
 						?>
 					</ul>
 				</div>
-				<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
+				<div class="exercise-title"><p>Add Exercises</p></div>
+				<select class="wpbb-exercise-selection">
+					<option>Add Exercise</option>
+					<?php foreach ( $exercise_posts as $exercise_post ) :
+
+						printf( '<option value="%s">%s</option>', esc_attr( $exercise_post->ID ), esc_html( $exercise_post->post_title ) );
+
+					endforeach; ?>
+				</select>
 			</li>
 			<?php
 
 			$d++;
+
+		}
+
+	}
+
+	/**
+	 * Load exercises
+	 *
+	 * @since 1.0.0
+	 * @param array $exercises
+	 * @return void
+	 */
+	public function load_exercises( $exercises ) {
+
+		if( ! isset( $exercises ) )
+			return;
+
+		foreach( $exercises as $exercise ) {
+
+			$sets  = $exercise[1]->sets;
+			$reps  = $exercise[1]->reps;
+			$rest  = $exercise[1]->rest;
+			$e_id  = intval( $exercise[0]->id );
+			$title = get_the_title( $e_id );
+
+			?>
+			<li class="list" data-exercise-id="<?php echo esc_attr( $e_id ); ?>">
+				<h4><strong><?php echo esc_html( $title ); ?> :</strong></h4>
+				<div class="set-input float-left">
+					<label for="sets">Sets</label>
+					<input type="text" id="sets" name="sets" value="<?php echo esc_attr( $sets ); ?>"/>
+				</div>
+				<div class="rep-input float-left">
+					<label for="reps">Reps/Duration</label>
+					<input type="text" id="reps" name="reps" value="<?php echo esc_attr( $reps ); ?>"/>
+				</div>
+				<div class="rest-input float-left">
+					<label for="rest">Rest Between Set</label>
+					<input type="text" id="rest" name="rest" value="<?php echo esc_attr( $rest ); ?>"/>
+				</div>
+				<div class="float-left">
+					<a href="" class="remove-exercise"></a>
+				</div>
+			</li>
+			<div class="clear"></div>
+			<?php
 
 		}
 
@@ -554,8 +561,6 @@ class Custom_Field {
 		$workout        = Post_Custom_Fields::get_workout();
 
 		printf( '<span class="description">%s</span><br/>', $field['desc'] );
-
-		print( '<a class="day-repeat-add button" href="#">Add Day</a>' );
 
 		printf( '<ul data-post-id="%s" id="%s-repeatable" class="day_repeat">', esc_attr( $post_id ), $field['id'] );
 
@@ -588,6 +593,8 @@ class Custom_Field {
 		}
 
 		print( '</ul>' );
+
+		print( '<a class="day-repeat-add button" href="#">Add Day</a>' );
 
 	}
 
