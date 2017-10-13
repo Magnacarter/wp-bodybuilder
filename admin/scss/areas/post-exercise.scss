@@ -41,6 +41,14 @@
 	margin-top: 15px;
 }
 
+span.select2 {
+	min-width: 50%;
+}
+
+#wp-workout_description-editor-tools {
+	display: none;
+}
+
 .save-btn {
 	color: white;
 	background: $wp-blue;
