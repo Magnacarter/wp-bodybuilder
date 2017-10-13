@@ -380,7 +380,9 @@ jQuery( document ).ready( function($) {
 			workoutRest         = $( '[name = "workout_rest_periods"]' ).val(),
 			workoutAuthor       = $( '[name = "workout_author"]' ).val(),
 			workoutRepetitions  = $( '[name = "workout_repetitions"]' ).val(),
-			workoutDescription  = $( '[name = "workout_description"]' ).val();
+			workoutDescription  = $( '[name = "workout_description"]' ).val(),
+			ed                  = tinyMCE.get('workout_description'),
+			workoutDescVisual   = ed.getContent();
 
 		$.ajax({
 			type: 'POST',
@@ -401,7 +403,7 @@ jQuery( document ).ready( function($) {
 				workoutRest: workoutRest,
 				workoutWorkload: workoutWorkload,
 				workoutIntensity: workoutIntensity,
-				workoutDescription: workoutDescription
+				workoutDescVisual: workoutDescVisual
 			},
 			success: function( response ) {
 				console.log(response.data);

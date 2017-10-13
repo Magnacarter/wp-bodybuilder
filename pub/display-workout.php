@@ -225,7 +225,7 @@ class Display_Workout extends Workout {
 
 						<h4>Description</h4>
 
-						<?php printf( '<p>%s</p>', esc_html( $description ) ) ?>
+						<?php printf( '<p>%s</p>', stripslashes( $description ) ) ?>
 
 					</div><!-- .description -->
 

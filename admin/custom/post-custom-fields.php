@@ -159,6 +159,10 @@ class Post_Custom_Fields extends Custom_Field {
 					$this->render_day_repeater_field( $field, $meta );
 					break;
 
+				case 'wysiwyg':
+					$this->render_wysiwyg_field( $field, $meta );
+					break;
+
 			} // end switch
 
 			print( '</td></tr>' );
@@ -293,7 +297,7 @@ class Post_Custom_Fields extends Custom_Field {
 			$workout_rest         = $_POST['workoutRest'];
 			$workout_workload     = $_POST['workoutWorkload'];
 			$workout_intensity    = $_POST['workoutIntensity'];
-			$workout_description  = $_POST['workoutDescription'];
+			$workout_desc_visual  = $_POST['workoutDescVisual'];
 
 			// Check if a nonce is valid.
 			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
@@ -330,7 +334,7 @@ class Post_Custom_Fields extends Custom_Field {
 				'workout_rest_periods' => $workout_rest,
 				'workout_workload'     => $workout_workload,
 				'workout_author'       => $workout_author,
-				'workout_description'  => $workout_description
+				'workout_description'  => $workout_desc_visual
 			);
 
 			Custom_Tables::save_workout( $args, $workout_id );

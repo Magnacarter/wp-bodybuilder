@@ -151,55 +151,55 @@ class Custom_Field {
 			),
 			array(
 				'label' => 'Description',
-				'desc'  => 'Give a brief overview of the workout',
+				'desc'  => 'Give a brief overview of the workout (SEO Enhancement)',
 				'id'    => $prefix . 'description',
-				'type'  => 'textarea'
+				'type'  => 'wysiwyg'
 			),
 			array(
 				'label' => 'Intensity',
-				'desc'  => 'Average target heartrate',
+				'desc'  => 'Average target heartrate (SEO Enhancement)',
 				'id'    => $prefix . 'intensity',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Rest Periods',
-				'desc'  => 'How many rest days are there per week?',
+				'desc'  => 'How many rest days are there per week? (SEO Enhancement)',
 				'id'    => $prefix . 'rest_periods',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Repetitions',
-				'desc'  => 'How many weeks should one do this workout?',
+				'desc'  => 'How many weeks should one do this workout? (SEO Enhancement)',
 				'id'    => $prefix . 'repetitions',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Workload',
-				'desc'  => 'What is the energy expenditure? e.g., calories burned',
+				'desc'  => 'What is the energy expenditure? e.g., calories burned (SEO Enhancement)',
 				'id'    => $prefix . 'workload',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Category',
-				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc...',
+				'desc'  => 'Add a category that the exercise belongs to. Examples: "Core", "Legs", "Yoga", etc... (SEO Enhancement)',
 				'id'    => $prefix . 'category',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Average Workout Time',
-				'desc'  => 'Average time it takes to complete each workout',
+				'desc'  => 'Average time it takes to complete each workout (SEO Enhancement)',
 				'id'    => $prefix . 'duration',
 				'type'  => 'text'
 			),
 			array(
 				'label' => 'Workout Directions',
-				'desc'  => 'Add instructions for performing the workout. Skip to new line for each new instruction. **Do not number**',
+				'desc'  => 'Add instructions for performing the workout. Skip to new line for each new instruction. **Do not number** (SEO Enhancement)',
 				'id'    => $prefix . 'instructions',
 				'type'  => 'textarea'
 			),
 			array(
 				'label' => 'Workout Image',
-				'desc'  => 'Add an image of the exercise being performed.',
+				'desc'  => 'Add an image of the exercise being performed. (SEO Enhancement)',
 				'id'    => $prefix . 'image',
 				'type'  => 'image'
 			),
@@ -266,6 +266,26 @@ class Custom_Field {
 
 		printf( '<span class="description">%s</span><br /><textarea name="%s" id="%2$s" cols="60" rows="4">%s</textarea>',
 			esc_html( $field['desc'] ), esc_attr( $field['id'] ), stripslashes( esc_html( $meta ) ) );
+
+	}
+
+	public static function render_wysiwyg_field( $field, $meta ) {
+
+		// Form fields
+		?>
+
+		<span class="description"><?php echo esc_html( $field['desc'] ); ?></span><br />
+
+		<?php
+
+		$settings = array(
+			'editor_height' => 200,
+			'wpautop'       => false,
+			'media_buttons' => false,
+			'quicktags'     => array( 'buttons' => 'strong,em,del,ul,ol,li,close' )
+		);
+
+		$list_field = wp_editor( stripslashes( $meta ), $field['id'], $settings );
 
 	}
 
@@ -430,7 +450,6 @@ class Custom_Field {
 		<li id="day-list-item" class="day-exercises">
 			<div class="day-header"><span><h3>Day 1</h3></div>
 			<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
-			<div class="selected-exercises">You've added the following exercises:</div>
 			<div class="selected-exercises-wrap">
 				<ul id="exercise-list"></ul>
 			</div>
@@ -466,7 +485,6 @@ class Custom_Field {
 			<li id="day-list-item" class="day-exercises">
 				<div class="day-header"><span><h3><?php echo esc_html( $workout[$d]->day ); ?></h3></div>
 				<div id="remove-btn"><a class="day-repeat-remove button" href="#">Remove Day</a></div>
-				<div class="selected-exercises">You've added the following exercises:</div>
 				<div class="selected-exercises-wrap">
 					<ul id="exercise-list">
 						<?php
