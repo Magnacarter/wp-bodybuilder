@@ -37,8 +37,7 @@ img.aligncenter {
 	margin-right: auto; 
 }
 
-#wpbb-workout-inner {
-
+#wpbb-workout-card {
 	h1,
 	h2,
 	h3,
@@ -51,26 +50,29 @@ img.aligncenter {
 	}
 
 	h2 {
-		font-size: 21px;
+		font-size: 20px;
+		text-transform: uppercase;
+		color: $darkBlue;
+		font-weight: 600;
 		line-height: 24px;
-		color: $h2Grey;
 	}
 
 	h3 {
-		font-size: 30px;
-		color: $h3Grey;
+		font-size: 17px;
+		text-transform: uppercase;
+		color: $blue;
+		font-weight: 200;
 	}
 
 	h4 {
-		color: $h4Grey;
 		font-size:22px;
 		font-weight:400;
 	}
 
 	p {
 		font-size: 12px;
-		color: $pGrey;
-		font-weight: 200;
+		font-weight: 600;
+		color: $medGrey;
 	}
 
 	ol {
@@ -82,7 +84,6 @@ img.aligncenter {
 			padding-bottom: 2px;
 			font-size: 12px;
 			line-height: 20px;
-			color: $star;
 		}
 	}
 }

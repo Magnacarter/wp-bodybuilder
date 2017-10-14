@@ -74,19 +74,22 @@ class Display_Workout extends Workout {
 		$div_id = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
 		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
 
-		printf( '<div id="%s"></div>', $div_id );
-		printf( '<div class="rating-meta"><p>%s out of 5 stars</p></div>', $average_rating );
-
 		?>
+
+		<div class="no-padding">
+			<div id="<?php echo esc_attr( $div_id ); ?>" class="grid-60"></div>
+			<div class="rating-meta grid-40"><p><?php echo esc_html( $average_rating ); ?> out of 5 star rating</p></div>
+		</div>
+
 		<script type="text/javascript">
 
 			jQuery( document ).ready( function($) {
 
 				$( '#<?php echo $div_id ?>' ).rateYo({
 					rating    : <?php echo $average_rating ?>,
-					starWidth : "15px",
-					normalFill: "#d8d4d4",
-					ratedFill : "#969393",
+					starWidth : "22px",
+					normalFill: "#dae4e7",
+					ratedFill : "#3c4a50",
 					fullStar  : true
 				});
 
@@ -112,7 +115,7 @@ class Display_Workout extends Workout {
 							console.log( response.data );
 							if( response.success === true ) {
 								console.log( response.data );
-								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 stars</p>' );
+								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 star rating</p>' );
 								alert( 'Thank you for rating this workout!' );
 							 }
 							if( response.success === false ) {
@@ -169,61 +172,56 @@ class Display_Workout extends Workout {
 
 		<div id="wpbb-workout-card" class="wpbb-workout grid-container">
 
-			<div id="wpbb-workout-inner" class="wpbb-content-inner">
+			<section id="rating-wrap">
 
-				<header class="no-pad-left grid-40">
+				<section id="rating" class="no-padding grid-45">
 
-					<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
+					<?php echo $this->add_rating_js( $post_id ) ?>
 
-					<p>Author: <?php echo esc_html( $fields['workout_author'] ) ?></p>
+					<header class="no-pad-left">
 
-					<p>Category: <?php echo esc_html( $fields['workout_category'] ) ?></p>
+						<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
 
-					<div class="no-padding">
+						<p>Author: <span><?php echo esc_html( $fields['workout_author'] ) ?></span></p>
 
-						<?php echo $this->add_rating_js( $post_id ) ?>
+						<p>Category: <span><?php echo esc_html( $fields['workout_category'] ) ?></span></p>
 
-					</div>
+					</header>
 
-					<div class="no-padding save-button">
+					<div id="averages">
 
-						<a class="save-btn" href="javascript:genPDF()">Save Workout</a>
+						<p>Workout Time : <span><?php echo esc_html( $avg_time ); ?></span></p>
 
-					</div>
+						<p>Energy Used : <span><?php echo esc_html( $avg_energy ); ?></span></p>
 
-				</header>
+					</div> <!-- #averages -->
 
-				<div class="workout-image-wrapper grid-60">
+				</section>
+
+				<div class="workout-image-wrapper no-pad-right grid-55">
 
 					<img id="workout-img" src="<?php echo esc_attr( $img_att[0] ) ?>" />
 
+					<div class="no-padding save-button">
+
+						<a class="save-btn blue-btn" href="javascript:genPDF()">Save Workout</a>
+
+					</div>
+
 				</div><!-- .workout-image-wrapper -->
+
+
+			</section>
+
+			<div class="clearfix"></div>
+
+			<div id="wpbb-workout-inner" class="wpbb-content-inner">
 
 				<section class="workout-content">
 
-					<div class="clearfix"></div>
-
-					<section id="averages" class="grid-100">
-
-						<div class="avg-time no-padding grid-100">
-
-							<?php printf( '<h5><strong>Average workout time :</strong> %s</h5>', esc_html( $avg_time ) ) ?>
-
-						</div>
-
-						<div class="avg-energy no-padding grid-100">
-
-							<?php printf( '<h5><strong>Energy used per workout :</strong> %s</h5>', esc_html( $avg_energy ) ) ?>
-
-						</div>
-
-					</section> <!-- #averages -->
-
-					<div class="clearfix"></div>
-
 					<div class="description no-pad-left grid-100">
 
-						<h4>Description</h4>
+						<h3>Description :</h3>
 
 						<?php printf( '<p>%s</p>', stripslashes( $description ) ) ?>
 
@@ -231,7 +229,7 @@ class Display_Workout extends Workout {
 
 					<div class="workout-instructions no-pad-left grid-100">
 
-						<h4>Workout Instructions</h4>
+						<h3>Workout Instructions :</h3>
 
 						<ol class="grid-100">
 
