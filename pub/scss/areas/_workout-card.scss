@@ -132,6 +132,7 @@
 			a {
 				font-size: 14px !important;
 				color: $blue !important;
+				transition: color .5s !important;
 
 				span {
 					border-bottom: 1px solid $borderA !important;
@@ -141,6 +142,14 @@
 					padding-right: 10px;
 					vertical-align: -17%;
 					content: url('../../assets/img/instructions-icon.png');
+				}
+
+				&:hover {
+					color: $grey !important;
+				}
+
+				&:hover > span {
+					border-bottom: 1px solid $grey !important;
 				}
 			}
 		}
@@ -200,14 +209,24 @@
 .close-btn {
 	font-size: 14px;
 	cursor: pointer;
+	transition: color .5s !important;
 
 	span {
 		border-bottom: 1px solid $white;
+		transition: border-bottom .5s !important;
 	}
 
 	&:before {
 		padding-right: 5px;
 		vertical-align: -11%;
 		content: url('../../assets/img/close-icon.png');
+	}
+
+	&:hover {
+		color: $grey !important;
+	}
+
+	&:hover > span {
+		border-bottom: 1px solid $grey;
 	}
 }
