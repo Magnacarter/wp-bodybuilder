@@ -308,12 +308,12 @@ class Display_Workout extends Workout {
 
 			<section id="rate-it" class="grid-container">
 
-				<div class="grid-50">
+				<div class="no-pad-left grid-50">
 					<h3>Did you do it?</h3>
 					<p>Rate this workout!</p>
 				</div>
 
-				<div id="rating-bottom" class="grid-50">
+				<div id="rating-bottom" class="no-pad-left grid-50">
 					<?php $this->add_bottom_rating( $post_id ); ?>
 				</div>
 
