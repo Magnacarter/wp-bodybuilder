@@ -1,7 +1,7 @@
 /* Workout card ------ */
 #wpbb-workout-card {
 	margin-top: 100px;
-	padding: 0 32px;
+	border: 1px solid $border;
 	position: relative;
 
 	.jq-ry-container {
@@ -13,28 +13,10 @@
 		top: -44px;
 		right: 0;
 		@extend %boxShadow;
-
-		.save-btn {
-
-		}
 	}
-}
-
-%headerP {
-	font-size: 13px !important;
-	color: $darkGrey !important;
-	font-weight: 600 !important;
-
-	span {
-		font-weight: 400;
-	}
-}
-
-.wpbb-workout {
-	border: 1px solid $border;
 
 	header {
-		margin-top: 80px;
+		margin-top: 20%;
 
 		h2 {
 			margin-bottom: 22px !important;
@@ -54,8 +36,34 @@
 	}
 }
 
+#rating-wrap {
+	margin-top: -53px;
+	padding: 0 30px;
+
+	#rating {
+		p {
+			font-size: 14px !important;
+		}
+	}
+
+	.rating-meta {
+		margin-top: -2px;
+		text-align: center;
+	}
+}
+
 #wpbb-workout-inner {
-	margin-top: 40px;
+	padding: 0 30px;
+}
+
+%headerP {
+	font-size: 13px !important;
+	color: $darkGrey !important;
+	font-weight: 600 !important;
+
+	span {
+		font-weight: 400 !important;
+	}
 }
 
 .workout-content {
@@ -64,22 +72,14 @@
 	}
 
 	p {
-		color: $darkGrey;
-		font-size: 14px;
+		color: $darkGrey !important;
+		font-size: 15px !important;
 		font-weight: 400 !important;
 	}
 
 	.description {
+		margin-top: 45px;
 		margin-bottom: 40px;
-	}
-}
-
-#rating-wrap {
-	margin-top: -53px;
-
-	.rating-meta {
-		margin-top: -2px;
-		text-align: center;
 	}
 }
 
@@ -95,6 +95,70 @@
 		position: relative;
 		@extend %boxShadow;
 	}
+}
+
+.exercises {
+	margin-top: 34px;
+
+	.day-title {
+		margin-top: 30px;
+		padding: 0 30px;
+	}
+
+	.day-title h3 {
+		margin-bottom: 24px !important;
+		font-size: 25px !important;
+	}
+
+	#single-exercise {
+		margin-bottom: 26px;
+		padding: 0 30px !important;
+
+		.single-exercise-inner {
+			display: block;
+			overflow: auto;
+			border: 1px solid $border;
+			padding: 15px !important;
+		}
+	}
+
+	.sets {
+		padding-left: 10px;
+
+		#instructions {
+			top: 0;
+
+			a {
+				font-size: 14px !important;
+				color: $blue !important;
+
+				span {
+					border-bottom: 1px solid $borderA !important;
+				}
+
+				&:before {
+					padding-right: 10px;
+					vertical-align: -11%;
+					content: url('../../assets/img/instructions-icon.png');
+				}
+			}
+		}
+
+		.reps-wrap {
+			margin-top: 34px;
+		}
+
+		p span,
+		p {
+			color: $darkGrey !important;
+			font-size: 14px !important;
+			font-weight: 400 !important;
+		}
+	}
+}
+
+.instruction-popup {
+	display: none;
 }
 
 /* Buttons ----- */

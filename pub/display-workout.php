@@ -78,7 +78,7 @@ class Display_Workout extends Workout {
 
 		<div class="no-padding">
 			<div id="<?php echo esc_attr( $div_id ); ?>" class="grid-60"></div>
-			<div class="rating-meta grid-40"><p><?php echo esc_html( $average_rating ); ?> out of 5 star rating</p></div>
+			<span class="text-center"><p><?php echo esc_html( $average_rating ); ?> out of 5 star rating</p></span>
 		</div>
 
 		<script type="text/javascript">
@@ -170,9 +170,9 @@ class Display_Workout extends Workout {
 
 		?>
 
-		<div id="wpbb-workout-card" class="wpbb-workout grid-container">
+		<div id="wpbb-workout-card" class="wpbb-workout no-padding grid-container">
 
-			<section id="rating-wrap">
+			<div id="rating-wrap">
 
 				<section id="rating" class="no-padding grid-45">
 
@@ -210,20 +210,19 @@ class Display_Workout extends Workout {
 
 				</div><!-- .workout-image-wrapper -->
 
-
-			</section>
+			</div> <!-- #rating-wrap -->
 
 			<div class="clearfix"></div>
 
-			<div id="wpbb-workout-inner" class="wpbb-content-inner">
+			<section id="wpbb-workout-inner" class="wpbb-content-inner">
 
-				<section class="workout-content">
+				<div class="workout-content">
 
 					<div class="description no-pad-left grid-100">
 
 						<h3>Description :</h3>
 
-						<?php printf( '<p>%s</p>', stripslashes( $description ) ) ?>
+						<p><?php echo stripslashes( $description ); ?></p>
 
 					</div><!-- .description -->
 
@@ -235,23 +234,25 @@ class Display_Workout extends Workout {
 
 						<?php foreach ( $instructions as $instruction ) : ?>
 
-							<li><?php echo $instruction ?></li>
+							<li><?php echo esc_html( $instruction ); ?></li>
 
-						<?php endforeach ?>
+						<?php endforeach; ?>
 
 						</ol>
 
-					</div><!-- .workout-instructions -->
+					</div> <!-- .workout-instructions -->
 
-					<div class="exercises">
+				</div> <!-- .workout-content -->
 
-						<?php $this->load_exercises( $workouts ) ?>
+			</section> <!-- .wpbb-content-inner -->
 
-					</div><!-- .exercises -->
+			<div class="gradient"></div>
 
-				</section><!-- .workout-content -->
+			<section class="exercises">
 
-			</div><!-- .wpbb-content-inner -->
+				<?php $this->load_exercises( $workouts ) ?>
+
+			</section> <!-- .exercises -->
 
 		</div><!-- .wpbb-workout -->
 

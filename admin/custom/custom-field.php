@@ -269,6 +269,13 @@ class Custom_Field {
 
 	}
 
+	/**
+	 * Render wysiwyg field
+	 *
+	 * @param array $field
+	 * @param string $meta
+	 * @return void
+	 */
 	public static function render_wysiwyg_field( $field, $meta ) {
 
 		// Form fields
