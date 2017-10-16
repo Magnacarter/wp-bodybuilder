@@ -125,6 +125,9 @@ class Workout {
 
 	/**
 	 * Render instructions popup
+	 *
+	 * @param int $post_id
+	 * @return void
 	 */
 	public function render_instructions_popup( $post_id ) {
 
@@ -140,7 +143,7 @@ class Workout {
 
 		<div class="instruction-popup">
 
-			<div class="close-button"><a class="close-btn">x</a></div>
+			<div class="close-button"><a class="close-btn"><span>close</span></a></div>
 
 			<ul>
 
@@ -201,7 +204,7 @@ class Workout {
 					$rest        = $exercise[1]['rest'];
 
 					?>
-					<section id="single-exercise" class="exercise no-padding grid-100">
+					<section class="single-exercise no-padding grid-100">
 
 						<div class="single-exercise-inner">
 
@@ -210,11 +213,12 @@ class Workout {
 							</div>
 
 							<div class="sets no-pad-right grid-60">
-								<div id="single-exercise-title" class="no-padding grid-50">
+
+								<div class="single-exercise-title no-padding grid-50">
 									<h4><span><?php echo esc_html( $title ); ?> </span></h4>
 								</div> <!-- #single-exercise-title -->
 
-								<div id="instructions" class="no-padding grid=50">
+								<div class="instructions no-padding grid=50">
 									<a class="float-right" href="#"><span>Instructions</span></a>
 								</div> <!-- #instructions -->
 
@@ -229,9 +233,13 @@ class Workout {
 
 						</div> <!-- .single-exercise-inner -->
 
-					</section> <!-- #single-exercise -->
+						<div class="popup-wrap">
+							<?php $this->render_instructions_popup( $exercise_id ); ?>
+						</div>
 
-					<?php $this->render_instructions_popup( $exercise_id );
+					</section> <!-- .single-exercise -->
+
+					<?php
 
 				}
 

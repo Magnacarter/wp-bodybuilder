@@ -97,13 +97,23 @@ jQuery( document ).ready( function($) {
 					if (json.post_title !== '') {
 						list.find('#exercise-list').append('<li class="list" data-exercise-id="' + json.ID + '">' +
 							'<h4><strong>' + json.post_title + ' : </strong></h4>' +
-							'<span>' +
-							'<input type="text" id="sets" name="sets" placeholder="Sets" value=""/>' +
-							'<input type="text" id="reps" name="reps" placeholder="Reps/Duration" value=""/>' +
-							'<input type="text" id="rest" name="rest" placeholder="Rest between sets" value=""/>' +
-							'<a href="" class="remove-exercise">x</a>' +
-							'</span>' +
-							'</li>');
+							'<div class="set-input float-left">' +
+							'<label for="sets">Sets</label>' +
+							'<input type="text" id="sets" name="sets" value=""/>' +
+							'</div>' +
+							'<div class="rep-input float-left">' +
+							'<label for="reps">Reps/Duration</label>' +
+							'<input type="text" id="reps" name="reps" value=""/>' +
+							'</div>' +
+							'<div class="rest-input float-left">' +
+							'<label for="rest">Rest Between Set</label>' +
+							'<input type="text" id="rest" name="rest" value=""/>' +
+							'</div>'+
+							'<div class="float-left">' +
+							'<a href="" class="remove-exercise"></a>' +
+							'</div>' +
+							'</li>' +
+							'<div class="clear"></div>');
 					}
 
 					$(".remove-exercise").on('click', function (e) {
@@ -370,7 +380,9 @@ jQuery( document ).ready( function($) {
 			workoutRest         = $( '[name = "workout_rest_periods"]' ).val(),
 			workoutAuthor       = $( '[name = "workout_author"]' ).val(),
 			workoutRepetitions  = $( '[name = "workout_repetitions"]' ).val(),
-			workoutDescription  = $( '[name = "workout_description"]' ).val();
+			workoutDescription  = $( '[name = "workout_description"]' ).val(),
+			ed                  = tinyMCE.get('workout_description'),
+			workoutDescVisual   = ed.getContent();
 
 		$.ajax({
 			type: 'POST',
@@ -391,7 +403,7 @@ jQuery( document ).ready( function($) {
 				workoutRest: workoutRest,
 				workoutWorkload: workoutWorkload,
 				workoutIntensity: workoutIntensity,
-				workoutDescription: workoutDescription
+				workoutDescVisual: workoutDescVisual
 			},
 			success: function( response ) {
 				console.log(response.data);
