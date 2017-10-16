@@ -62,6 +62,64 @@ class Display_Workout extends Workout {
 	}
 
 	/**
+	 * Add borttom rating
+	 *
+	 * @since 1.0.0
+	 * @param int $post_id
+	 * @return void
+	 */
+	public function add_bottom_rating( $post_id ) {
+
+		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
+
+		?>
+		<script type="text/javascript">
+			jQuery( document ).ready( function($) {
+				const rateBottom = $( '#rating-bottom' );
+
+				rateBottom.rateYo({
+					rating    : <?php echo $average_rating ?>,
+					starWidth : "35px",
+					normalFill: "#dae4e7",
+					ratedFill : "#3c4a50",
+					fullStar  : true
+				});
+
+				rateBottom.rateYo().on( 'rateyo.set', function (e, data) {
+
+					$( '#rating_value').attr( 'value', data.rating );
+					var userRating = data.rating;
+				 	console.log( userRating );
+
+					 $.ajax({
+						 type: 'POST',
+						 url: wpbb_rating_vars.ajaxurl,
+						 dataType: 'json',
+						 data: {
+							 action: 'update_user_rating',
+							 user_rating: userRating,
+							 post_id: <?php echo $post_id ?>,
+							 div_id: 'rating-bottom'
+						 },
+						 success: function (response) {
+							 console.log(response.data);
+							 if (response.success === true) {
+								 console.log(response.data);
+								 alert('Thank you for rating this workout!');
+							 }
+							 if (response.success === false) {
+								 console.log(response);
+								 alert(response.data);
+							 }
+						 }
+					 }); // ajax
+				}); // on rate event
+			}); // document ready
+		</script>
+		<?php
+	}
+
+	/**
 	 * Add rating js
 	 *
 	 * @since 1.0.0
@@ -70,8 +128,8 @@ class Display_Workout extends Workout {
 	 */
 	public function add_rating_js( $post_id ) {
 
-		$name   = $this->get_workout_meta( $post_id, 'workout_name' );
-		$div_id = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
+		$name           = $this->get_workout_meta( $post_id, 'workout_name' );
+		$div_id         = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
 		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
 
 		?>
@@ -82,7 +140,6 @@ class Display_Workout extends Workout {
 		</div>
 
 		<script type="text/javascript">
-
 			jQuery( document ).ready( function($) {
 
 				$( '#<?php echo $div_id ?>' ).rateYo({
@@ -97,9 +154,7 @@ class Display_Workout extends Workout {
 
 					$( '#rating_value').attr( 'value', data.rating );
 
-					var userRating = data.rating;
-
-					console.log( userRating );
+					const userRating = data.rating;
 
 					$.ajax({
 						type: 'POST',
@@ -124,11 +179,8 @@ class Display_Workout extends Workout {
 							}
 						}
 					}); // rate, no comment event
-
 				}); // on rate event
-
 			}); // on rate event
-
 		</script>
 		<?php
 
@@ -176,7 +228,7 @@ class Display_Workout extends Workout {
 
 				<section id="rating" class="no-padding grid-45">
 
-					<?php echo $this->add_rating_js( $post_id ) ?>
+					<?php $this->add_rating_js( $post_id ) ?>
 
 					<header class="no-pad-left">
 
@@ -253,6 +305,19 @@ class Display_Workout extends Workout {
 				<?php $this->load_exercises( $workouts ) ?>
 
 			</section> <!-- .exercises -->
+
+			<section id="rate-it" class="grid-container">
+
+				<div class="grid-50">
+					<h3>Did you do it?</h3>
+					<p>Rate this workout!</p>
+				</div>
+
+				<div id="rating-bottom" class="grid-50">
+					<?php $this->add_bottom_rating( $post_id ); ?>
+				</div>
+
+			</section>
 
 		</div><!-- .wpbb-workout -->
 
