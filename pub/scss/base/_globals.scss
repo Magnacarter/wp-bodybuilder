@@ -76,10 +76,15 @@ img.aligncenter {
 		color: $medGrey;
 	}
 
+	ul,
+	ol {
+		margin: 0 !important;
+	}
+
 	ol {
 		margin-left: 0 !important;
 		margin-bottom: 0 !important;
-		padding-left:47px !important;
+		padding-left: 47px !important;
 		display: block;
 		list-style: none;
 		counter-reset: numList;
