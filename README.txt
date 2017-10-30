@@ -15,6 +15,8 @@ Create a custom workout card that is built with SEO in mind and will display at 
 
 WP BodyBuilder will auto build a JSON Schema script in accordance with Google's ExercisePlan schema requirements to give your workout card optimal SEO.
 
+For further instructions on how to use WP BodyBuilder, please see the video tutorial [on YouTube](https://youtu.be/OVX_bpgMgnU)
+
 **Development of this plugin is done [on GitHub](https://github.com/Magnacarter/wp-bodybuilder). Pull requests welcome. Please see [issues](https://github.com/Magnacarter/wp-bodybuilder/issues) reported there before going to the plugin forum.**
 
 == Installation ==
