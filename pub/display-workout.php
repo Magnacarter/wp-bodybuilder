@@ -246,7 +246,7 @@ class Display_Workout extends Workout {
 
 						</header>
 
-						<div id="averages">
+						<div id="averages" class="desktop">
 
 							<p>Workout Time : <span><?php echo esc_html( $avg_time ); ?></span></p>
 
@@ -271,6 +271,22 @@ class Display_Workout extends Workout {
 				</div> <!-- #rating-wrap -->
 
 				<div class="clearfix"></div>
+
+				<div id="mobile-rating-wrap" class="grid-container pl-30">
+
+					<section id="rating-mobile" class="no-padding mobile-grid-100 mobile">
+
+						<div id="averages">
+
+							<p>Workout Time : <span><?php echo esc_html( $avg_time ); ?></span></p>
+
+							<p>Energy Used : <span><?php echo esc_html( $avg_energy ); ?></span></p>
+
+						</div> <!-- #averages -->
+
+					</section>
+
+				</div>
 
 				<section id="wpbb-workout-inner" class="wpbb-content-inner">
 

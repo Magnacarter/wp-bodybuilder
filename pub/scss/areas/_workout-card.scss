@@ -27,9 +27,25 @@
 			top: -1.8%;
 		}
 
+		@media( max-width: 500px ) {
+			top: -1.6%;
+		}
+
+		@media( max-width: 385px ) {
+			top: -1.5%;
+		}
+
+		@media( max-width: 365px ) {
+			top: -1.4%;
+		}
+
 		.save-btn {
 			@media( max-width: 550px ) {
 				font-size: 9px !important;
+			}
+
+			@media( max-width: 330px ) {
+				font-size: 8px !important;
 			}
 		}
 	}
@@ -59,7 +75,8 @@
 	margin-top: -11%;
 	padding: 0 30px;
 
-	#rating {
+	#rating,
+	#rating-mobile{
 		@media( max-width: 971px ) {
 			margin-top: -6px;
 		}
@@ -78,6 +95,11 @@
 
 			@media( max-width: 500px ) {
 				font-size: 12px !important;
+			}
+
+			@media( max-width: 385px ) {
+				font-size: 10px !important;
+				width: 100%;
 			}
 		}
 		header {
@@ -122,6 +144,10 @@
 		color: $darkGrey !important;
 		font-size: 15px !important;
 		font-weight: 400 !important;
+
+		@media( max-width: 500px ) {
+			font-size: 12px !important;
+		}
 	}
 
 	.description {
@@ -137,6 +163,10 @@
 .workout-image-wrapper {
 	margin-top: -12px;
 	text-align: right;
+
+	@media( max-width: 450px ) {
+		margin-top: 18%;
+	}
 
 	#workout-img {
 		position: relative;
@@ -252,6 +282,10 @@
 
 	.jq-ry-container {
 		margin-top: -6px;
+
+		@media( max-width: 823px ) {
+			margin-top: 8px;
+		}
 	}
 }
 
