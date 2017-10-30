@@ -35,7 +35,7 @@ For further instructions on how to use WP BodyBuilder, please see the video tuto
 
 == Changelog ==
 
-= 1.0.0 - October, 2017 =
+= 1.0.0 - October 30, 2017 =
 
 Initial release!
 
