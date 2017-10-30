@@ -56,8 +56,9 @@ function init_constants() {
  */
 function public_scripts() {
 
-	wp_enqueue_style(   'font-awesome',      BODYBUILDER_URL . 'assets/font-awesome/css/font-awesome.min.css', '4.7.0' );
+	wp_enqueue_style(   'font-awesome',       BODYBUILDER_URL . 'assets/font-awesome/css/font-awesome.min.css', '4.7.0' );
 	wp_enqueue_style(   'wpbb_grid',          BODYBUILDER_URL . 'assets/css/unsemantic-grid-responsive.css', BODYBUILDER_VER );
+	wp_enqueue_style(   'wpbb_tablet-grid',   BODYBUILDER_URL . 'assets/css/unsemantic-grid-tablet.css', BODYBUILDER_VER );
 	wp_enqueue_style(   'wpbb_rateyo_styles', BODYBUILDER_URL . 'assets/css/jquery.rateyo.min.css', '2.3.2' );
 	wp_enqueue_style(   'wpbb_styles',        BODYBUILDER_URL . 'assets/css/pub.css' );
 	wp_enqueue_script(  'wpbb_pdf_script',    BODYBUILDER_URL . 'assets/js/jspdf.min.js', array( 'jquery' ), BODYBUILDER_VER, true );

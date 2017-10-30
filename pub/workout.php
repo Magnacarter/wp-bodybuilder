@@ -214,12 +214,16 @@ class Workout {
 
 							<div class="sets no-pad-right grid-60">
 
-								<div class="single-exercise-title no-padding grid-50">
+								<div class="single-exercise-title desktop no-padding grid-50">
+									<h4><span><?php echo esc_html( $title ); ?> </span></h4>
+								</div> <!-- #single-exercise-title -->
+
+								<div class="single-exercise-title mobile no-padding grid-100">
 									<h4><span><?php echo esc_html( $title ); ?> </span></h4>
 								</div> <!-- #single-exercise-title -->
 
 								<div class="instructions no-padding grid=50">
-									<a class="float-right" href="#"><span>Instructions</span></a>
+									<a href="#"><span>Instructions</span></a>
 								</div> <!-- #instructions -->
 
 								<div class="clearfix"></div>
