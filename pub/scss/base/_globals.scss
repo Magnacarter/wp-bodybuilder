@@ -1,5 +1,4 @@
 /* Globals ----------- */
-
 img {
 	vertical-align: top;
 	height: auto;
@@ -37,52 +36,105 @@ img.aligncenter {
 	margin-right: auto; 
 }
 
-#wpbb-workout-inner {
-
+#wpbb-workout-card {
 	h1,
 	h2,
 	h3,
 	h4,
 	h5,
 	h6,
-	p{
+	p {
 		margin: 0;
 		padding: 0;
 	}
 
 	h2 {
-		font-size: 21px;
+		font-size: 20px;
+		text-transform: uppercase;
+		color: $darkBlue;
+		font-weight: 600;
 		line-height: 24px;
-		color: $h2Grey;
 	}
 
 	h3 {
-		font-size: 30px;
-		color: $h3Grey;
+		font-size: 17px;
+		text-transform: uppercase !important;
+		color: $blue !important;
+		font-weight: 600 !important;
 	}
 
 	h4 {
-		color: $h4Grey;
-		font-size:22px;
-		font-weight:400;
+		font-size:16px !important;
+		font-weight:600 !important;
+		text-transform: uppercase !important;
+		color: $blue !important;
 	}
 
 	p {
 		font-size: 12px;
-		color: $pGrey;
-		font-weight: 200;
+		font-weight: 600;
+		color: $medGrey;
+	}
+
+	ul,
+	ol {
+		margin: 0 !important;
 	}
 
 	ol {
-		margin-left: 3px;
+		margin-left: 0 !important;
+		margin-bottom: 0 !important;
+		padding-left: 47px !important;
+		display: block;
+		list-style: none;
+		counter-reset: numList;
+		position:relative;
 
 		li {
-			font-weight: 200;
-			padding-top: 2px;
-			padding-bottom: 2px;
-			font-size: 12px;
-			line-height: 20px;
-			color: $star;
+			margin-bottom: 10px !important;
+			font-weight: 200 !important;
+			padding-top: 2px !important;
+			padding-bottom: 2px !important;
+			font-size: 15px !important;
+			line-height: 30px !important;
+			color: $darkGrey !important;
+
+			@media( max-width: 500px ) {
+				font-size: 12px !important;
+				line-height: 20px !important;
+			}
+
+			&:before {
+				counter-increment: numList;
+				content: counter(numList);
+				float: left;
+				position: absolute;
+				margin-top: 0;
+				left: 0;
+				box-shadow: 6px 6px 28px $grey;
+				font-size: 18px;
+				font-weight:500;
+				text-align: center;
+				background-color: $blue;
+				color: $white;
+				width: 30px;
+				height: 30px;
+				line-height: 32px;
+
+				@media( max-width: 500px ) {
+					font-size: 14px;
+					width: 20px;
+					height: 20px;
+					line-height: 20px;
+				}
+			}
 		}
+	}
+
+	a {
+		text-decoration: none !important;
+		box-shadow: none !important;
+		color: $white;
+		border-bottom: none;
 	}
 }

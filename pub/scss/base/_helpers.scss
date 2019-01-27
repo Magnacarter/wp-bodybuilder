@@ -1,6 +1,4 @@
 /* Helpers ----- */
-
-// transition
 %transition {
  transition: all 0.3s ease-in-out;
 }
@@ -17,6 +15,22 @@
 	padding-right: 0 !important;
 }
 
+.pl-15 {
+	padding-left: 15px !important;
+}
+
+.pr-15 {
+	padding-right: 15px !important;
+}
+
+.pl-30 {
+	padding-left: 30px !important;
+}
+
+.pr-30 {
+	padding-right: 30px !important;
+}
+
 .text-right {
 	text-align: right !important;
 }
@@ -29,11 +43,20 @@
 	text-align: left !important;
 }
 
-.fat-border {
-	border-bottom: 5px solid #000;
+.desktop {
+	@media( max-width: 971px ) {
+		display: none;
+	}
 }
 
-.med-border {
-	border-bottom: 2px solid #000;
+.mobile {
+	@media( min-width: 972px ) {
+		display: none;
+	}
+}
+
+.gradient {
+	background: linear-gradient( $white, $gradientBase );
+	height: 43px;
 }
 

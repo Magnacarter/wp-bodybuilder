@@ -62,6 +62,64 @@ class Display_Workout extends Workout {
 	}
 
 	/**
+	 * Add borttom rating
+	 *
+	 * @since 1.0.0
+	 * @param int $post_id
+	 * @return void
+	 */
+	public function add_bottom_rating( $post_id ) {
+
+		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
+
+		?>
+		<script type="text/javascript">
+			jQuery( document ).ready( function($) {
+				const rateBottom = $( '#rating-bottom' );
+
+				rateBottom.rateYo({
+					rating    : <?php echo $average_rating ?>,
+					starWidth : "35px",
+					normalFill: "#dae4e7",
+					ratedFill : "#3c4a50",
+					fullStar  : true
+				});
+
+				rateBottom.rateYo().on( 'rateyo.set', function (e, data) {
+
+					$( '#rating_value').attr( 'value', data.rating );
+					var userRating = data.rating;
+				 	console.log( userRating );
+
+					 $.ajax({
+						 type: 'POST',
+						 url: wpbb_rating_vars.ajaxurl,
+						 dataType: 'json',
+						 data: {
+							 action: 'update_user_rating',
+							 user_rating: userRating,
+							 post_id: <?php echo $post_id ?>,
+							 div_id: 'rating-bottom'
+						 },
+						 success: function (response) {
+							 console.log(response.data);
+							 if (response.success === true) {
+								 console.log(response.data);
+								 alert('Thank you for rating this workout!');
+							 }
+							 if (response.success === false) {
+								 console.log(response);
+								 alert(response.data);
+							 }
+						 }
+					 }); // ajax
+				}); // on rate event
+			}); // document ready
+		</script>
+		<?php
+	}
+
+	/**
 	 * Add rating js
 	 *
 	 * @since 1.0.0
@@ -70,23 +128,29 @@ class Display_Workout extends Workout {
 	 */
 	public function add_rating_js( $post_id ) {
 
-		$name   = $this->get_workout_meta( $post_id, 'workout_name' );
-		$div_id = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
+		$name           = $this->get_workout_meta( $post_id, 'workout_name' );
+		$div_id         = strtolower( str_replace( ' ', '-', $name ) ) . '-' . $post_id;
 		$average_rating = $this->get_workout_meta( $post_id, 'rating_average' );
 
-		printf( '<div id="%s"></div>', $div_id );
-		printf( '<div class="rating-meta"><p>%s out of 5 stars</p></div>', $average_rating );
-
 		?>
-		<script type="text/javascript">
 
+		<div class="no-padding">
+			<div id="<?php echo esc_attr( $div_id ); ?>" class="grid-60"></div>
+			<span class="desktop text-center"><p><?php echo esc_html( $average_rating ); ?> out of 5 star rating</p></span>
+			<div class="clearfix"></div>
+			<div class="mobile">
+				<p><?php echo esc_html( $average_rating ); ?> out of 5 star rating</p>
+			</div>
+		</div>
+
+		<script type="text/javascript">
 			jQuery( document ).ready( function($) {
 
 				$( '#<?php echo $div_id ?>' ).rateYo({
 					rating    : <?php echo $average_rating ?>,
-					starWidth : "15px",
-					normalFill: "#d8d4d4",
-					ratedFill : "#969393",
+					starWidth : "22px",
+					normalFill: "#dae4e7",
+					ratedFill : "#3c4a50",
 					fullStar  : true
 				});
 
@@ -94,9 +158,7 @@ class Display_Workout extends Workout {
 
 					$( '#rating_value').attr( 'value', data.rating );
 
-					var userRating = data.rating;
-
-					console.log( userRating );
+					const userRating = data.rating;
 
 					$.ajax({
 						type: 'POST',
@@ -112,8 +174,8 @@ class Display_Workout extends Workout {
 							console.log( response.data );
 							if( response.success === true ) {
 								console.log( response.data );
-								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 stars</p>' );
-								alert( 'Thank you for rating this recipe!' );
+								$( '.rating-meta' ).html( '<p>' + response.data[2] + ' out of 5 star rating</p>' );
+								alert( 'Thank you for rating this workout!' );
 							 }
 							if( response.success === false ) {
 								console.log( response );
@@ -121,11 +183,8 @@ class Display_Workout extends Workout {
 							}
 						}
 					}); // rate, no comment event
-
 				}); // on rate event
-
 			}); // on rate event
-
 		</script>
 		<?php
 
@@ -141,127 +200,156 @@ class Display_Workout extends Workout {
 	 */
 	public function add_workout_to_post( $content ) {
 
-		$post_id     = $this->get_global_id();
-		$fields      = $this->add_workout_meta( $post_id );
-		$img_id      = intval( $fields['workout_image'] );
-		$img_att     = wp_get_attachment_image_src( $img_id, 'full' );
-		$workouts    = $this->get_workout( $post_id );
-		$avg_time    = Custom_Tables::get_workout_meta( $post_id, 'workout_duration' );
-		$avg_energy  = Custom_Tables::get_workout_meta( $post_id, 'workout_workload' );
-		$description = Custom_Tables::get_workout_meta( $post_id, 'workout_description' );
+		if ( is_single() ) :
 
-		// Put instructions into an array at each new line
-		$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
+			$post_id     = $this->get_global_id();
+			$fields      = $this->add_workout_meta( $post_id );
+			$img_id      = intval( $fields['workout_image'] );
+			$img_att     = wp_get_attachment_image_src( $img_id, 'full' );
+			$workouts    = $this->get_workout( $post_id );
+			$avg_time    = Custom_Tables::get_workout_meta( $post_id, 'workout_duration' );
+			$avg_energy  = Custom_Tables::get_workout_meta( $post_id, 'workout_workload' );
+			$description = Custom_Tables::get_workout_meta( $post_id, 'workout_description' );
 
-		// Filter the array for whitespace or empty stings from the textarea in the post admin
-		$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
+			// Put instructions into an array at each new line
+			$instructions = preg_split( '/(\r\n|\n|\r)/', $fields['workout_instructions'] );
 
-		if ( empty( $workouts ) )
-			return $content;
+			// Filter the array for whitespace or empty stings from the textarea in the post admin
+			$instructions = array_filter( $instructions, array( $this, 'check_whitespace_or_empty' ) );
 
-		ob_start();
+			if ( empty( $workouts ) )
+				return $content;
 
-		$workout_schema = $this->build_schema_array( $post_id );
+			ob_start();
 
-		print( $workout_schema );
+			$workout_schema = $this->build_schema_array( $post_id );
 
-		?>
+			print( $workout_schema );
 
-		<div id="wpbb-workout-card" class="wpbb-workout grid-container">
+			?>
 
-			<div id="wpbb-workout-inner" class="wpbb-content-inner">
+			<div id="wpbb-workout-card" class="wpbb-workout no-padding grid-container">
 
-				<header class="no-pad-left grid-40">
+				<div id="rating-wrap">
 
-					<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
+					<section id="rating" class="no-padding grid-45 tablet-grid-50">
 
-					<p>Author: <?php echo esc_html( $fields['workout_author'] ) ?></p>
+						<?php $this->add_rating_js( $post_id ) ?>
 
-					<p>Category: <?php echo esc_html( $fields['workout_category'] ) ?></p>
+						<header class="no-pad-left">
 
-					<div class="no-padding">
+							<h2><?php echo esc_html( $fields['workout_name'] ) ?></h2>
 
-						<?php echo $this->add_rating_js( $post_id ) ?>
+							<p>Author: <span><?php echo esc_html( $fields['workout_author'] ) ?></span></p>
 
-					</div>
+							<p>Category: <span><?php echo esc_html( $fields['workout_category'] ) ?></span></p>
 
-					<div class="no-padding save-button">
+						</header>
 
-						<a class="save-btn" href="javascript:genPDF()">Save Workout</a>
+						<div id="averages" class="desktop">
 
-					</div>
+							<p>Workout Time : <span><?php echo esc_html( $avg_time ); ?></span></p>
 
-				</header>
+							<p>Energy Used : <span><?php echo esc_html( $avg_energy ); ?></span></p>
 
-				<div class="workout-image-wrapper grid-60">
+						</div> <!-- #averages -->
 
-					<img id="workout-img" src="<?php echo esc_attr( $img_att[0] ) ?>" />
+					</section>
 
-				</div><!-- .workout-image-wrapper -->
+					<div class="workout-image-wrapper no-pad-right grid-55 tablet-grid-50">
 
-				<section class="workout-content">
+						<img id="workout-img" src="<?php echo esc_attr( $img_att[0] ) ?>" />
 
-					<div class="clearfix"></div>
+						<div class="no-padding save-button">
 
-					<section id="averages" class="grid-100">
-
-						<div class="avg-time no-padding grid-100">
-
-							<?php printf( '<h5><strong>Average workout time :</strong> %s</h5>', esc_html( $avg_time ) ) ?>
+							<a class="save-btn blue-btn" href="javascript:genPDF()">Save Workout</a>
 
 						</div>
 
-						<div class="avg-energy no-padding grid-100">
+					</div><!-- .workout-image-wrapper -->
 
-							<?php printf( '<h5><strong>Energy used per workout :</strong> %s</h5>', esc_html( $avg_energy ) ) ?>
+				</div> <!-- #rating-wrap -->
 
-						</div>
+				<div class="clearfix"></div>
 
-					</section> <!-- #averages -->
+				<div id="mobile-rating-wrap" class="grid-container pl-30">
 
-					<div class="clearfix"></div>
+					<section id="rating-mobile" class="no-padding mobile-grid-100 mobile">
 
-					<div class="description no-pad-left grid-100">
+						<div id="averages">
 
-						<h4>Description</h4>
+							<p>Workout Time : <span><?php echo esc_html( $avg_time ); ?></span></p>
 
-						<?php printf( '<p>%s</p>', esc_html( $description ) ) ?>
+							<p>Energy Used : <span><?php echo esc_html( $avg_energy ); ?></span></p>
 
-					</div><!-- .description -->
+						</div> <!-- #averages -->
 
-					<div class="workout-instructions no-pad-left grid-100">
+					</section>
 
-						<h4>Workout Instructions</h4>
+				</div>
 
-						<ol class="grid-100">
+				<section id="wpbb-workout-inner" class="wpbb-content-inner">
 
-						<?php foreach ( $instructions as $instruction ) : ?>
+					<div class="workout-content">
 
-							<li><?php echo $instruction ?></li>
+						<div class="description no-pad-left grid-100">
 
-						<?php endforeach ?>
+							<h3>Description :</h3>
 
-						</ol>
+							<p><?php echo stripslashes( $description ); ?></p>
 
-					</div><!-- .workout-instructions -->
+						</div><!-- .description -->
 
-					<div class="exercises">
+						<div class="workout-instructions no-pad-left grid-100">
 
-						<?php $this->load_exercises( $workouts ) ?>
+							<h3>Workout Instructions :</h3>
 
-					</div><!-- .exercises -->
+							<ol class="grid-100">
 
-				</section><!-- .workout-content -->
+							<?php foreach ( $instructions as $instruction ) : ?>
 
-			</div><!-- .wpbb-content-inner -->
+								<li><?php echo esc_html( $instruction ); ?></li>
 
-		</div><!-- .wpbb-workout -->
+							<?php endforeach; ?>
 
-		<?php
+							</ol>
 
-		$workout = ob_get_clean();
+						</div> <!-- .workout-instructions -->
 
-		$content .= $workout;
+					</div> <!-- .workout-content -->
+
+				</section> <!-- .wpbb-content-inner -->
+
+				<div class="gradient"></div>
+
+				<section class="exercises">
+
+					<?php $this->load_exercises( $workouts ) ?>
+
+				</section> <!-- .exercises -->
+
+				<section id="rate-it" class="grid-container">
+
+					<div class="no-pad-left grid-50">
+						<h3>Did you do it?</h3>
+						<p>Rate this workout!</p>
+					</div>
+
+					<div id="rating-bottom" class="no-pad-left grid-50">
+						<?php $this->add_bottom_rating( $post_id ); ?>
+					</div>
+
+				</section>
+
+			</div><!-- .wpbb-workout -->
+
+			<?php
+
+			$workout = ob_get_clean();
+
+			$content .= $workout;
+
+		endif;
 
 		return $content;
 

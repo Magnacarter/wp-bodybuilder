@@ -125,6 +125,9 @@ class Workout {
 
 	/**
 	 * Render instructions popup
+	 *
+	 * @param int $post_id
+	 * @return void
 	 */
 	public function render_instructions_popup( $post_id ) {
 
@@ -140,7 +143,7 @@ class Workout {
 
 		<div class="instruction-popup">
 
-			<div class="close-button"><a class="close-btn">x</a></div>
+			<div class="close-button"><a class="close-btn"><span>close</span></a></div>
 
 			<ul>
 
@@ -176,7 +179,7 @@ class Workout {
 
 			foreach ( $work_days as $work_day ) {
 
-				print( '<div class="day-title no-pad-left grid-100">' );
+				print( '<div class="day-title grid-100">' );
 
 				printf( '<h3>%s</h3>', $work_day['day'] );
 
@@ -189,8 +192,6 @@ class Workout {
 
 				foreach ( $exercises as $exercise ) {
 
-					print( '<div id="single-exercise" class="exercise no-pad-left grid-100">' );
-
 					$exercise_id = $exercise[0]['id'];
 					$image_id    = get_post_meta( $exercise_id, 'exercise_image' );
 					$image_id    = (int)$image_id[0];
@@ -202,23 +203,51 @@ class Workout {
 					$reps        = $exercise[1]['reps'];
 					$rest        = $exercise[1]['rest'];
 
-					$this->render_instructions_popup( $exercise_id );
+					?>
+					<section class="single-exercise no-padding grid-100">
 
-					printf( '<h4><span>%s</span></h4>', esc_html( $title ) );
+						<div class="single-exercise-inner">
 
-					printf( '<div class="no-pad-left grid-30"><img src="%s"/></div>', esc_attr( $image_path ) );
+							<div class="no-pad-left grid-40">
+								<img src="<?php echo esc_attr( $image_path ); ?>"/>
+							</div>
 
-					print( '<div class="sets grid-45">' );
-					printf( '<p><span>Sets : </span> %s</p>', $sets );
-					printf( '<p><span>Reps : </span> %s</p>', $reps );
-					printf( '<p><span>Rest per set : </span> %s</p>', $rest );
-					print( '</div>' );
+							<div class="sets no-pad-right grid-60">
 
-					print( '<div class="instruction-button grid-25"><a class="instruction-btn">Instructions</a></div>' );
+								<div class="single-exercise-title desktop no-padding grid-50">
+									<h4><span><?php echo esc_html( $title ); ?> </span></h4>
+								</div> <!-- #single-exercise-title -->
 
-					print( '</div>' );
+								<div class="single-exercise-title mobile no-padding grid-100">
+									<h4><span><?php echo esc_html( $title ); ?> </span></h4>
+								</div> <!-- #single-exercise-title -->
+
+								<div class="instructions no-padding grid=50">
+									<a href="#"><span>Instructions</span></a>
+								</div> <!-- #instructions -->
+
+								<div class="clearfix"></div>
+
+								<div class="reps-wrap">
+									<p><span>Sets : </span> <?php echo esc_html( $sets ); ?></p>
+									<p><span>Reps : </span> <?php echo esc_html( $reps ); ?></p>
+									<p><span>Rest per set : </span> <?php echo esc_html( $rest ); ?></p>
+								</div> <!-- .reps-wrap -->
+							</div> <!-- .sets -->
+
+						</div> <!-- .single-exercise-inner -->
+
+						<div class="popup-wrap">
+							<?php $this->render_instructions_popup( $exercise_id ); ?>
+						</div>
+
+					</section> <!-- .single-exercise -->
+
+					<?php
 
 				}
+
+				?><div class="gradient"></div><?php
 
 			}
 

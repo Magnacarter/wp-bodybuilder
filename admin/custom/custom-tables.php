@@ -37,13 +37,11 @@ class Custom_Tables {
 	 * @return void
 	 */
 	public function install_workout_table() {
+
 		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'bodybuilder_workout';
-
+		$table_name                = $wpdb->prefix . 'bodybuilder_workout';
 		$wpdb->bodybuilder_workout = $wpdb->prefix . 'bodybuilder_workout';
-
-		$charset_collate = $wpdb->get_charset_collate();
+		$charset_collate           = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
 		workout_id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -68,7 +66,9 @@ class Custom_Tables {
 	) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
 		dbDelta( $sql );
+
 	}
 
 	/**

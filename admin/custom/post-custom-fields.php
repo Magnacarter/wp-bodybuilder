@@ -159,6 +159,10 @@ class Post_Custom_Fields extends Custom_Field {
 					$this->render_day_repeater_field( $field, $meta );
 					break;
 
+				case 'wysiwyg':
+					$this->render_wysiwyg_field( $field, $meta );
+					break;
+
 			} // end switch
 
 			print( '</td></tr>' );
@@ -178,19 +182,25 @@ class Post_Custom_Fields extends Custom_Field {
 		$post_id = $this->get_global_id();
 		$workout = Post_Custom_Fields::get_workout();
 
-		print( '<input type="hidden" name="post_id" value="' . $post_id . '" />' );
+		?>
 
-		// Use nonce for verification
-		print( '<input type="hidden" name="workout_meta_box_nonce" value="' . wp_create_nonce( 'workout-nonce' ) . '" />' );
+		<input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>" />
+		<input type="hidden" name="workout_meta_box_nonce" value="<?php echo wp_create_nonce( 'workout-nonce' ); ?>" />
+		<table class="form-table">
 
-		// Begin the field table and loop
-		print( '<table class="form-table">' );
+			<?php $this->set_new_workout_fields( $post_id ); ?>
 
-			$this->set_new_workout_fields( $post_id );
+		</table>
 
-		print( '</table>' ); // end table
+		<a class="save-btn">Save Workout</a>
 
-		print( '<a class="save-btn">Save Workout</a>' );
+		<div class="progress-background">
+			<div class="progress-bar-wrap">
+				<div id="progress-bar" class="center" style="width:20%">20%</div>
+			</div>
+		</div>
+
+		<?php
 
 	}
 
@@ -263,17 +273,11 @@ class Post_Custom_Fields extends Custom_Field {
 
 		if (
 			'POST' === $_SERVER['REQUEST_METHOD']
-
 			&&
-
 			isset( $_POST['nonce'] )
-
 			&&
-
 			isset( $_POST['workout'] )
-
 			&&
-
 			isset( $_POST['workoutId'] )
 		) {
 
@@ -293,7 +297,7 @@ class Post_Custom_Fields extends Custom_Field {
 			$workout_rest         = $_POST['workoutRest'];
 			$workout_workload     = $_POST['workoutWorkload'];
 			$workout_intensity    = $_POST['workoutIntensity'];
-			$workout_description  = $_POST['workoutDescription'];
+			$workout_desc_visual  = $_POST['workoutDescVisual'];
 
 			// Check if a nonce is valid.
 			if ( ! wp_verify_nonce( $nonce_field, $nonce_action ) )
@@ -330,7 +334,7 @@ class Post_Custom_Fields extends Custom_Field {
 				'workout_rest_periods' => $workout_rest,
 				'workout_workload'     => $workout_workload,
 				'workout_author'       => $workout_author,
-				'workout_description'  => $workout_description
+				'workout_description'  => $workout_desc_visual
 			);
 
 			Custom_Tables::save_workout( $args, $workout_id );

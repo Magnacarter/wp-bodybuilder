@@ -164,4 +164,3 @@ class Init_Plugin {
 	}
 }
 Init_Plugin::get_instance();
-

@@ -152,6 +152,14 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 */
 	public function save_exercise_meta( $post_id ) {
 
+		if (
+			'POST' !== $_SERVER['REQUEST_METHOD']
+			&&
+			! isset( $_POST['exercise_meta_box_nonce'] )
+		) {
+			return;
+		}
+
 		$custom_meta_fields = $this->get_exercise_meta_fields();
 
 		// verify nonce

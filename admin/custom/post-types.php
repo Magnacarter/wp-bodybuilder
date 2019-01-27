@@ -64,7 +64,8 @@ function register_exercise_custom_post_type() {
 		'hierarchical'  => false,
 		'has_archive'   => false,
 		'menu_position' => 10,
-		'capabilities'  => $capabilities
+		'capabilities'  => $capabilities,
+		'menu_icon'   => BODYBUILDER_URL . 'assets/img/exercise-icon.png',
 	);
 
 	register_post_type( 'exercise', $args );

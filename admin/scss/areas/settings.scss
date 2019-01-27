@@ -1,5 +1,38 @@
+<<<<<<< HEAD
 /* Widget ------------- */
 
 .approval {
 	margin-bottom: 10px;
+=======
+/* Settings Page ----- */
+
+.wp-menu-image.dashicons-before {
+	img {
+		height:22px;
+	}
+	&:hover {
+		color: #0073aa;
+	}
+}
+
+.progress-background {
+	display: none;
+	position: absolute;
+	padding: 20px;
+	top: 88%;
+	left: 20%;
+	width: 60%;
+	height: 18px;
+	background-color: rgba(60, 74, 80, 0.63);
+	border-radius: 5px;
+}
+.progress-bar-wrap {
+	background-color: $lite-blue;
+	border-radius: 5px;
+
+	#progress-bar {
+		background-color: $bb-blue;
+		color: #fff;
+	}
+>>>>>>> 518460700a644b4c762c11871b3102ff06c4a256
 }

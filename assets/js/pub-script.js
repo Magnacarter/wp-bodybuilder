@@ -1,21 +1,18 @@
 jQuery( document ).ready( function($) {
 
-	var btn      = $( '#instruction-btn' ),
-		closeBtn = $( '.close-btn' ),
-		popUp    = $( '.instruction-popup' );
+	const instrucBtn   = $( '.instructions a' );
+	const instructions = $( '.popup-wrap' );
+	const closeBtn     = $( '.close-btn' );
+	const parentExercise = $( '.single-exercise' );
 
-	$( '.instruction-btn' ).on( 'click', function( e ) {
-
-		$(this).parent().parent().find( ".instruction-popup" ).show(200);
-
-		console.log('click');
-
+	instrucBtn.on( 'click', function( e ) {
+		e.preventDefault();
+		$( this ).closest( parentExercise ).find( instructions ).slideDown();
 	});
 
 	closeBtn.on( 'click', function( e ) {
-
-		$(this).parent().parent().hide(200);
-
+		e.preventDefault();
+		$( this ).closest( parentExercise ).find( instructions ).slideUp();
 	});
 
 });
