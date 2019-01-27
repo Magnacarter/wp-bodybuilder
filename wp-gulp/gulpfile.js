@@ -99,7 +99,7 @@ gulp.task( 'jsAdminWatch', [ 'concatAdminScripts' ], browserSync.reload );
 gulp.task( 'watchFiles', function() {
   browserSync({
     proxy: {
-      target: 'http://testsite.dev/'
+      target: 'http://plugindev.test/'
     }
   });
   gulp.watch([ '../pub/scss/**/*.scss' ], [ 'cssWatch' ]);
