@@ -5,20 +5,22 @@
  * @package Bodybuilder\plugin\admin\custom
  * @since   1.0.0
  */
-
 namespace Bodybuilder\plugin\admin\custom;
 
 /**
  * Class Exercise_Custom_Fields
  */
-class Exercise_Custom_Fields extends Custom_Field {
+class Exercise_Custom_Fields extends Custom_Fields {
 
 	/**
-	 * Hold instance of class
-	 *
-	 * @var $instance
+	 * @var array $exercise_meta_fields
 	 */
-	public static $instance;
+	private $exercise_meta_fields = array();
+
+	/**
+	 * @var array $workout_meta_fields
+	 */
+	private $workout_meta_field = array();
 
 	/**
 	 * Class Constructor
@@ -29,19 +31,12 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @action load-post-new.php
 	 */
 	public function __construct() {
-
 		if ( is_admin() ) {
-
 			add_action( 'load-post.php',     array( $this, 'init_metabox' ) );
-
 			add_action( 'load-post-new.php', array( $this, 'init_metabox' ) );
-
 			add_action( 'admin_enqueue_scripts', array( $this, 'localize_script' ) );
-
 		}
-
 		add_action( 'wp_ajax_process_ajax', array( $this, 'process_ajax' ) );
-
 	}
 
 	/**
@@ -51,11 +46,8 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @action save_post
 	 */
 	public function init_metabox() {
-
 		add_action( 'add_meta_boxes', array( $this, 'add_exercise_meta_box'  ) );
-
 		add_action( 'save_post', array( $this, 'save_exercise_meta' ) );
-
 	}
 
 	/**
@@ -68,7 +60,6 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @return void
 	 */
 	public function add_exercise_meta_box() {
-
 		add_meta_box(
 			'exercise-custom-fields',                   // $id
 			'Exercise Fields',                          // $title
@@ -77,67 +68,103 @@ class Exercise_Custom_Fields extends Custom_Field {
 			'normal',                                   // $context
 			'high'                                      // $priority
 		);
+	}
 
+	/**
+	 * Set custom meta fields
+	 *
+	 * define the custom fields for the CPT
+	 *
+	 * @since 1.0.0
+	 * @return array $custom_meta_fields
+	 */
+	public function set_exercise_meta_fields( $excercise_fields ) {
+		foreach ( $excercise_fields as $fields ) {
+			$this->exercise_meta_fields[] = $fields;
+		}
+	}
+
+	/**
+	 * Get exercise meta fields
+	 *
+	 * @since 1.0.0
+	 * @return array $exercise_meta_fields
+	 */
+	public function get_exercise_meta_fields() {
+		return $this->exercise_meta_fields;
+	}
+
+	/**
+	 * Set workout meta fields
+	 *
+	 * define the custom fields for the workout
+	 *
+	 * @since 1.0.0
+	 * @return array $custom_meta_fields
+	 */
+	public function set_workout_meta_fields( $workout_fields ) {
+		foreach ( $workout_fields as $key => $value ) {
+			$this->workout_meta_fields[$key] = $value;
+		}
+	}
+
+	/**
+	 * Get workout meta fields
+	 *
+	 * @since 1.0.0
+	 * @return array $exercise_meta_fields
+	 */
+	public function get_workout_meta_fields() {
+		return $this->workout_meta_fields;
 	}
 
 	/**
 	 * Render exercise meta box
 	 *
 	 * @since 1.0.0
+	 * @param object $post
 	 * @return void
 	 */
-	public function render_exercise_meta_box() {
+	public function render_exercise_meta_box( $post ) {
 
-		$post_id            = $this->get_global_id();
-		$custom_meta_fields = $this->get_exercise_meta_fields();
+		?>
+		<input type="hidden" name="exercise_meta_box_nonce" value="<?php wp_create_nonce( basename( __FILE__ ) ); ?>" />
+		<table class="form-table">
+		<?php
 
-		// Use nonce for verification
-		print( '<input type="hidden" name="exercise_meta_box_nonce" value="' . wp_create_nonce( basename( __FILE__ ) ).'" />' );
+		foreach ( $this->exercise_meta_fields as $field ) {
 
-		// Begin the field table and loop
-		print( '<table class="form-table">' );
-
-		foreach ( $custom_meta_fields as $field ) {
-
-			// get value of this field if it exists for this post
-			$meta = get_post_meta( $post_id, $field['id'], true );
-
-			// begin a table row with
 			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
 
-				switch( $field['type'] ) {
+				$meta = get_post_meta( $post->ID, $field['id'], true );
 
+				switch( $field['type'] ) {
 					case 'text':
 						$this->render_text_field( $field, $meta );
 					break;
-
 					case 'textarea':
 						$this->render_textarea_field( $field, $meta );
 					break;
 					case 'checkbox':
 						$this->render_checkbox_field( $field, $meta );
 					break;
-
 					case 'select':
 						$this->render_select_field( $field, $meta );
 					break;
-
 					case 'image':
-						$this->render_image_field( $field, $meta, $post_id );
+						$this->render_image_field( $field, $meta, $post->ID );
 					break;
-
 					case 'repeatable':
 						$this->render_repeater_field( $field, $meta );
 					break;
-
-				} //end switch
-
-			print( '</td></tr>' );
-
-		} // end foreach
-
-		print( '</table>' ); // end table
-
+				}
+			?>
+			</td></tr>
+			<?php
+		}
+		?>
+		</table>
+		<?php
 	}
 
 	/**
@@ -151,7 +178,6 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @return int $post_id
 	 */
 	public function save_exercise_meta( $post_id ) {
-
 		if (
 			'POST' !== $_SERVER['REQUEST_METHOD']
 			&&
@@ -177,9 +203,7 @@ class Exercise_Custom_Fields extends Custom_Field {
 				return $post_id;
 
 		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
-
 			return $post_id;
-
 		}
 
 		// loop through fields and save the data
@@ -189,25 +213,16 @@ class Exercise_Custom_Fields extends Custom_Field {
 			$new = $_POST[$field['id']];
 
 			if ( $new && $new != $old ) {
-
 				update_post_meta( $post_id, $field['id'], $new );
-
 			} elseif ( '' == $new && $old ) {
-
 				delete_post_meta( $post_id, $field['id'], $old );
-
 			}
 
 			if ( $field['id'] == 'exercise_image' ) {
-
 				$img_id = $_POST['custom-img-id'];
-
 				update_post_meta( $post_id, $field['id'] , $img_id );
-
 			}
-
-		} // end foreach
-
+		}
 	}
 
 	/**
@@ -218,14 +233,10 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @return void
 	 */
 	public function process_ajax() {
-
 		$sorted  = $_POST['data'];
 		$post_id = $_POST['postId'];
-
 		update_post_meta( $post_id, 'exercise_repeatable', $sorted );
-
 		wp_send_json_success( $sorted );
-
 	}
 
 	/**
@@ -236,40 +247,11 @@ class Exercise_Custom_Fields extends Custom_Field {
 	 * @return void
 	 */
 	public function localize_script() {
-
 		if( isset( $post ) ) {
-
-			$post_id = $this->get_global_id();
-
+			$post_id = $this->global_id();
 			wp_localize_script( 'wpbb_admin_script', 'wpbbConfig', array(
-
 				'postID' => $post_id,
-
 			) );
-
 		}
-
 	}
-
-	/**
-	 * Return active instance of Bodybuilder_Custom_Fields, create one if it doesn't exist
-	 *
-	 * @return object Exercise_Custom_Fields
-	 */
-	public static function get_instance() {
-
-		if ( empty( self::$instance ) ) {
-
-			$class = __CLASS__;
-
-			self::$instance = new $class;
-
-		}
-
-		return self::$instance;
-
-	}
-
 }
-
-Exercise_Custom_Fields::get_instance();

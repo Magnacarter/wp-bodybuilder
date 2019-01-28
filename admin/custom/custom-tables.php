@@ -7,7 +7,6 @@
  * @author Adam Carter
  * @licence GNU-2.0+
  */
-
 namespace Bodybuilder\plugin\admin\custom;
 
 /**
@@ -24,9 +23,7 @@ class Custom_Tables {
 	 * Custom_Tables constructor.
 	 */
 	public function __construct() {
-
 		$this->install_workout_table();
-
 	}
 
 	/**
@@ -168,19 +165,11 @@ class Custom_Tables {
 	 * @return Custom_Tables
 	 */
 	public static function get_instance() {
-
 		if ( empty( self::$instance ) ) {
-
 			$class = __CLASS__;
-
 			self::$instance = new $class;
-
 		}
-
 		return self::$instance;
-
 	}
-
 }
-
 Custom_Tables::get_instance();

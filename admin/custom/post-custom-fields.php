@@ -9,15 +9,13 @@
  * @author Adam Carter
  * @licence GNU-2.0+
  */
-
 namespace Bodybuilder\plugin\admin\custom;
-
 use Bodybuilder\plugin\admin\custom\Custom_Tables;
 
 /**
  * Class Post_Custom_Fields
  */
-class Post_Custom_Fields extends Custom_Field {
+class Post_Custom_Fields extends Custom_Fields {
 
 	/**
 	 * Hold Post_Custom_Fields instance
@@ -35,21 +33,13 @@ class Post_Custom_Fields extends Custom_Field {
 	 * @action load-post-new.php
 	 */
 	public function __construct() {
-
 		if ( is_admin() ) {
-
 			add_action( 'load-post.php',     array( $this, 'init_metabox' ) );
-
 			add_action( 'load-post-new.php', array( $this, 'init_metabox' ) );
-
 		}
-
 		add_action( 'wp_ajax_workout_process_ajax', array( $this, 'workout_process_ajax' ) );
-
 		add_action( 'wp_ajax_add_day_ajax', array( $this, 'add_day_ajax' ) );
-
 		add_action( 'wp_ajax_save_workout_from_post', array( $this, 'save_workout_from_post' ) );
-
 	}
 
 	/**
@@ -59,11 +49,8 @@ class Post_Custom_Fields extends Custom_Field {
 	 * @action save_post
 	 */
 	public function init_metabox() {
-
 		add_action( 'add_meta_boxes', array( $this, 'add_metabox_to_post'  ) );
-
 		add_action( 'wp_insert_post', array( $this, 'save_workout_from_post' ), 10, 2 );
-
 	}
 
 	/**
@@ -76,9 +63,7 @@ class Post_Custom_Fields extends Custom_Field {
 	 * @return void
 	 */
 	public function add_metabox_to_post() {
-
 		global $post;
-
 		add_meta_box(
 			'exercise-custom-fields',
 			__( 'Add a New Workout', 'text_domain' ),
@@ -87,7 +72,6 @@ class Post_Custom_Fields extends Custom_Field {
 			'advanced',
 			'high'
 		);
-
 	}
 
 	/**
@@ -340,9 +324,7 @@ class Post_Custom_Fields extends Custom_Field {
 			Custom_Tables::save_workout( $args, $workout_id );
 
 			wp_send_json_success( $workout_instructions );
-
 		}
-
 	}
 
 	/**
@@ -351,19 +333,11 @@ class Post_Custom_Fields extends Custom_Field {
 	 * @return Post_Custom_Fields
 	 */
 	public static function get_instance() {
-
 		if ( empty( self::$instance ) ) {
-
 			$class = __CLASS__;
-
 			self::$instance = new $class;
-
 		}
-
 		return self::$instance;
-
 	}
-
 }
-
 Post_Custom_Fields::get_instance();

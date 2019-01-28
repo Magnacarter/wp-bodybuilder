@@ -133,11 +133,12 @@ class Init_Plugin {
 	 */
 	public static function init_autoloader() {
 		// Admin files
-		require_once 'admin/custom/custom-field.php';
+		require_once 'admin/custom/custom-fields.php';
 		require_once 'admin/custom/post-types.php';
 		require_once 'admin/custom/custom-tables.php';
-		require_once 'admin/custom/exercise-custom-fields.php';
 		require_once 'admin/custom/post-custom-fields.php';
+		require_once 'admin/custom/exercise-custom-fields.php';
+		require_once 'admin/custom/set-custom-fields.php';
 
 		//Public files
 		require_once 'pub/frontend-ajax.php';
