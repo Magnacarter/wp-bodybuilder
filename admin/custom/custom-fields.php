@@ -74,8 +74,8 @@ class Custom_Fields {
 	 * @return void
 	 */
 	public static function render_checkbox_field( $field, $meta ) {
-		echo '<input type="checkbox" name="' . $field['id'] . '" id="' . $field['id'] . '" ', $meta ? ' checked="checked"' : '', '/>
-		<label for="' . $field['id'] . '">' . $field['desc'] . '</label>';
+		echo '<input type="checkbox" name="' . esc_attr( $field['id'] ) . '" id="' . esc_attr( $field['id'] ) . '" ', $meta ? ' checked="checked"' : '', '/>
+		<label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['desc'] ) . '</label>';
 	}
 
 	/**
@@ -87,19 +87,16 @@ class Custom_Fields {
 	 * @return void
 	 */
 	public static function render_select_field( $field, $meta ) {
-
-		printf( '<span class="description">%s</span><br />', esc_html( $field['desc'] ) );
-
-		printf( '<select name="%s" id="%1$s">', esc_attr( $field['id'] ) );
+		?>
+		<span class="description"><?php echo esc_html( $field['desc'] ); ?></span><br />
+		<select name="<?php echo esc_attr( $field['id'] ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>">
+		<?php
 
 		foreach ( $field['options'] as $option ) {
-
 			echo '<option', $meta == $option['value'] ? ' selected="selected"' : '', ' value="' . esc_attr( $option['value'] ) . '">' . esc_html( $option['label'] ) . '</option>';
-
 		}
 
-		print( '</select>' );
-
+		?></select><?php
 	}
 
 	/**
@@ -135,7 +132,7 @@ class Custom_Fields {
 		<div class="custom-img-container">
 			<span class="description"><?php echo esc_html( $field['desc'] ) ?></span><br/><br/>
 			<?php if ( $have_img ) : ?>
-				<img src="<?php echo $img_src[0] ?>" alt="" style="max-width:150px; max-height: 150px;"/>
+				<img src="<?php echo esc_url( $img_src[0] ) ?>" alt="" style="max-width:150px; max-height: 150px;"/>
 			<?php endif; ?>
 		</div>
 
@@ -188,8 +185,8 @@ class Custom_Fields {
 			}
 		} else {
 			?>
-			printf( '<input type="text" name="<?php echo esc_attr( $field['id'][$i] ); ?>" id="<?php echo esc_attr( $field['id'] ) ?>" value="" size="30" />
-			print( '<a class="repeatable-remove button" href="#">-</a></li>' );
+			<input type="text" name="<?php echo esc_attr( $field['id'][$i] ); ?>" id="<?php echo esc_attr( $field['id'] ) ?>" value="" size="30" />
+			<a class="repeatable-remove button" href="#">-</a></li>
 			<?php
 		}
 		?></ul><?php
@@ -320,39 +317,29 @@ class Custom_Fields {
 		$post_id        = $post->ID;
 		$workout        = Post_Custom_Fields::get_workout();
 
-		printf( '<span class="description">%s</span><br/>', $field['desc'] );
-
-		printf( '<ul data-post-id="%s" id="%s-repeatable" class="day_repeat">', esc_attr( $post_id ), $field['id'] );
-
+		?>
+		<span class="description"><?php echo esc_html( $field['desc'] ); ?></span><br/>
+		<ul data-post-id="<?php echo esc_attr( $post_id ); ?>" id="<?php echo esc_attr( $field['id'] ); ?>-repeatable" class="day_repeat">
+		<?php
 		$i = 0;
 
 		if ( $meta ) {
-
 			foreach ( $meta as $row ) {
-
-				printf( '<li id="item-%s>', $field['id'] );
-
-				printf( '<input type="text" name="%s" id="%s" value="%s" size="30" />', $field['id'][ $i ], $field['id'], $row );
-
+				printf( '<li id="item-%s>', esc_html( $field['id'] ) );
+				printf( '<input type="text" name="%s" id="%s" value="%s" size="30" />', esc_attr( $field['id'][ $i ] ), esc_attr( $field['id'] ), esc_attr( $row ) );
 				print( '<a class="day-repeat-remove button" href="#">-</a></li>' );
-
 				$i ++;
-
 			}
-
 		} elseif( ! empty( $workout ) ) {
-
 			$workout = json_decode( $workout[0]->workout );
-
 			$this->load_saved_workout( $exercise_posts, $workout );
-
 		} else {
-
 			$this->load_new_day( $exercise_posts );
-
 		}
 
-		print( '</ul>' );
-		print( '<a class="day-repeat-add button" href="#">Add Day</a>' );
+		?>
+		</ul>
+		<a class="day-repeat-add button" href="#">Add Day</a>
+		<?php
 	}
 }

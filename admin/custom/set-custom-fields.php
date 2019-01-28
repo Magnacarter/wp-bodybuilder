@@ -1,6 +1,6 @@
 <?php
 /**
- * Workout Meta
+ * Set custom fields
  */
 use Bodybuilder\plugin\admin\custom\Exercise_Custom_Fields;
 

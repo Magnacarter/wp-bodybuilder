@@ -246,9 +246,8 @@ class Exercise_Custom_Fields extends Custom_Fields {
 	 * @add_action admin_enqueue_scripts
 	 * @return void
 	 */
-	public function localize_script() {
+	public function localize_script( $post_id ) {
 		if( isset( $post ) ) {
-			$post_id = $this->global_id();
 			wp_localize_script( 'wpbb_admin_script', 'wpbbConfig', array(
 				'postID' => $post_id,
 			) );
