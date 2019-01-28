@@ -1,54 +1,41 @@
 /* Post Exercise ------------- */
-
 .exercise-title {
 	margin-top: 20px;
 }
-
 #exercise-list {
-
 	label {
 		display: block;
 	}
-
 	input {
 		margin-right: 10px;
 		display: block;
 		height:30px;
 	}
-
 	.rep-input {
 		margin-left: -7%;
 	}
-
 	.rest-input {
 		margin-left: -7%;
 	}
-
 	#sets {
 		width: 70%;
 	}
-
 	#reps {
 		width: 70%;
 	}
-
 	#rest {
 		width: 70%;
 	}
 }
-
 .selected-exercises {
 	margin-top: 15px;
 }
-
 span.select2 {
 	min-width: 50%;
 }
-
 #wp-workout_description-editor-tools {
 	display: none;
 }
-
 .save-btn {
 	color: white;
 	background: $wp-blue;
@@ -63,11 +50,9 @@ span.select2 {
 		cursor: pointer;
 	}
 }
-
 #remove-btn {
 	margin-top: 15px;
 }
-
 .remove-exercise {
 	position: absolute;
 	text-decoration: none;
@@ -99,11 +84,9 @@ span.select2 {
 		}
 	}
 }
-
 a.day-repeat-add.button {
 	margin-top: 10px;
 }
-
 #poststuff .inside {
 	padding-bottom: 60px;
 }

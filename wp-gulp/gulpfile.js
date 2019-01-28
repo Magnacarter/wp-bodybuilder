@@ -89,11 +89,8 @@ gulp.task( 'concatCSS', [ 'compileSass' ], function() {
 });
 
 gulp.task( 'cssWatch', [ 'concatCSS' ], browserSync.reload );
-
 gulp.task( 'jsWatch', [ 'concatScripts' ], browserSync.reload );
-
 gulp.task( 'cssAdminWatch', [ 'concatAdminCSS' ], browserSync.reload );
-
 gulp.task( 'jsAdminWatch', [ 'concatAdminScripts' ], browserSync.reload );
 
 gulp.task( 'watchFiles', function() {

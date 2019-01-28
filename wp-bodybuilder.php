@@ -136,7 +136,6 @@ class Init_Plugin {
 		require_once 'admin/custom/custom-field.php';
 		require_once 'admin/custom/post-types.php';
 		require_once 'admin/custom/custom-tables.php';
-		require_once 'admin/custom/settings-page.php';
 		require_once 'admin/custom/exercise-custom-fields.php';
 		require_once 'admin/custom/post-custom-fields.php';
 
