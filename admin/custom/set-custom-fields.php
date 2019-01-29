@@ -3,8 +3,10 @@
  * Set custom fields
  */
 use Bodybuilder\plugin\admin\custom\Exercise_Custom_Fields;
+use Bodybuilder\plugin\admin\custom\Post_Custom_Fields;
 
-$custom_fields = new Exercise_Custom_Fields();
+$custom_fields_exercise = new Exercise_Custom_Fields();
+$custom_fields_post = new Post_Custom_Fields();
 
 $excercise_fields = array(
 	array(
@@ -32,7 +34,7 @@ $excercise_fields = array(
 		'type'  => 'image'
 	)
 );
-$custom_fields->set_exercise_meta_fields( $excercise_fields );
+$custom_fields_exercise->set_exercise_meta_fields( $excercise_fields );
 
 $workout_fields = array(
 	array(
@@ -108,4 +110,4 @@ $workout_fields = array(
 		'type'  => 'day-repeater'
 	)
 );
-$custom_fields->set_workout_meta_fields( $workout_fields );
+$custom_fields_post->set_workout_meta_fields( $workout_fields );

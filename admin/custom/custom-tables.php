@@ -65,7 +65,6 @@ class Custom_Tables {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( $sql );
-
 	}
 
 	/**
@@ -77,10 +76,10 @@ class Custom_Tables {
 	 */
 	public static function get_workout_meta( $workout_id, $field_id ) {
 
-		if( ! isset( $workout_id ) )
+		if ( ! isset( $workout_id ) )
 			return;
 
-		if( $field_id === 'workout_day' )
+		if ( $field_id === 'workout_day' )
 			return;
 
 		global $wpdb;
@@ -95,7 +94,7 @@ class Custom_Tables {
 
 		$metas = json_decode( json_encode( $meta ), true );
 
-		if( ! isset( $metas[0] ) )
+		if ( ! isset( $metas[0] ) )
 			return;
 
 		$workout_meta = $metas[0][$field_id];
@@ -147,16 +146,11 @@ class Custom_Tables {
 			"
 		);
 
-		if( empty( $id ) || $id === null ) {
-
+		if ( empty( $id ) || $id === null ) {
 			$wpdb->insert( $table_name, $args );
-
 		} else {
-
 			$wpdb->update( $table_name, $args, array( 'workout_id' => $workout_id ) );
-
 		}
-
 	}
 
 	/**

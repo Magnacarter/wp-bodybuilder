@@ -5,7 +5,6 @@
  * @package Bodybuilder\plugin\admin\custom
  * @since   1.0.0
  */
-
 namespace Bodybuilder\plugin\admin\custom;
 
 /**
@@ -84,29 +83,19 @@ add_action( 'init', __NAMESPACE__ . '\register_exercise_custom_post_type' );
  * @return array
  */
 function get_all_post_type_features( $post_type = 'post', $exclude_features = array() ) {
-
 	$configured_features = get_all_post_type_supports( $post_type );
 
 	if ( ! $exclude_features ) {
-
 		return array_keys( $configured_features );
-
 	}
 
 	$features = array();
 
 	foreach ( $configured_features as $feature => $value ) {
-
 		if ( in_array( $feature, $exclude_features ) ) {
-
 			continue;
-
 		}
-
 		$features[] = $feature;
-
 	}
-
 	return $features;
-
 }

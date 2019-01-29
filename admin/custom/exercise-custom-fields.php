@@ -18,11 +18,6 @@ class Exercise_Custom_Fields extends Custom_Fields {
 	private $exercise_meta_fields = array();
 
 	/**
-	 * @var array $workout_meta_fields
-	 */
-	private $workout_meta_field = array();
-
-	/**
 	 * Class Constructor
 	 *
 	 * Hook our metabox into the post admin area
@@ -92,30 +87,6 @@ class Exercise_Custom_Fields extends Custom_Fields {
 	 */
 	public function get_exercise_meta_fields() {
 		return $this->exercise_meta_fields;
-	}
-
-	/**
-	 * Set workout meta fields
-	 *
-	 * define the custom fields for the workout
-	 *
-	 * @since 1.0.0
-	 * @return array $custom_meta_fields
-	 */
-	public function set_workout_meta_fields( $workout_fields ) {
-		foreach ( $workout_fields as $key => $value ) {
-			$this->workout_meta_fields[$key] = $value;
-		}
-	}
-
-	/**
-	 * Get workout meta fields
-	 *
-	 * @since 1.0.0
-	 * @return array $exercise_meta_fields
-	 */
-	public function get_workout_meta_fields() {
-		return $this->workout_meta_fields;
 	}
 
 	/**

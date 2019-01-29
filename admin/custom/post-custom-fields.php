@@ -18,11 +18,9 @@ use Bodybuilder\plugin\admin\custom\Custom_Tables;
 class Post_Custom_Fields extends Custom_Fields {
 
 	/**
-	 * Hold Post_Custom_Fields instance
-	 *
-	 * @var string
+	 * @var array $workout_meta_fields
 	 */
-	public static $instance;
+	private $workout_meta_fields = array();
 
 	/**
 	 * Class Constructor
@@ -40,6 +38,30 @@ class Post_Custom_Fields extends Custom_Fields {
 		add_action( 'wp_ajax_workout_process_ajax', array( $this, 'workout_process_ajax' ) );
 		add_action( 'wp_ajax_add_day_ajax', array( $this, 'add_day_ajax' ) );
 		add_action( 'wp_ajax_save_workout_from_post', array( $this, 'save_workout_from_post' ) );
+	}
+
+	/**
+	 * Set workout meta fields
+	 *
+	 * define the custom fields for the workout
+	 *
+	 * @since 1.0.0
+	 * @return array $custom_meta_fields
+	 */
+	public function set_workout_meta_fields( $workout_fields ) {
+		foreach ( $workout_fields as $key => $value ) {
+			$this->workout_meta_fields[$key] = $value;
+		}
+	}
+
+	/**
+	 * Get workout meta fields
+	 *
+	 * @since 1.0.0
+	 * @return array $exercise_meta_fields
+	 */
+	public function get_workout_meta_fields() {
+		return $this->workout_meta_fields;
 	}
 
 	/**
@@ -63,11 +85,10 @@ class Post_Custom_Fields extends Custom_Fields {
 	 * @return void
 	 */
 	public function add_metabox_to_post() {
-		global $post;
 		add_meta_box(
 			'exercise-custom-fields',
 			__( 'Add a New Workout', 'text_domain' ),
-			array( $this, 'render_metabox_for_post' ),
+			array( $this, 'render_metabox_workout_fields' ),
 			'post',
 			'advanced',
 			'high'
@@ -80,12 +101,9 @@ class Post_Custom_Fields extends Custom_Fields {
 	 * @since 1.0.0
 	 * @return array|null|object $workout
 	 */
-	public static function get_workout() {
-
-		global $post, $wpdb;
-
+	public function get_workout() {
+		global $wpdb, $post;
 		$post_id = $post->ID;
-
 		$workout = $wpdb->get_results(
 			"
 			SELECT workout
@@ -93,9 +111,7 @@ class Post_Custom_Fields extends Custom_Fields {
 			WHERE workout_id = $post_id
 			"
 		);
-
 		return $workout;
-
 	}
 
 	/**
@@ -105,54 +121,42 @@ class Post_Custom_Fields extends Custom_Fields {
 	 * @param int $post_id
 	 * @return void
 	 */
-	public function set_new_workout_fields( $post_id ) {
+	public function render_workout_metabox( $post_id ) {
 
-		$custom_meta_fields = $this->get_workout_meta_fields();
-
-		foreach ( $custom_meta_fields as $field ) {
+		foreach ( $this->workout_meta_fields as $field ) {
 
 			// get value of this field if it exists for this post
 			$meta = Custom_Tables::get_workout_meta( $post_id, $field['id'] );
 
-			// begin a table row with
 			printf( '<tr><th><label for="%s">%s</label></th><td>', esc_attr( $field['id'] ), esc_html( $field['label'] ) );
 
 			switch ( $field['type'] ) {
-
 				case 'text':
 					$this->render_text_field( $field, $meta );
 					break;
-
 				case 'textarea':
 					$this->render_textarea_field( $field, $meta );
 					break;
-
 				case 'checkbox':
 					$this->render_checkbox_field( $field, $meta );
 					break;
-
 				case 'select':
 					$this->render_select_field( $field, $meta );
 					break;
-
 				case 'image':
 					$this->render_image_field( $field, $meta, $post_id );
 					break;
-
 				case 'day-repeater':
 					$this->render_day_repeater_field( $field, $meta );
 					break;
-
 				case 'wysiwyg':
 					$this->render_wysiwyg_field( $field, $meta );
 					break;
-
-			} // end switch
-
-			print( '</td></tr>' );
-
-		} // end foreach
-
+			}
+			?>
+			</td></tr>
+			<?php
+		}
 	}
 
 	/**
@@ -162,18 +166,15 @@ class Post_Custom_Fields extends Custom_Fields {
 	 * @return void
 	 */
 	public function render_metabox_workout_fields() {
-
-		$post_id = $this->get_global_id();
-		$workout = Post_Custom_Fields::get_workout();
+		global $post;
+		$post_id = $post->ID;
+		$workout = $this->get_workout();
 
 		?>
-
 		<input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>" />
 		<input type="hidden" name="workout_meta_box_nonce" value="<?php echo wp_create_nonce( 'workout-nonce' ); ?>" />
 		<table class="form-table">
-
-			<?php $this->set_new_workout_fields( $post_id ); ?>
-
+			<?php $this->render_workout_metabox( $post_id ); ?>
 		</table>
 
 		<a class="save-btn">Save Workout</a>
@@ -183,44 +184,22 @@ class Post_Custom_Fields extends Custom_Fields {
 				<div id="progress-bar" class="center" style="width:20%">20%</div>
 			</div>
 		</div>
-
 		<?php
-
-	}
-
-	/**
-	 * Render metabox for post
-	 *
-	 * Render the meta box in the post post editor screen
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function render_metabox_for_post() {
-
-		$this->render_metabox_workout_fields();
-
 	}
 
 	/**
 	 * Add day ajax
 	 */
 	public function add_day_ajax() {
-
-		if( $_POST['addDay'] == true ) {
-
+		if ( $_POST['addDay'] == true ) {
 			$args = array(
 				'posts_per_page'   => -1,
 				'post_type'        => 'exercise',
 				'post_status'      => 'publish',
 			);
-
 			$exercisePosts = get_posts( $args );
-
 			wp_send_json_success( $exercisePosts );
-
 		}
-
 	}
 
 	/**
@@ -231,17 +210,11 @@ class Post_Custom_Fields extends Custom_Fields {
 	 * @return void
 	 */
 	public function workout_process_ajax() {
-
 		if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
-
 			$exercise_id = $_POST['exerciseId'];
-
 			$exercise_post = get_post( $exercise_id );
-
 			wp_send_json_success( $exercise_post );
-
 		}
-
 	}
 
 	/**
@@ -326,18 +299,4 @@ class Post_Custom_Fields extends Custom_Fields {
 			wp_send_json_success( $workout_instructions );
 		}
 	}
-
-	/**
-	 * Return active instance of Post_Custom_Fields, create one if it doesn't exist
-	 *
-	 * @return Post_Custom_Fields
-	 */
-	public static function get_instance() {
-		if ( empty( self::$instance ) ) {
-			$class = __CLASS__;
-			self::$instance = new $class;
-		}
-		return self::$instance;
-	}
 }
-Post_Custom_Fields::get_instance();
